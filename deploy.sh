@@ -1,0 +1,1 @@
+cp target/holiday-booking.war ~/glassfish6/glassfish/domains/domain1/autodeploy
