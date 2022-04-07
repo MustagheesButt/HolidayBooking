@@ -1,6 +1,7 @@
-package holidayBooking;
+package holidayBooking.models;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,8 +10,8 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "users")
-public class User implements Serializable {
+@Table(name = "admins")
+public class Admin implements Serializable {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
@@ -21,9 +22,11 @@ public class User implements Serializable {
 
   private String email;
 
-  private String type; // employee or admin
-
   private String password;
+
+  private LocalDateTime createdAt;
+
+  private LocalDateTime updatedAt;
   
   public Long getId() {
     return this.id;
@@ -37,11 +40,14 @@ public class User implements Serializable {
   public String getEmail() {
     return this.email;
   }
-  public String getType() {
-    return this.type;
-  }
   public String getPassword() {
     return this.password;
+  }
+  public LocalDateTime getCreatedAt() {
+    return this.createdAt;
+  }
+  public LocalDateTime getUpdatedAt() {
+    return this.updatedAt;
   }
 
   public void setId(Long id) {
@@ -56,10 +62,13 @@ public class User implements Serializable {
   public void setEmail(String email) {
     this.email = email;
   }
-  public void setType(String type) {
-    this.type = type;
-  }
   public void setPassword(String password) {
     this.password = password;
+  }
+  public void setCreatedAt(LocalDateTime createdAt) {
+    this.createdAt = createdAt;
+  }
+  public void setUpdatedAt(LocalDateTime updatedAt) {
+    this.updatedAt = updatedAt;
   }
 }

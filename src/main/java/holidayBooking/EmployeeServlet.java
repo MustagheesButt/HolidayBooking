@@ -11,27 +11,26 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import holidayBooking.models.Admin;
-// import holidayBooking.models.Employee;
+import holidayBooking.models.Employee;
 import holidayBooking.services.EmployeeService;
 
-@WebServlet("/admin")
-public class AdminServlet extends HttpServlet {
+@WebServlet("/employee")
+public class EmployeeServlet extends HttpServlet {
   @Inject
   private EmployeeService employeeService;
 
   @Override
   protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-    RequestDispatcher view = req.getRequestDispatcher("admin_dashboard.jsp");
+    RequestDispatcher view = req.getRequestDispatcher("dashboard.jsp");
     HttpSession session = req.getSession();
 
-    if (session.getAttribute("admin") == null) {
+    if (session.getAttribute("employee") == null) {
       resp.sendRedirect("/login");
       return;
     }
   
-    Admin admin = (Admin)session.getAttribute("admin");
-    req.setAttribute("admin", admin);
+    Employee u = (Employee)session.getAttribute("employee");
+    req.setAttribute("user", u);
 
     view.forward(req, resp);
   }

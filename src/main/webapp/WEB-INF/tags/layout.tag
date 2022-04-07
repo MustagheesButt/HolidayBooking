@@ -15,10 +15,10 @@
   <body>
     <nav class="justify-center flex space-x-4 bg-purple-200 py-4">
       <a href="/" class="px-3 text-slate-700 font-medium">Home</a>
-      <c:if test="${sessionScope.current_user_id == null}">
+      <c:if test="${sessionScope.admin == null && sessionScope.employee == null}">
         <a href="/login" class="px-3 text-slate-700 font-medium">Login</a>
       </c:if>
-      <c:if test="${sessionScope.current_user_id != null}">
+      <c:if test="${sessionScope.admin != null || sessionScope.employee != null}">
         <a href="/dashboard" class="px-3 text-slate-700 font-medium">Dashboard</a>
         <a href="/profile" class="px-3 text-slate-700 font-medium">Profile</a>
         <a href="/login?action=logout" class="px-3 text-slate-700 font-medium">Logout</a>

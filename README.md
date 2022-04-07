@@ -36,6 +36,8 @@ Then if you will open localhost:8080 it will show a page with link to admin pane
 
 Follow this: https://medium.com/@hasnat.saeed/install-and-configure-mysql-jdbc-driver-on-jboss-wildfly-e751a3be60d3
 
+Make sure the connector file name in `module.xml` and the one you downloaded match.
+
 When adding DataSource, keep JNDI name: java:/local-mysql
 
 ### Glassfish
