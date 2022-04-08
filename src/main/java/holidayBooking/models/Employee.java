@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -24,7 +25,11 @@ public class Employee implements Serializable {
 
   private String password;
 
+  @OneToOne
   private Role role;
+
+  @OneToOne
+  private Department department;
 
   private LocalDateTime createdAt;
 
@@ -47,6 +52,9 @@ public class Employee implements Serializable {
   }
   public Role getRole() {
     return this.role;
+  }
+  public Department getDepartment() {
+    return this.department;
   }
   public LocalDateTime getCreatedAt() {
     return this.createdAt;
@@ -73,10 +81,18 @@ public class Employee implements Serializable {
   public void setRole(Role role) {
     this.role = role;
   }
+  public void setDepartment(Department department) {
+    this.department = department;
+  }
   public void setCreatedAt(LocalDateTime createdAt) {
     this.createdAt = createdAt;
   }
   public void setUpdatedAt(LocalDateTime updatedAt) {
     this.updatedAt = updatedAt;
+  }
+
+  /* Other helper methods */
+  public String getFullName() {
+    return this.firstName + " " + this.lastName;
   }
 }

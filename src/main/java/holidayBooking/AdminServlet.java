@@ -32,6 +32,7 @@ public class AdminServlet extends HttpServlet {
   
     Admin admin = (Admin)session.getAttribute("admin");
     req.setAttribute("admin", admin);
+    req.setAttribute("employees", employeeService.getAll());
 
     view.forward(req, resp);
   }

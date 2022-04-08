@@ -1,4 +1,5 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@tag description="Page template" pageEncoding="UTF-8"%>
 <%@attribute name="head" fragment="true" %>
 <%@attribute name="header" fragment="true" %>
@@ -11,6 +12,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <script src="https://cdn.tailwindcss.com"></script>
+    <t:svg-icons></t:svg-icons>
   </head>
   <body>
     <nav class="justify-center flex space-x-4 bg-purple-200 py-4">
