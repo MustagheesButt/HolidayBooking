@@ -1,11 +1,15 @@
 package holidayBooking.models;
 
 import java.io.Serializable;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -16,6 +20,9 @@ public class Department implements Serializable {
   private Long id;
 
   private String title;
+
+  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "department")
+  private List<Employee> employees;
   
   public Long getId() {
     return this.id;
@@ -23,12 +30,18 @@ public class Department implements Serializable {
   public String getTitle() {
     return this.title;
   }
+  public List<Employee> getEmployees() {
+    return this.employees;
+  }
 
   public void setId(Long id) {
     this.id = id;
   }
   public void setTitle(String title) {
     this.title = title;
+  }
+  public void setEmployees(List<Employee> employees) {
+    this.employees = employees;
   }
 
   /* Helpers */
