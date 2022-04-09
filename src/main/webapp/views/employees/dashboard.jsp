@@ -10,11 +10,7 @@
   
   <jsp:body>
     <div class="flex flex-col md:flex-row bg-gray-400">
-      <aside class="flex flex-col">
-        <a href="/request-holidays">Request Holidays</a>
-        <a href="/manage-requests">Manage Roles</a>
-        <a href="/profile">Profile</a>
-      </aside>
+      <jsp:include page="_sidebar.jsp" />
   
       <section class="flex flex-col w-full">
         <section class="m-5 p-5 bg-gray-200">
@@ -36,11 +32,36 @@
         const calendar = new FullCalendar.Calendar(calendarEl, {
           initialView: 'dayGridMonth',
           selectable: true,
-          dateClick: function(info) {
-            console.log(info)
-          },
+          // dateClick: function(info) {
+          //   console.log(info)
+          // },
           select: function(info) {
-            console.log(info)
+            // console.log((info.start, info.end, new Date(info.end.getTime() - (24000 * 3600))))
+            console.log((info.end - info.start) / (24000 * 3600))
+            const endStr = (((info.end - info.start) / (24000 * 3600)) === 1) ? '' : (" - " + info.endStr)
+            Swal.fire({
+              title: 'Submit Holiday Request?',
+              input: 'text',
+              inputAttributes: {
+                placeholder: 'Title/Reason for holiday'
+              },
+              html: info.startStr + endStr,
+              icon: 'question',
+              showCancelButton: true
+            }).then(function(result) {
+              const formData = new FormData()
+              formData.append('title', result.value)
+              formData.append('date_start', info.start)
+              formData.append('date_end', info.end)
+              if (result.isConfirmed) {
+                fetch("/create-holiday-request", {
+                  method: 'POST',
+                  body: formData
+                }).then(async function(res) {
+                  console.log(await res.json())
+                })
+              }
+            })
           }
         });
         calendar.render();

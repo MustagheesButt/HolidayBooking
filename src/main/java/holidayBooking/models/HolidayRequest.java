@@ -25,7 +25,7 @@ public class HolidayRequest implements Serializable {
 
   private LocalDateTime dateEnd;
 
-  @ManyToOne(cascade = CascadeType.ALL)
+  @ManyToOne
   @JoinColumn(name = "employee_id")
   private Employee employee;
 
@@ -62,10 +62,10 @@ public class HolidayRequest implements Serializable {
   public void setDateEnd(LocalDateTime dateEnd) {
     this.dateEnd = dateEnd;
   }
-  public void getEmployee(Employee employee) {
+  public void setEmployee(Employee employee) {
     this.employee = employee;
   }
-  public void getStatus(String status) {
+  public void setStatus(String status) {
     this.status = status;
   }
 

@@ -13,24 +13,30 @@ import javax.servlet.http.HttpSession;
 
 import holidayBooking.models.Employee;
 import holidayBooking.services.EmployeeService;
+import holidayBooking.services.HolidayRequestService;
 
 @WebServlet({"/dashboard", "/request-holidays", "/manage-requests", "/profile"})
 public class EmployeeServlet extends HttpServlet {
   @Inject
   private EmployeeService employeeService;
+  @Inject
+  private HolidayRequestService holidayRequestService;
 
   @Override
   protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
     RequestDispatcher view = req.getRequestDispatcher("views/employees/dashboard.jsp");
     HttpSession session = req.getSession();
+    String uri = req.getRequestURI();
 
     if (session.getAttribute("employee") == null) {
       resp.sendRedirect("/login");
       return;
     }
-  
-    Employee u = (Employee)session.getAttribute("employee");
-    req.setAttribute("user", u);
+
+    if (uri.contains("manage-requests")) {
+      req.setAttribute("holidayRequests", holidayRequestService.getAll());
+      view = req.getRequestDispatcher("views/employees/manage_requests.jsp");
+    }
 
     view.forward(req, resp);
   }
