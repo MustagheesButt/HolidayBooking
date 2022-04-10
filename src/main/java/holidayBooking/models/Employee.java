@@ -3,6 +3,7 @@ package holidayBooking.models;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -36,7 +37,7 @@ public class Employee implements Serializable {
   @OneToOne
   private Role role;
 
-  @ManyToOne(cascade = CascadeType.ALL)
+  @OneToOne(cascade = CascadeType.ALL)
   @JoinColumn(name="department_id")
   private Department department;
 
@@ -123,6 +124,11 @@ public class Employee implements Serializable {
   }
 
   public int getRemainingHolidays() {
-    return Employee.HOLIDAYS_PER_YEAR - this.getHolidayRequests().size();
+    int approvedHolidays = this.getHolidayRequests()
+      .stream()
+      .filter(hr -> hr.getStatus().equals("approved"))
+      .collect(Collectors.toList())
+      .size();
+    return Employee.HOLIDAYS_PER_YEAR - approvedHolidays;
   }
 }

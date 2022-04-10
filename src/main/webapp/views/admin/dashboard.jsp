@@ -53,6 +53,72 @@
             </tbody>
           </table>
         </section>
+
+        <section class="m-5 p-5 bg-gray-200">
+          <h2 class="text-xl">Holiday Bookings</h2>
+          <p class="mb-5 text-gray-500">These are approved holiday requests.</p>
+          <input id="filter1" type="text" placeholder="Filter by name/email" />
+          <table>
+            <thead>
+              <tr>
+                <th>Reason for Holiday</th>
+                <th>Employee Name</th>
+                <th>Employee Email</th>
+                <th>Employee Department</th>
+                <th>Date Start</th>
+                <th>Date End</th>
+              </tr>
+            </thead>
+            <tbody>
+              <c:forEach var="hb" items="${holidayBookings}">
+                <tr>
+                  <td>${hb.title}</td>
+                  <td class="filter1-target">${hb.employee.fullName}</td>
+                  <td class="filter1-target">${hb.employee.email}</td>
+                  <td>${hb.employee.department}</td>
+                  <td>${hb.dateStart}</td>
+                  <td>${hb.dateEnd}</td>
+                  <!-- <td class="flex justify-between">
+                    <a href="/admin/edit-employee/${employee.id}">
+                      <svg aria-hidden="true" focusable="false" class="h-6 w-6">
+                        <use xlink:href="#pencil"></use>
+                      </svg>
+                    </a>
+                    <a href="/admin/delete-employee/${employee.id}">
+                      <svg aria-hidden="true" focusable="false" class="h-6 w-6">
+                        <use xlink:href="#trash"></use>
+                      </svg>
+                    </a>
+                  </td> -->
+                </tr>
+              </c:forEach>
+            </tbody>
+          </table>
+
+          <script>
+            const filter1 = document.querySelector('#filter1')
+      
+            filter1.addEventListener('input', function() {
+              document.querySelectorAll('.found').forEach((ele) => ele.classList.remove('found'))
+      
+              document.querySelectorAll('.filter1-target').forEach((ele, key, parent) => {
+                if (ele.parentElement.classList.contains("found")) return
+      
+                if (ele.innerHTML.toLowerCase().includes(filter1.value.toLowerCase())) {
+                  ele.parentElement.classList.add("found")
+                  ele.parentElement.classList.remove('hidden')
+                } else {
+                  ele.parentElement.classList.add('hidden')
+                }
+              })
+            })
+          </script>
+        </section>
+
+        <section class="m-5 p-5 bg-gray-200">
+          <h2 class="text-xl">Search Employees on Leave/Work by Date</h2>
+          <input type="date" id="filter2" />
+        </section>
       </section>
     </div>
   </jsp:body>

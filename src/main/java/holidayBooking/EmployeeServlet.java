@@ -1,6 +1,7 @@
 package holidayBooking;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.inject.Inject;
 import javax.servlet.RequestDispatcher;
@@ -12,13 +13,14 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import holidayBooking.models.Employee;
-import holidayBooking.services.EmployeeService;
+import holidayBooking.models.HolidayRequest;
+// import holidayBooking.services.EmployeeService;
 import holidayBooking.services.HolidayRequestService;
 
 @WebServlet({"/dashboard", "/request-holidays", "/manage-requests", "/profile"})
 public class EmployeeServlet extends HttpServlet {
-  @Inject
-  private EmployeeService employeeService;
+  // @Inject
+  // private EmployeeService employeeService;
   @Inject
   private HolidayRequestService holidayRequestService;
 
@@ -34,7 +36,8 @@ public class EmployeeServlet extends HttpServlet {
     }
 
     if (uri.contains("manage-requests")) {
-      req.setAttribute("holidayRequests", holidayRequestService.findAllByEmploee((Employee)session.getAttribute("employee")));
+      List<HolidayRequest> requests = holidayRequestService.findAllByEmploee((Employee)session.getAttribute("employee"));
+      req.setAttribute("holidayRequests", requests);
       view = req.getRequestDispatcher("views/employees/manage_requests.jsp");
     }
 
