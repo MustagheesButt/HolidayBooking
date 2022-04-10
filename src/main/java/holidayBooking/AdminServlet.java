@@ -2,6 +2,7 @@ package holidayBooking;
 
 import java.io.IOException;
 import java.time.LocalDateTime; 
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 import javax.servlet.RequestDispatcher;
@@ -11,8 +12,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 
 
 import holidayBooking.models.Admin;
@@ -70,6 +69,7 @@ public class AdminServlet extends HttpServlet {
     }
     else {
       req.setAttribute("employees", employeeService.getAll());
+      req.setAttribute("holidayBookings", holidayRequestService.getAll().stream().filter(hr -> hr.getStatus().equals("approved")).collect(Collectors.toList()));
     }
 
     view.forward(req, resp);

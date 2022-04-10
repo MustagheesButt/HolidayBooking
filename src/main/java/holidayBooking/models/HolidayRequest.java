@@ -3,7 +3,6 @@ package holidayBooking.models;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -29,7 +28,7 @@ public class HolidayRequest implements Serializable {
   @JoinColumn(name = "employee_id")
   private Employee employee;
 
-  private String status; // pending, accepted, rejected
+  private String status; // pending, approved, rejected
   
   public Long getId() {
     return this.id;

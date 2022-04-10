@@ -3,6 +3,7 @@ package holidayBooking.models;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -48,37 +49,47 @@ public class Employee implements Serializable {
   private LocalDateTime createdAt;
 
   private LocalDateTime updatedAt;
-  
+
   public Long getId() {
     return this.id;
   }
+
   public String getFirstName() {
     return this.firstName;
   }
+
   public String getLastName() {
     return this.lastName;
   }
+
   public String getEmail() {
     return this.email;
   }
+
   public String getPassword() {
     return this.password;
   }
+
   public Role getRole() {
     return this.role;
   }
+
   public Department getDepartment() {
     return this.department;
   }
+
   public LocalDateTime getJoiningDate() {
     return this.joiningDate;
   }
+
   public List<HolidayRequest> getHolidayRequests() {
     return this.holidayRequests;
   }
+
   public LocalDateTime getCreatedAt() {
     return this.createdAt;
   }
+
   public LocalDateTime getUpdatedAt() {
     return this.updatedAt;
   }
@@ -86,33 +97,43 @@ public class Employee implements Serializable {
   public void setId(Long id) {
     this.id = id;
   }
+
   public void setFirstName(String firstName) {
     this.firstName = firstName;
   }
+
   public void setLastName(String lastName) {
     this.lastName = lastName;
   }
+
   public void setEmail(String email) {
     this.email = email;
   }
+
   public void setPassword(String password) {
     this.password = password;
   }
+
   public void setRole(Role role) {
     this.role = role;
   }
+
   public void setDepartment(Department department) {
     this.department = department;
   }
+
   public void setJoiningDate(LocalDateTime joiningDate) {
     this.joiningDate = joiningDate;
   }
+
   public void setHolidayRequests(List<HolidayRequest> holidayRequests) {
     this.holidayRequests = holidayRequests;
   }
+
   public void setCreatedAt(LocalDateTime createdAt) {
     this.createdAt = createdAt;
   }
+
   public void setUpdatedAt(LocalDateTime updatedAt) {
     this.updatedAt = updatedAt;
   }
@@ -122,7 +143,25 @@ public class Employee implements Serializable {
     return this.firstName + " " + this.lastName;
   }
 
+  public List<HolidayRequest> getHolidayBookings() {
+    return this.getHolidayRequests()
+        .stream()
+        .filter(hr -> hr.getStatus().equals("approved"))
+        .collect(Collectors.toList());
+  }
+
   public int getRemainingHolidays() {
-    return Employee.HOLIDAYS_PER_YEAR - this.getHolidayRequests().size();
+    int approvedHolidays = this.getHolidayBookings().size();
+    return Employee.HOLIDAYS_PER_YEAR - approvedHolidays;
+  }
+
+  public String getHolidayBookingsSerialized() {
+    return "[" +
+        String.join(",", this.getHolidayBookings()
+            .stream()
+            // .map(hr -> "{\\\"start\\\": \\\"" + hr.getDateStart() + "\\\", \\\"end\\\": \\\"" + hr.getDateEnd() + "\\\"}")
+            .map(hr -> "{\"start\": \"" + hr.getDateStart() + "\", \"end\": \"" + hr.getDateEnd() + "\"}")
+            .collect(Collectors.toList()))
+        + "]";
   }
 }
