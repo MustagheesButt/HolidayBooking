@@ -9,6 +9,7 @@ import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 
 import holidayBooking.models.Employee;
+import holidayBooking.models.HolidayRequest;
 
 @ApplicationScoped
 @Transactional
@@ -33,4 +34,16 @@ public class EmployeeService {
   public List<Employee> getAll() {
     return entityManager.createQuery("SELECT e FROM Employee e", Employee.class).getResultList();
   }
+  
+  public void delete(Employee e) {
+	  entityManager.createQuery("Delete From HolidayRequest hr WHERE hr.employee = ?1")
+		 .setParameter(1,e)
+		 .executeUpdate();
+	 entityManager.createQuery("Delete From Employee e WHERE e.id = ?1")
+	 .setParameter(1,e.getId())
+	 .executeUpdate();
+  }
+  public void update(Employee e) {
+	    entityManager.merge(e);
+	  }
 }

@@ -37,16 +37,20 @@
                   <td>${employee.department}</td>
                   <td>${employee.role}</td>
                   <td class="flex justify-between">
-                    <a href="/admin/edit-employee/${employee.id}">
-                      <svg aria-hidden="true" focusable="false" class="h-6 w-6">
-                        <use xlink:href="#pencil"></use>
+                    <a href="/admin/edit-employee?id=${employee.id}">
+                     <svg aria-hidden="true" focusable="false" class="h-6 w-6">
+                       <use xlink:href="#pencil"></use>
+                     </svg>
+                  </a> 
+                    <form action="/delete-employee" method="post">
+                        <input type="hidden" name="id" value="${employee.id}" />
+                        <button type="submit">
+                   			
+                          <svg aria-hidden="true" focusable="false" class="h-6 w-6">
+                            <use xlink:href="#trash"></use>            
                       </svg>
-                    </a>
-                    <a href="/admin/delete-employee/${employee.id}">
-                      <svg aria-hidden="true" focusable="false" class="h-6 w-6">
-                        <use xlink:href="#trash"></use>
-                      </svg>
-                    </a>
+                      </button>
+                    </form>
                   </td>
                 </tr>
               </c:forEach>
