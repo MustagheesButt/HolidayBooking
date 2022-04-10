@@ -36,7 +36,7 @@ public class Employee implements Serializable {
   @OneToOne
   private Role role;
 
-  @ManyToOne(cascade = CascadeType.ALL)
+  @OneToOne
   @JoinColumn(name="department_id")
   private Department department;
 

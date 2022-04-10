@@ -37,7 +37,7 @@ public class HolidayRequestService {
   }
 
   public void persist(HolidayRequest hr) {
-    entityManager.persist(hr);;
+    entityManager.persist(hr);
   }
 
   public void update(HolidayRequest hr) {

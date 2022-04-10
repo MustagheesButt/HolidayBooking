@@ -46,4 +46,8 @@ public class EmployeeService {
   public void update(Employee e) {
 	    entityManager.merge(e);
 	  }
+  public void persist(Employee e) {
+	    entityManager.persist(e);
+	  }
+  
 }

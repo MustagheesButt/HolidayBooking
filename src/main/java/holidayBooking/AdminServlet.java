@@ -1,6 +1,7 @@
 package holidayBooking;
 
 import java.io.IOException;
+import java.time.LocalDateTime; 
 
 import javax.inject.Inject;
 import javax.servlet.RequestDispatcher;
@@ -13,6 +14,7 @@ import javax.servlet.http.HttpSession;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 
+
 import holidayBooking.models.Admin;
 import holidayBooking.models.Employee;
 import holidayBooking.services.DepartmentService;
@@ -23,7 +25,7 @@ import holidayBooking.services.HolidayRequestService;
 import holidayBooking.services.RoleService;
 import holidayBooking.models.Department;
 
-@WebServlet({"/admin", "/admin/manage-employees", "/delete-employee", "/edit-employee",  "/update-employee", "/admin/manage-roles", "/admin/manage-departments", "/admin/manage-requests", "/admin/edit-employee" })
+@WebServlet({"/admin", "/admin/manage-employees", "/delete-employee", "/add-employee", "/admin/create-employee", "/edit-employee",  "/update-employee", "/admin/manage-roles", "/admin/manage-departments", "/admin/manage-requests", "/admin/edit-employee" })
 public class AdminServlet extends HttpServlet {
   @Inject
   private EmployeeService employeeService;
@@ -50,7 +52,13 @@ public class AdminServlet extends HttpServlet {
 
     if (uri.contains("manage-departments")) {
       view = AdminServlet.getManageDepartments(req, departmentService);
-    } else if (uri.contains("manage-requests")) {
+    }
+    else if (uri.contains("create-employee")) {
+    	req.setAttribute("roles", roleService.getAll());
+    	req.setAttribute("departments", departmentService.getAll());
+        view = req.getRequestDispatcher("/views/admin/create_employee.jsp");
+      }
+    else if (uri.contains("manage-requests")) {
       req.setAttribute("holidayRequests", holidayRequestService.getAll());
       view = req.getRequestDispatcher("/views/admin/manage_requests.jsp");
     }
@@ -83,6 +91,9 @@ public class AdminServlet extends HttpServlet {
 	    else if (uri.contains("update-employee")) {
 	    	AdminServlet.updateEmployee(req, employeeService, roleService, departmentService);
 	    }
+	    else if (uri.contains("add-employee")) {
+	    	AdminServlet.addEmployee(req, employeeService, roleService, departmentService);
+	    }
 
 	    resp.sendRedirect(redirectTo);
 	  }
@@ -99,14 +110,39 @@ public class AdminServlet extends HttpServlet {
 	  Role r =  roleService.findRole(role);
 	  Long department = Long.parseLong(req.getParameter("department"));
 	  Department d =  departmentService.find(department);
+	  LocalDateTime now = LocalDateTime.now() ;
+	  
 	  e.setFirstName(req.getParameter("fname"));
 	  e.setLastName(req.getParameter("lname"));
 	  e.setEmail(req.getParameter("email"));
 	  e.setPassword(req.getParameter("password"));
 	  e.setRole(r);
 	  e.setDepartment(d);
+	 
+	  e.setUpdatedAt(now);
 	  
 	  employeeService.update(e);
+  }
+  private static void addEmployee(HttpServletRequest req, EmployeeService employeeService, RoleService roleService, DepartmentService departmentService) {
+	 
+	  Employee e = new Employee();
+	  Long role = Long.parseLong(req.getParameter("role"));
+	  Role r =  roleService.findRole(role);
+	  Long department = Long.parseLong(req.getParameter("department"));
+	  Department d =  departmentService.find(department);
+	  LocalDateTime now = LocalDateTime.now() ;
+	  
+	  e.setFirstName(req.getParameter("fname"));
+	  e.setLastName(req.getParameter("lname"));
+	  e.setEmail(req.getParameter("email"));
+	  e.setPassword(req.getParameter("password"));
+	  e.setRole(r);
+	  e.setDepartment(d);
+	  e.setJoiningDate(now);
+	  e.setCreatedAt(now);
+	  e.setUpdatedAt(now);
+	  
+	  employeeService.persist(e);;
   }
   private static RequestDispatcher getManageDepartments(HttpServletRequest req, DepartmentService d) {
     req.setAttribute("departments", d.getAll());

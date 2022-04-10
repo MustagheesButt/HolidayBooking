@@ -10,12 +10,12 @@
     <div class="flex flex-col md:flex-row">
       <jsp:include page="_sidebar.jsp" />
   
-      <section class="flex flex-col">
-        <section>
+      <section class="flex flex-col p-5 w-full">
+        <section class="m-2 p-2 place-self-center">
           <h2>Welcome ${admin.email}!</h2>
         </section>
     
-        <section>
+        <section class="m-2 p-2 place-self-center">
           <h2>List of all employees</h2>
           <table>
             <thead>
@@ -57,6 +57,11 @@
             </tbody>
           </table>
         </section>
+        
+        <section class="m-2 p-2 place-self-center">	
+        		<a href="/admin/create-employee" class="button p-2 bg-indigo-400 rounded-none hover:rounded-full">Create New Employee</a>       	
+        </section>
+        
       </section>
     </div>
   </jsp:body>
