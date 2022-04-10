@@ -8,11 +8,7 @@
   
   <jsp:body>
     <div class="flex flex-col md:flex-row">
-      <aside class="flex flex-col">
-        <a href="/admin/manage-employees">Manage Employees</a>
-        <a href="/admin/manage-roles">Manage Roles</a>
-        <a href="/admin/manage-departments">Manage Departments</a>
-      </aside>
+      <jsp:include page="_sidebar.jsp" />
   
       <section class="flex flex-col">
         <section>

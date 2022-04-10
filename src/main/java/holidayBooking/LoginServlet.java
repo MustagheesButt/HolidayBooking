@@ -16,7 +16,7 @@ import holidayBooking.models.Employee;
 import holidayBooking.services.AdminService;
 import holidayBooking.services.EmployeeService;
 
-@WebServlet({"", "/login"})
+@WebServlet({"", "/login", "/logout"})
 public class LoginServlet extends HttpServlet {
   @Inject
   private EmployeeService employeeService;
@@ -26,6 +26,13 @@ public class LoginServlet extends HttpServlet {
   @Override
   protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
     RequestDispatcher view = req.getRequestDispatcher("login.jsp");
+    String uri = req.getRequestURI();
+    HttpSession session = req.getSession();
+
+    if (uri.contains("logout")) {
+      session.invalidate();
+    }
+
     view.forward(req, resp);
   }
 

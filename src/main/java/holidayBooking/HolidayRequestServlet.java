@@ -19,7 +19,7 @@ import holidayBooking.models.HolidayRequest;
 import holidayBooking.services.EmployeeService;
 import holidayBooking.services.HolidayRequestService;
 
-@WebServlet({"/create-holiday-request", "/delete-holiday-request", "/approve", "/reject"})
+@WebServlet({"/create-holiday-request", "/delete-holiday-request", "/approve-request", "/reject-request"})
 @MultipartConfig
 public class HolidayRequestServlet extends HttpServlet {
   @Inject
@@ -32,16 +32,23 @@ public class HolidayRequestServlet extends HttpServlet {
     HttpSession session = req.getSession();
     String uri = req.getRequestURI();
 
-    if (session.getAttribute("employee") == null) {
+    if (session.getAttribute("employee") == null && session.getAttribute("admin") == null) {
       resp.sendRedirect("/login");
       return;
     }
 
+    String redirectTo = "/dashboard";
     if (uri.contains("create-holiday-request")) {
       HolidayRequestServlet.createHolidayRequest(req, holidayRequestService, (Employee)session.getAttribute("employee"));
+    } else if (uri.contains("approve-request")) {
+      HolidayRequestServlet.approveRequest(req, holidayRequestService);
+      redirectTo = "/admin/manage-requests";
+    } else if (uri.contains("reject-request")) {
+      HolidayRequestServlet.rejectRequest(req, holidayRequestService);
+      redirectTo = "/admin/manage-requests";
     }
 
-    resp.sendRedirect("/dashboard");
+    resp.sendRedirect(redirectTo);
   }
 
   private static void createHolidayRequest(HttpServletRequest req, HolidayRequestService holidayRequestService, Employee e) {
@@ -59,5 +66,23 @@ public class HolidayRequestServlet extends HttpServlet {
     hr.setEmployee(e);
     
     holidayRequestService.persist(hr);
+  }
+
+  private static void approveRequest(HttpServletRequest req, HolidayRequestService holidayRequestService) {
+    Long id = Long.parseLong(req.getParameter("id"));
+
+    HolidayRequest hr = holidayRequestService.find(id);
+    hr.setStatus("approved");
+
+    holidayRequestService.update(hr);
+  }
+
+  private static void rejectRequest(HttpServletRequest req, HolidayRequestService holidayRequestService) {
+    Long id = Long.parseLong(req.getParameter("id"));
+
+    HolidayRequest hr = holidayRequestService.find(id);
+    hr.setStatus("rejected");
+
+    holidayRequestService.update(hr);
   }
 }

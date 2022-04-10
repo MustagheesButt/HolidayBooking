@@ -34,7 +34,7 @@ public class EmployeeServlet extends HttpServlet {
     }
 
     if (uri.contains("manage-requests")) {
-      req.setAttribute("holidayRequests", holidayRequestService.getAll());
+      req.setAttribute("holidayRequests", holidayRequestService.findAllByEmploee((Employee)session.getAttribute("employee")));
       view = req.getRequestDispatcher("views/employees/manage_requests.jsp");
     }
 

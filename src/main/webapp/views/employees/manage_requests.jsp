@@ -11,51 +11,53 @@
       <jsp:include page="_sidebar.jsp" />
   
       <section class="flex flex-col">
-        <section class="m-5 p-5">
+        <section class="m-5 p-5 bg-gray-200">
           <h2 class="text-xl">${employee.email} - ${employee.department}</h2>
           <p>You have <strong>${employee.remainingHolidays}</strong> holidays remaining.</p>
         </section>
     
-        <section>
-          <h1>Your Holiday Requests</h1>
-          <c:if test="${holidayRequest.size() == 0}">
-            <p class="text-gray-300">No holiday requests yet.</p>
+        <section class="m-5 p-5 bg-gray-200">
+          <c:if test="${holidayRequests.size() == 0}">
+            <p class="text-2xl text-gray-500">No holiday requests yet.</p>
           </c:if>
-          <table>
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Title</th>
-                <th>Date Start</th>
-                <th>Date End</th>
-                <th>Status</th>
-                <!-- <th>Actions</th> -->
-              </tr>
-            </thead>
-            <tbody>
-              <c:forEach var="hr" items="${holidayRequests}">
+          <c:if test="${holidayRequests.size() > 0}">
+            <h1>Your Holiday Requests</h1>
+            <table>
+              <thead>
                 <tr>
-                  <td>${hr.id}</td>
-                  <td>${hr.title}</td>
-                  <td>${hr.dateStart}</td>
-                  <td>${hr.dateEnd}</td>
-                  <td>${hr.status}</td>
-                  <!-- <td class="flex justify-between">
-                    <a href="/admin/edit-employee/${employee.id}">
-                      <svg aria-hidden="true" focusable="false" class="h-6 w-6">
-                        <use xlink:href="#pencil"></use>
-                      </svg>
-                    </a>
-                    <a href="/admin/delete-employee/${employee.id}">
-                      <svg aria-hidden="true" focusable="false" class="h-6 w-6">
-                        <use xlink:href="#trash"></use>
-                      </svg>
-                    </a>
-                  </td> -->
+                  <th>ID</th>
+                  <th>Title</th>
+                  <th>Date Start</th>
+                  <th>Date End</th>
+                  <th>Status</th>
+                  <!-- <th>Actions</th> -->
                 </tr>
-              </c:forEach>
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                <c:forEach var="hr" items="${holidayRequests}">
+                  <tr>
+                    <td>${hr.id}</td>
+                    <td>${hr.title}</td>
+                    <td>${hr.dateStart}</td>
+                    <td>${hr.dateEnd}</td>
+                    <td class='capitalize ${hr.status == "pending" ? "bg-yellow-200" : hr.status == "approved" ? "bg-green-200": "bg-red-200"}'>${hr.status}</td>
+                    <!-- <td class="flex justify-between">
+                      <a href="/admin/edit-employee/${employee.id}">
+                        <svg aria-hidden="true" focusable="false" class="h-6 w-6">
+                          <use xlink:href="#pencil"></use>
+                        </svg>
+                      </a>
+                      <a href="/admin/delete-employee/${employee.id}">
+                        <svg aria-hidden="true" focusable="false" class="h-6 w-6">
+                          <use xlink:href="#trash"></use>
+                        </svg>
+                      </a>
+                    </td> -->
+                  </tr>
+                </c:forEach>
+              </tbody>
+            </table>
+          </c:if>
         </section>
       </section>
     </div>

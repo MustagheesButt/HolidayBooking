@@ -4,9 +4,11 @@ import java.util.List;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 
+import holidayBooking.models.Employee;
 import holidayBooking.models.HolidayRequest;
 
 @ApplicationScoped
@@ -19,11 +21,26 @@ public class HolidayRequestService {
     return entityManager.find(HolidayRequest.class, id);
   }
 
+  public List<HolidayRequest> findAllByEmploee(Employee employee) {
+    try {
+      return entityManager.createQuery("SELECT h FROM HolidayRequest h WHERE h.employee = ?1", HolidayRequest.class)
+          .setParameter(1, employee)
+          .getResultList();
+    } catch (Exception e) {
+      System.out.println(e.getMessage());
+      return null;
+    }
+  }
+
   public List<HolidayRequest> getAll() {
     return entityManager.createQuery("SELECT h FROM HolidayRequest h", HolidayRequest.class).getResultList();
   }
 
   public void persist(HolidayRequest hr) {
     entityManager.persist(hr);
+  }
+
+  public void update(HolidayRequest hr) {
+    entityManager.merge(hr);
   }
 }

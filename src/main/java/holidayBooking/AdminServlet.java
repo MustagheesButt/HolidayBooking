@@ -10,22 +10,27 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 
 import holidayBooking.models.Admin;
 import holidayBooking.services.DepartmentService;
 // import holidayBooking.models.Employee;
 import holidayBooking.services.EmployeeService;
+import holidayBooking.services.HolidayRequestService;
 
-@WebServlet({"/admin", "/admin/manage-employees", "/admin/manage-roles", "/admin/manage-departments"})
+@WebServlet({"/admin", "/admin/manage-employees", "/admin/manage-roles", "/admin/manage-departments", "/admin/manage-requests"})
 public class AdminServlet extends HttpServlet {
   @Inject
   private EmployeeService employeeService;
   @Inject
   private DepartmentService departmentService;
+  @Inject
+  private HolidayRequestService holidayRequestService;
 
   @Override
   protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-    RequestDispatcher view = req.getRequestDispatcher("views/admin/dashboard.jsp");
+    RequestDispatcher view = req.getRequestDispatcher("/views/admin/dashboard.jsp");
     HttpSession session = req.getSession();
     String uri = req.getRequestURI();
 
@@ -39,6 +44,9 @@ public class AdminServlet extends HttpServlet {
 
     if (uri.contains("manage-departments")) {
       view = AdminServlet.getManageDepartments(req, departmentService);
+    } else if (uri.contains("manage-requests")) {
+      req.setAttribute("holidayRequests", holidayRequestService.getAll());
+      view = req.getRequestDispatcher("/views/admin/manage_requests.jsp");
     } else {
       req.setAttribute("employees", employeeService.getAll());
     }

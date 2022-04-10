@@ -58,7 +58,11 @@
                   method: 'POST',
                   body: formData
                 }).then(async function(res) {
-                  console.log(await res.json())
+                  // console.log(await res.json())
+                  Swal.fire({
+                    title: "Holiday request created!",
+                    icon: 'success'
+                  })
                 })
               }
             })
