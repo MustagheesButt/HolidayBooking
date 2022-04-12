@@ -21,7 +21,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "employees")
 public class Employee implements Serializable {
-  static final int HOLIDAYS_PER_YEAR = 30;
+  static final int HOLIDAYS_PER_YEAR = 30; // For testing can set it 1 or something
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

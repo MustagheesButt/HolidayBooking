@@ -2,6 +2,7 @@ package holidayBooking.models;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,6 +11,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import holidayBooking.beans.ConstraintBean;
 
 @Entity
 @Table(name = "holiday_requests")
@@ -71,5 +74,9 @@ public class HolidayRequest implements Serializable {
   /* Helpers */
   public String toString() {
     return this.title + ":" + this.status;
+  }
+
+  public List<String> getConstraintViolations() {
+    return ConstraintBean.brokenContraints(this);
   }
 }

@@ -54,7 +54,7 @@ public class AdminServlet extends HttpServlet {
 			req.setAttribute("departments", departmentService.getAll());
 			view = req.getRequestDispatcher("/views/admin/create_employee.jsp");
 		} else if (uri.contains("manage-requests")) {
-			req.setAttribute("holidayRequests", holidayRequestService.getAll());
+			req.setAttribute("holidayRequests", holidayRequestService.getPending());
 			view = req.getRequestDispatcher("/views/admin/manage_requests.jsp");
 		} else if (uri.contains("edit-employee")) {
 			req.setAttribute("employee", employeeService.findUser(Long.parseLong(req.getParameter("id"))));

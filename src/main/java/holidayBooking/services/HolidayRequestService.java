@@ -39,6 +39,10 @@ public class HolidayRequestService {
     return entityManager.createQuery("SELECT h FROM HolidayRequest h WHERE h.status = 'approved'", HolidayRequest.class).getResultList();
   }
 
+  public List<HolidayRequest> getPending() {
+    return entityManager.createQuery("SELECT h FROM HolidayRequest h WHERE h.status = 'pending'", HolidayRequest.class).getResultList();
+  }
+
   public void persist(HolidayRequest hr) {
     entityManager.persist(hr);
   }

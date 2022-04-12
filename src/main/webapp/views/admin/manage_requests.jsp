@@ -18,10 +18,10 @@
 
         <section class="m-5 p-5 bg-gray-200">
           <c:if test="${holidayRequests.size() == 0}">
-            <p class="text-2xl text-gray-500">No holiday requests yet.</p>
+            <p class="text-2xl text-gray-500">No pending holiday requests :)</p>
           </c:if>
           <c:if test="${holidayRequests.size() > 0}">
-            <h1>Your Holiday Requests</h1>
+            <h2 class="text-xl font-bold mb-5">Pending Holiday Requests</h2>
             <table>
               <thead>
                 <tr>
@@ -30,21 +30,19 @@
                   <th>Title</th>
                   <th>Date Start</th>
                   <th>Date End</th>
-                  <th>Status</th>
+                  <th>Constraint Violations</th>
                   <th>Actions</th>
                 </tr>
               </thead>
               <tbody>
                 <c:forEach var="hr" items="${holidayRequests}">
-                  <tr>
+                  <tr class='capitalize ${hr.constraintViolations.size() > 0 ? "bg-red-200" : ""}'>
                     <td>${hr.id}</td>
                     <td>${hr.employee.fullName}</td>
                     <td>${hr.title}</td>
                     <td>${hr.dateStart}</td>
                     <td>${hr.dateEnd}</td>
-                    <td
-                      class='capitalize ${hr.status == "pending" ? "bg-yellow-200" : hr.status == "approved" ? "bg-green-200": "bg-red-200"}'>
-                      ${hr.status}</td>
+                    <td>${String.join(", ", hr.constraintViolations)}</td>
                     <td class="flex justify-between">
                       <form action="/approve-request" method="post">
                         <input type="hidden" name="id" value="${hr.id}" />
