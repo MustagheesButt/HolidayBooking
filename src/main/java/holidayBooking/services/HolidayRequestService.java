@@ -20,7 +20,7 @@ public class HolidayRequestService {
     return entityManager.find(HolidayRequest.class, id);
   }
 
-  public List<HolidayRequest> findAllByEmploee(Employee employee) {
+  public List<HolidayRequest> findAllByEmployee(Employee employee) {
     try {
       return entityManager.createQuery("SELECT h FROM HolidayRequest h WHERE h.employee = ?1", HolidayRequest.class)
           .setParameter(1, employee)
@@ -33,6 +33,10 @@ public class HolidayRequestService {
 
   public List<HolidayRequest> getAll() {
     return entityManager.createQuery("SELECT h FROM HolidayRequest h", HolidayRequest.class).getResultList();
+  }
+
+  public List<HolidayRequest> getApproved() {
+    return entityManager.createQuery("SELECT h FROM HolidayRequest h WHERE h.status = 'approved'", HolidayRequest.class).getResultList();
   }
 
   public void persist(HolidayRequest hr) {

@@ -4,12 +4,9 @@ import java.util.List;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 
-import holidayBooking.models.Employee;
-import holidayBooking.models.HolidayRequest;
 import holidayBooking.models.Role;
 
 @ApplicationScoped

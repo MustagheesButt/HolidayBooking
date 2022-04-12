@@ -14,13 +14,13 @@ import javax.servlet.http.HttpSession;
 
 import holidayBooking.models.Employee;
 import holidayBooking.models.HolidayRequest;
-// import holidayBooking.services.EmployeeService;
+import holidayBooking.services.EmployeeService;
 import holidayBooking.services.HolidayRequestService;
 
 @WebServlet({"/dashboard", "/request-holidays", "/manage-requests", "/profile"})
 public class EmployeeServlet extends HttpServlet {
-  // @Inject
-  // private EmployeeService employeeService;
+  @Inject
+  private EmployeeService employeeService;
   @Inject
   private HolidayRequestService holidayRequestService;
 
@@ -33,10 +33,14 @@ public class EmployeeServlet extends HttpServlet {
     if (session.getAttribute("employee") == null) {
       resp.sendRedirect("/login");
       return;
+    } else {
+      // to update session in case employee was updated by admin
+      Employee e = (Employee)session.getAttribute("employee");
+      session.setAttribute("employee", employeeService.findUser(e.getId()));
     }
 
     if (uri.contains("manage-requests")) {
-      List<HolidayRequest> requests = holidayRequestService.findAllByEmploee((Employee)session.getAttribute("employee"));
+      List<HolidayRequest> requests = holidayRequestService.findAllByEmployee((Employee)session.getAttribute("employee"));
       req.setAttribute("holidayRequests", requests);
       view = req.getRequestDispatcher("views/employees/manage_requests.jsp");
     }

@@ -1,8 +1,7 @@
 package holidayBooking;
 
 import java.io.IOException;
-import java.time.LocalDateTime; 
-import java.util.stream.Collectors;
+import java.time.LocalDateTime;
 
 import javax.inject.Inject;
 import javax.servlet.RequestDispatcher;
@@ -12,18 +11,18 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
+import javax.transaction.Transactional;
 
 import holidayBooking.models.Admin;
 import holidayBooking.models.Employee;
 import holidayBooking.services.DepartmentService;
 import holidayBooking.models.Role;
-// import holidayBooking.models.Employee;
 import holidayBooking.services.EmployeeService;
 import holidayBooking.services.HolidayRequestService;
 import holidayBooking.services.RoleService;
 import holidayBooking.models.Department;
 
+@Transactional
 @WebServlet({"/admin", "/admin/manage-employees", "/delete-employee", "/add-employee", "/admin/create-employee", "/edit-employee",  "/update-employee", "/admin/manage-roles", "/admin/manage-departments", "/admin/manage-requests", "/admin/edit-employee" })
 public class AdminServlet extends HttpServlet {
   @Inject
@@ -69,7 +68,7 @@ public class AdminServlet extends HttpServlet {
     }
     else {
       req.setAttribute("employees", employeeService.getAll());
-      req.setAttribute("holidayBookings", holidayRequestService.getAll().stream().filter(hr -> hr.getStatus().equals("approved")).collect(Collectors.toList()));
+      req.setAttribute("holidayBookings", holidayRequestService.getApproved());
     }
 
     view.forward(req, resp);

@@ -26,7 +26,7 @@
 		                  <option value="${department.id}" ${employee.department.equals(department) ? "selected=true" : "" }>${department.title}</option>
 		                </c:forEach>
 		        </select>
-		  		<input type="submit" value="Update Department" class="shadow appearance-none border w-full py-2 px-3">  
+		  		<input type="submit" value="Add Employee" class="shadow appearance-none border w-full py-2 px-3">  
 		  	</form>
   		</section>
     </div>

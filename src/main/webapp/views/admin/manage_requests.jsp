@@ -26,6 +26,7 @@
               <thead>
                 <tr>
                   <th>ID</th>
+                  <th>Employee Name</th>
                   <th>Title</th>
                   <th>Date Start</th>
                   <th>Date End</th>
@@ -37,6 +38,7 @@
                 <c:forEach var="hr" items="${holidayRequests}">
                   <tr>
                     <td>${hr.id}</td>
+                    <td>${hr.employee.fullName}</td>
                     <td>${hr.title}</td>
                     <td>${hr.dateStart}</td>
                     <td>${hr.dateEnd}</td>

@@ -1,6 +1,7 @@
 package holidayBooking.models;
 
 import java.io.Serializable;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -37,13 +38,13 @@ public class Employee implements Serializable {
   @OneToOne
   private Role role;
 
-  @OneToOne
-  @JoinColumn(name="department_id")
+  @ManyToOne
+  @JoinColumn(name = "department_id")
   private Department department;
 
   private LocalDateTime joiningDate;
 
-  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "employee")
+  @OneToMany(cascade = CascadeType.REMOVE, fetch = FetchType.EAGER, mappedBy = "employee")
   private List<HolidayRequest> holidayRequests;
 
   private LocalDateTime createdAt;
@@ -151,15 +152,21 @@ public class Employee implements Serializable {
   }
 
   public int getRemainingHolidays() {
-    int approvedHolidays = this.getHolidayBookings().size();
-    return Employee.HOLIDAYS_PER_YEAR - approvedHolidays;
+    Long approvedHolidays = this.getHolidayBookings()
+        .stream()
+        .reduce(0L, (sum, hr) -> {
+            // System.out.println(Duration.between(hr.getDateStart(), hr.getDateEnd()).toDays());
+            return sum + Duration.between(hr.getDateStart(), hr.getDateEnd()).toDays();
+          }, Long::sum);
+    return Employee.HOLIDAYS_PER_YEAR - approvedHolidays.intValue();
   }
 
   public String getHolidayBookingsSerialized() {
     return "[" +
         String.join(",", this.getHolidayBookings()
             .stream()
-            // .map(hr -> "{\\\"start\\\": \\\"" + hr.getDateStart() + "\\\", \\\"end\\\": \\\"" + hr.getDateEnd() + "\\\"}")
+            // .map(hr -> "{\\\"start\\\": \\\"" + hr.getDateStart() + "\\\", \\\"end\\\":
+            // \\\"" + hr.getDateEnd() + "\\\"}")
             .map(hr -> "{\"start\": \"" + hr.getDateStart() + "\", \"end\": \"" + hr.getDateEnd() + "\"}")
             .collect(Collectors.toList()))
         + "]";

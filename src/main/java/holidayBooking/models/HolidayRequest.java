@@ -70,6 +70,6 @@ public class HolidayRequest implements Serializable {
 
   /* Helpers */
   public String toString() {
-    return this.title;
+    return this.title + ":" + this.status;
   }
 }

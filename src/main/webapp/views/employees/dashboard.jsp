@@ -36,9 +36,11 @@
           //   console.log(info)
           // },
           select: function(info) {
-            // console.log((info.start, info.end, new Date(info.end.getTime() - (24000 * 3600))))
-            console.log((info.end - info.start) / (24000 * 3600))
-            const endStr = (((info.end - info.start) / (24000 * 3600)) === 1) ? '' : (" - " + info.endStr)
+            const diff = (info.end - info.start) / (24000 * 3600)
+            console.log(diff)
+            const endStr = (diff === 1) ? '' : (" - " + info.endStr)
+            // if (diff > 1)
+            //   info.end = new Date(info.end.getTime() + 86399999)
             Swal.fire({
               title: 'Submit Holiday Request?',
               input: 'text',
