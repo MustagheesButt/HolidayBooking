@@ -36,7 +36,7 @@ public class EmployeeServlet extends HttpServlet {
     } else {
       // to update session in case employee was updated by admin
       Employee e = (Employee)session.getAttribute("employee");
-      session.setAttribute("employee", employeeService.findUser(e.getId()));
+      session.setAttribute("employee", employeeService.find(e.getId()));
     }
 
     if (uri.contains("manage-requests")) {

@@ -17,6 +17,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.json.bind.annotation.JsonbTransient;
 
 @Entity
 @Table(name = "employees")
@@ -38,12 +39,14 @@ public class Employee implements Serializable {
   @OneToOne
   private Role role;
 
+  @JsonbTransient
   @ManyToOne
   @JoinColumn(name = "department_id")
   private Department department;
 
   private LocalDateTime joiningDate;
 
+  @JsonbTransient
   @OneToMany(cascade = CascadeType.REMOVE, fetch = FetchType.EAGER, mappedBy = "employee")
   private List<HolidayRequest> holidayRequests;
 

@@ -67,7 +67,7 @@ Or just use the menu shortcuts (if) provided by your IDE. This will create a `ho
 
 ### Wildfly
 
-Use admin panel to upload `.war` file. After deployed successfully, it should be available at localhost:8080/holiday-booking
+Use admin panel to upload `.war` file. After deployed successfully, it should be available at localhost:8080/
 
 ### Glassfish
 You just have to copy the `target/holiday-booking.war` to glassfish (`glassfish6/glassfish/domains/domain1/autodeploy`).

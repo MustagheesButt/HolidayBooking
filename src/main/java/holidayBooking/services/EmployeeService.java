@@ -16,7 +16,7 @@ public class EmployeeService {
   @PersistenceContext
   private EntityManager entityManager;
 
-  public Employee findUser(Long id) {
+  public Employee find(Long id) {
     return entityManager.find(Employee.class, id);
   }
 

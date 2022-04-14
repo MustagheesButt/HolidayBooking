@@ -11,8 +11,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import holidayBooking.models.Admin;
-import holidayBooking.models.Employee;
+import holidayBooking.beans.LoginBean;
+import holidayBooking.beans.LoginResponse;
 import holidayBooking.services.AdminService;
 import holidayBooking.services.EmployeeService;
 
@@ -43,27 +43,14 @@ public class LoginServlet extends HttpServlet {
     HttpSession session = req.getSession();
     // session.invalidate(); // clear session
 
-    Employee employee = employeeService.findByEmail(email);
-    if (employee != null) {
-      if (!employee.getPassword().equals(password)) {
-        resp.sendRedirect("/login?error=email");
-        return;
-      }
+    LoginResponse loginStatus = LoginBean.login(email, password, employeeService, adminService, session);
 
-      session.setAttribute("employee", employee);
-      resp.sendRedirect("/dashboard");
-      return;
-    }
-
-    Admin admin = adminService.findByEmail(email);
-    if (admin != null && !admin.getPassword().equals(password)) {
+    if (loginStatus.getEmployee() == null && loginStatus.getAdmin() == null) {
       resp.sendRedirect("/login?error=email");
-      return;
+    } else if (loginStatus.getEmployee() != null) {
+      resp.sendRedirect("/dashboard");
     }
-
-    session.setAttribute("admin", admin);
-    resp.sendRedirect("/admin");
-    return;
     
+    resp.sendRedirect("/admin");
   }
 }
