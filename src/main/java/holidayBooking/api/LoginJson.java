@@ -1,6 +1,5 @@
 package holidayBooking.api;
 
-// @XmlRootElement
 public class LoginJson {
   private String email;
   private String password;

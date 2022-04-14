@@ -15,7 +15,7 @@ import holidayBooking.services.RoleService;
 public class AdminBean {
   public static void deleteEmployee(HttpServletRequest req, EmployeeService employeeService) {
     Long id = Long.parseLong(req.getParameter("id"));
-    Employee e = employeeService.findUser(id);
+    Employee e = employeeService.find(id);
     employeeService.delete(e);
   }
 
@@ -23,7 +23,7 @@ public class AdminBean {
       HttpServletRequest req, EmployeeService employeeService,
       RoleService roleService, DepartmentService departmentService) {
     Long id = Long.parseLong(req.getParameter("id"));
-    Employee e = employeeService.findUser(id);
+    Employee e = employeeService.find(id);
     Long role = Long.parseLong(req.getParameter("role"));
     Role r = roleService.findRole(role);
     Long department = Long.parseLong(req.getParameter("department"));

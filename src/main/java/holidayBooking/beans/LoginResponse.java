@@ -1,5 +1,9 @@
 package holidayBooking.beans;
 
+import com.fatboyindustrial.gsonjavatime.Converters;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import holidayBooking.models.Admin;
 import holidayBooking.models.Employee;
 
@@ -29,5 +33,10 @@ public class LoginResponse {
 
   public void setAdmin(Admin a) {
     this.admin = a;
+  }
+
+  public static LoginResponse parseLoginResponse(String jsonString) {
+    Gson gson = Converters.registerLocalDateTime(new GsonBuilder()).create();
+    return gson.fromJson(jsonString, LoginResponse.class);
   }
 }
