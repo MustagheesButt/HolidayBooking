@@ -30,6 +30,7 @@
                   <th>Title</th>
                   <th>Date Start</th>
                   <th>Date End</th>
+                  <th>Duration</th>
                   <th>Constraint Violations</th>
                   <th>Actions</th>
                 </tr>
@@ -42,8 +43,10 @@
                     <td>${hr.title}</td>
                     <td>${hr.dateStart}</td>
                     <td>${hr.dateEnd}</td>
+                    <td>${hr.duration}</td>
                     <td>${String.join(", ", hr.constraintViolations)}</td>
                     <td class="flex justify-between">
+                    <c:if test="${hr.duration <= hr.employee.remainingHolidays }">
                       <form action="/approve-request" method="post">
                         <input type="hidden" name="id" value="${hr.id}" />
 
@@ -53,6 +56,7 @@
                           </svg>
                         </button>
                       </form>
+                    </c:if>                  
                       <form action="/reject-request" method="post">
                         <input type="hidden" name="id" value="${hr.id}" />
 

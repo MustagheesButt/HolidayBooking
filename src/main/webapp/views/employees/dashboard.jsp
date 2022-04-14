@@ -47,7 +47,7 @@
               inputAttributes: {
                 placeholder: 'Title/Reason for holiday'
               },
-              html: info.startStr + endStr,
+              html: info.startStr + endStr + ' : ' + diff + ' Days',
               icon: 'question',
               showCancelButton: true
             }).then(function(result) {
@@ -55,17 +55,27 @@
               formData.append('title', result.value)
               formData.append('date_start', info.start)
               formData.append('date_end', info.end)
+              formData.append('duration',diff)
               if (result.isConfirmed) {
+            	  if(diff <= ${employee.remainingHolidays}){
                 fetch("/create-holiday-request", {
                   method: 'POST',
                   body: formData
                 }).then(async function(res) {
                   // console.log(await res.json())
                   Swal.fire({
-                    title: "Holiday request created!",
+                    title: 'Holiday request created!',
                     icon: 'success'
                   })
                 })
+            	  }
+            	  else if (diff > ${employee.remainingHolidays}){
+            		  Swal.fire({
+            			  title: 'Request Exceeds Holidays Limit',
+            			  html: 'Remaining Holidays = ' + ${employee.remainingHolidays},
+            			  icon: 'error'
+            		  })
+            	  }
               }
             })
           }

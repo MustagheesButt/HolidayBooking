@@ -15,11 +15,12 @@ import holidayBooking.beans.HolidayRequestBean;
 import holidayBooking.models.Employee;
 import holidayBooking.services.HolidayRequestService;
 
-@WebServlet({"/create-holiday-request", "/delete-holiday-request", "/approve-request", "/reject-request"})
+@WebServlet({"/create-holiday-request",  "/delete-holiday-request", "/approve-request", "/reject-request"})
 @MultipartConfig
 public class HolidayRequestServlet extends HttpServlet {
   @Inject
   private HolidayRequestService holidayRequestService;
+
 
   @Override
   protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -34,7 +35,8 @@ public class HolidayRequestServlet extends HttpServlet {
     String redirectTo = "/dashboard";
     if (uri.contains("create-holiday-request")) {
       HolidayRequestBean.createHolidayRequest(req, holidayRequestService, (Employee)session.getAttribute("employee"));
-    } else if (uri.contains("approve-request")) {
+    }
+    else if (uri.contains("approve-request")) {
       HolidayRequestBean.approveRequest(req, holidayRequestService);
       redirectTo = "/admin/manage-requests";
     } else if (uri.contains("reject-request")) {

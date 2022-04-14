@@ -23,5 +23,5 @@ INSERT INTO `employees` (`email`, `password`, `firstname`, `lastname`, `departme
 INSERT INTO `employees` (`email`, `password`, `firstname`, `lastname`, `department_id`, `role_id`, `joiningdate`, `createdat`, `updatedat`) VALUES ('elsa@google.com', '1234', 'Elsa', 'Jean', 6, 5, '2022-04-07 14:51:43.000000', '2022-04-07 14:51:43.000000', '2022-04-07 14:51:43.000000');
 INSERT INTO `employees` (`email`, `password`, `firstname`, `lastname`, `department_id`, `role_id`, `joiningdate`, `createdat`, `updatedat`) VALUES ('jia@google.com', '1234', 'Jia', 'Lissa', 6, 6, CURRENT_TIME, CURRENT_TIME, CURRENT_TIME);
 
-INSERT INTO `holiday_requests` (`title`, `datestart`, `dateend`, `status`, `employee_id`) VALUES ('Birthday', ADDTIME(CURRENT_DATE, '1 0:0:0.000000'), ADDTIME(CURRENT_DATE, '2 0:0:0.000000'), 'pending', 1);
-INSERT INTO `holiday_requests` (`title`, `datestart`, `dateend`, `status`, `employee_id`) VALUES ('Family event', ADDTIME(CURRENT_DATE, '1 0:0:0.000000'), ADDTIME(CURRENT_DATE, '2 0:0:0.000000'), 'pending', 2);
+INSERT INTO `holiday_requests` (`title`, `datestart`, `dateend`, `duration`, `status`, `employee_id`) VALUES ('Birthday', ADDTIME(CURRENT_DATE, '1 0:0:0.000000'), ADDTIME(CURRENT_DATE, '2 0:0:0.000000'),1, 'pending', 1);
+INSERT INTO `holiday_requests` (`title`, `datestart`, `dateend`, `duration`, `status`, `employee_id`) VALUES ('Family event', ADDTIME(CURRENT_DATE, '1 0:0:0.000000'), ADDTIME(CURRENT_DATE, '2 0:0:0.000000'),1, 'pending', 2);

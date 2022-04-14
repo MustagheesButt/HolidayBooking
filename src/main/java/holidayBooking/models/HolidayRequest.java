@@ -26,6 +26,8 @@ public class HolidayRequest implements Serializable {
   private LocalDateTime dateStart;
 
   private LocalDateTime dateEnd;
+  
+  private Long duration;
 
   @ManyToOne
   @JoinColumn(name = "employee_id")
@@ -45,6 +47,9 @@ public class HolidayRequest implements Serializable {
   public LocalDateTime getDateEnd() {
     return this.dateEnd;
   }
+  public long getDuration() {
+	  return this.duration;
+  }
   public Employee getEmployee() {
     return this.employee;
   }
@@ -63,6 +68,9 @@ public class HolidayRequest implements Serializable {
   }
   public void setDateEnd(LocalDateTime dateEnd) {
     this.dateEnd = dateEnd;
+  }
+  public void setDuration(long duration) {
+	  this.duration = duration;
   }
   public void setEmployee(Employee employee) {
     this.employee = employee;
