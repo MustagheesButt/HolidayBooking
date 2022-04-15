@@ -40,7 +40,12 @@ public class LoginFrame extends JFrame {
     loginButton.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
         LoginResponse lr = Helpers.sendLoginReq(inputEmail.getText(), inputPassword.getText());
-        if (lr != null && lr.getEmployee() != null) {
+        if (lr == null) {
+          JOptionPane.showMessageDialog(null, "Could not establish a connection");
+          return;
+        }
+
+        if (lr.getEmployee() != null) {
           System.out.println(lr.getEmployee().getFullName());
           goToDashboardFrame(W, H, lr.getEmployee());
         } else {

@@ -34,7 +34,6 @@ public class LoginResource {
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
   public LoginResponse login(LoginJson lJson, @Context HttpServletRequest request) {
-    System.out.println("heloooooooooooo");
     System.out.println(lJson.getEmail() + " " + lJson.getPassword());
     HttpSession session = request.getSession();
     LoginResponse loginStatus = LoginBean.login(lJson.getEmail(), lJson.getPassword(), employeeService, adminService,
