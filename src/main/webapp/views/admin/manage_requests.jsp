@@ -46,7 +46,7 @@
                     <td>${hr.duration}</td>
                     <td>${String.join(", ", hr.constraintViolations)}</td>
                     <td class="flex justify-between">
-                    <c:if test="${hr.duration <= hr.employee.remainingHolidays }">
+                    <c:if test="${hr.constraintViolations.size() == 0 }">
                       <form action="/approve-request" method="post">
                         <input type="hidden" name="id" value="${hr.id}" />
 

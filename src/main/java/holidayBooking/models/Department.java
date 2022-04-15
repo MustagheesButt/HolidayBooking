@@ -1,6 +1,7 @@
 package holidayBooking.models;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -48,4 +49,14 @@ public class Department implements Serializable {
   public String toString() {
     return this.title;
   }
+  
+  public List<HolidayRequest> getAllRequests(){
+	 List<Employee> e = this.getEmployees();
+	 List<HolidayRequest> hr = new ArrayList<HolidayRequest>();
+	 for(int i=0; i<e.size();i++) {		
+		 hr.addAll(e.get(i).getHolidayBookings());
+	 }
+	 return hr;
+  }
+  
 }

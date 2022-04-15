@@ -9,6 +9,7 @@ import javax.transaction.Transactional;
 
 import holidayBooking.models.Employee;
 import holidayBooking.models.HolidayRequest;
+import holidayBooking.services.HolidayRequestService;
 
 @ApplicationScoped
 @Transactional
