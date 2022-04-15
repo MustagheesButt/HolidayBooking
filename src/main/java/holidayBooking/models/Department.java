@@ -1,6 +1,7 @@
 package holidayBooking.models;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,8 +50,16 @@ public class Department implements Serializable {
   public String toString() {
     return this.title;
   }
-  
   public List<HolidayRequest> getAllRequests(){
+		 List<Employee> e = this.getEmployees();
+		 List<HolidayRequest> hr = new ArrayList<HolidayRequest>();
+		 for(int i=0; i<e.size();i++) {		
+			 hr.addAll(e.get(i).getHolidayRequests());
+		 }
+		 return hr;
+	  }
+  
+  public List<HolidayRequest> getAprrovedRequests(){
 	 List<Employee> e = this.getEmployees();
 	 List<HolidayRequest> hr = new ArrayList<HolidayRequest>();
 	 for(int i=0; i<e.size();i++) {		
@@ -58,5 +67,34 @@ public class Department implements Serializable {
 	 }
 	 return hr;
   }
+  public List<HolidayRequest> getRoleRequests(long id){
+		 List<Employee> e = this.getEmployees();
+		 List<HolidayRequest> hr = new ArrayList<HolidayRequest>();
+		 for(int i=0; i<e.size();i++) {
+			 hr.addAll(e.get(i).getRoleBookings(id));
+		 }
+		 return hr;
+	  }
+  public List<Employee> getRoleSpecific(long id){
+	  List<Employee> Temp = new ArrayList<Employee>();
+			  
+	  for (Employee e : this.getEmployees()) {    		
+    			if(!Temp.contains(e)) {
+	    			if(e.getRole().getId()==id) {
+	    				Temp.add(e);
+	    			}
+    			}
+    	}
+	  return Temp;
+  }
+  
+  public List<HolidayRequest> getSpecificRequests(LocalDateTime start, LocalDateTime end){
+		 List<Employee> e = this.getEmployees();
+		 List<HolidayRequest> hr = new ArrayList<HolidayRequest>();
+		 for(int i=0; i<e.size();i++) {		
+			 hr.addAll(e.get(i).getHoliday(start, end));
+		 }
+		 return hr;
+	  }
   
 }

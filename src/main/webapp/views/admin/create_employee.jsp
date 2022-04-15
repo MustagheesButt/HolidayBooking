@@ -28,7 +28,9 @@
 		        </select>
 		  		<input type="submit" value="Add Employee" class="shadow appearance-none border w-full py-2 px-3">  
 		  	</form>
+		  	
   		</section>
     </div>
-  </jsp:body>
+  
+   </jsp:body>
 </t:layout>

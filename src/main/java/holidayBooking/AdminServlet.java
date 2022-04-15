@@ -83,10 +83,31 @@ public class AdminServlet extends HttpServlet {
 		String redirectTo = "/admin";
 		if (uri.contains("delete-employee")) {
 			AdminBean.deleteEmployee(req, employeeService);
+			
 		} else if (uri.contains("update-employee")) {
-			AdminBean.updateEmployee(req, employeeService, roleService, departmentService);
-		} else if (uri.contains("add-employee")) {
-			AdminBean.addEmployee(req, employeeService, roleService, departmentService);
+			String msg = AdminBean.updateEmployee(req, employeeService, roleService, departmentService);
+			if(msg == "Head") {
+				redirectTo = "/admin?error=Head";
+			}	
+			else if (msg == "Deputy") {
+				redirectTo = "/admin?error=Deputy";
+			}
+			else if (msg == "Email") {
+				redirectTo = "/admin?error=Email";
+			}	
+		} 
+		
+		else if (uri.contains("add-employee")) {
+			String msg = AdminBean.addEmployee(req, employeeService, roleService, departmentService);
+			if(msg == "Head") {
+				redirectTo = "/admin?error=Head";
+			}
+			else if (msg == "Deputy") {
+				redirectTo = "/admin?error=Deputy";
+			}	
+			else if (msg == "Email") {
+				redirectTo = "/admin?error=Email";
+			}	
 		}
 
 		resp.sendRedirect(redirectTo);

@@ -7,6 +7,27 @@
   </jsp:attribute>
 
   <jsp:body>
+  <script>
+		    const params = new URLSearchParams(window.location.search)
+		    if(params.get("error")==="Head"){
+		    	Swal.fire({
+					  title: 'This Department Already Has a Head',
+					  icon: 'error'
+				  })
+		    }
+		    else if(params.get("error")==="Deputy"){
+		    	Swal.fire({
+					  title: 'This Department Already Has a Deputy Head',
+					  icon: 'error'
+				  })
+		    }
+		    else if(params.get("error")==="Email"){
+		    	Swal.fire({
+					  title: 'Email Already Exists. Please use another Email.',
+					  icon: 'error'
+				  })
+		    }
+</script>
     <div class="flex flex-col md:flex-row">
       <jsp:include page="_sidebar.jsp" />
   
@@ -213,6 +234,8 @@
               })
             })
           </script>
+          
+       
         </section>
       </section>
     </div>

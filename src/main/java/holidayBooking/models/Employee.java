@@ -1,12 +1,15 @@
 package holidayBooking.models;
 
 import java.io.Serializable;
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -17,13 +20,18 @@ import javax.persistence.OneToOne;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import javax.json.bind.annotation.JsonbTransient;
 
 @Entity
-@Table(name = "employees")
+@Table(name = "employees", uniqueConstraints={@UniqueConstraint(columnNames = {"email"})})
+
+
+
 public class Employee implements Serializable {
   static final int HOLIDAYS_PER_YEAR = 30; // For testing can set it 1 or something
 
+ 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
@@ -32,7 +40,8 @@ public class Employee implements Serializable {
 
   private String lastName;
 
-  private String email;
+  @Column(name = "email")
+  private  String email;
 
   private String password;
 
@@ -153,6 +162,24 @@ public class Employee implements Serializable {
         .filter(hr -> hr.getStatus().equals("approved"))
         .collect(Collectors.toList());
   }
+  public List<HolidayRequest> getRoleBookings(Long id) {
+	    return this.getHolidayRequests()
+	        .stream()
+	        .filter(hr -> hr.getStatus().equals("approved"))
+	        .filter(hr -> hr.getEmployee().getRole().getId().equals(id))
+	        .collect(Collectors.toList());
+	  }
+  
+  
+  public List<HolidayRequest> getHoliday(LocalDateTime start, LocalDateTime end ) {
+	    
+	  return this.getHolidayRequests()
+	        .stream()
+	        .filter(hr -> hr.getStatus().equals("approved"))
+	        .filter(hr -> hr.getDateStart().compareTo(start)>=0)
+	        .filter(hr -> hr.getDateEnd().compareTo(end) < 0)
+	        .collect(Collectors.toList());  
+	  }
 
   public int getRemainingHolidays() {
     Long approvedHolidays = this.getHolidayBookings()
