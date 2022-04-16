@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -29,6 +30,7 @@ public class HolidayRequest implements Serializable {
   
   private Long duration;
 
+  @JsonbTransient
   @ManyToOne
   @JoinColumn(name = "employee_id")
   private Employee employee;

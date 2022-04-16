@@ -1,8 +1,6 @@
 package holidayBooking.models;
 
 import java.io.Serializable;
-import java.lang.annotation.Retention;
-import java.lang.annotation.Target;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;

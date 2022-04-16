@@ -49,8 +49,8 @@ public class LoginServlet extends HttpServlet {
       resp.sendRedirect("/login?error=email");
     } else if (loginStatus.getEmployee() != null) {
       resp.sendRedirect("/dashboard");
+    } else {
+      resp.sendRedirect("/admin");
     }
-    
-    resp.sendRedirect("/admin");
   }
 }

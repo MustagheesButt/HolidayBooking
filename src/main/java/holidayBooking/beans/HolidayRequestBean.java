@@ -1,33 +1,28 @@
 package holidayBooking.beans;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+
+import com.fatboyindustrial.gsonjavatime.Converters;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 
 import holidayBooking.models.Employee;
 import holidayBooking.models.HolidayRequest;
 import holidayBooking.services.HolidayRequestService;
-import holidayBooking.services.EmployeeService;
 
 public class HolidayRequestBean {
-  public static void createHolidayRequest(HttpServletRequest req, HolidayRequestService holidayRequestService, Employee e) {
-    String title = req.getParameter("title");
-    DateTimeFormatter pattern = DateTimeFormatter.ofPattern("EEE MMM dd yyyy HH:mm:ss 'GMT'xx '('zzzz')'");
-    long duration =Long.parseLong(req.getParameter("duration"));
-    		
-    LocalDateTime dateStart = LocalDateTime.parse(req.getParameter("date_start"), pattern);
-    LocalDateTime dateEnd = LocalDateTime.parse(req.getParameter("date_end"), pattern);
-
-    HolidayRequest hr = new HolidayRequest();
-    hr.setTitle(title);
-    hr.setDateStart(dateStart);
-    hr.setDateEnd(dateEnd);
+  public static HolidayRequest createHolidayRequest(HolidayRequest hr, HolidayRequestService holidayRequestService, Employee e) {
     hr.setStatus("pending");
-    hr.setDuration(duration);
     hr.setEmployee(e);
     
     holidayRequestService.persist(hr);
+
+    return hr;
   }
   public static void approveRequest(HttpServletRequest req, HolidayRequestService holidayRequestService ) {
     Long id = Long.parseLong(req.getParameter("id"));
@@ -43,5 +38,18 @@ public class HolidayRequestBean {
     hr.setStatus("rejected");
 
     holidayRequestService.update(hr);
+  }
+
+  public static HolidayRequest parseHolidayRequest(String jsonString) {
+    Gson gson = Converters.registerLocalDateTime(new GsonBuilder()).create();
+    System.out.println("DEBUG-----------------");
+    System.out.println(jsonString);
+    return gson.fromJson(jsonString, HolidayRequest.class);
+  }
+
+  public static List<HolidayRequest> parseHolidayRequests(String jsonString) {
+    Type listType = new TypeToken<ArrayList<HolidayRequest>>(){}.getType();
+    Gson gson = Converters.registerLocalDateTime(new GsonBuilder()).create();
+    return gson.fromJson(jsonString, listType);
   }
 }
