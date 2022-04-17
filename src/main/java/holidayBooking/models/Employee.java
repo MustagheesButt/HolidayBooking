@@ -182,8 +182,6 @@ public class Employee implements Serializable {
 
   public int getRemainingHolidays() {
 	Integer bonusHolidays = (int)ChronoUnit.YEARS.between(this.joiningDate, LocalDateTime.now())/5;
-	System.out.println("DEBUG---------");
-	System.out.println(bonusHolidays);
     Long approvedHolidays = this.getHolidayBookings()
         .stream()
         .reduce(0L, (sum, hr) -> {
