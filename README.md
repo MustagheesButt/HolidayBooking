@@ -55,6 +55,14 @@ After saving, in General tab, click ping button to test if connection is success
 
 After that create a JDBC Resource named `local-mysql`
 
+## Setting up JMS
+
+To enable messaging services in Wildfly, rename `<wildfly-dir>/standalone/configuration/standalone.xml` to `standalone.old`, and then rename `standalone-full.xml` to `standalone.xml`.
+
+Copy your existing `<datasources>` from the `standalone.old` file, if any, so you don't have to create them again.
+
+Next you need to create a JMS Queue, name `myQueue`, from the admin panel. Use `java:/jms/myQueue` as the entries value.
+
 ## Building/Compiling
 
 `mvn clean -f "/home/<user_name>/Documents/Projects/holiday-booking/pom.xml"`

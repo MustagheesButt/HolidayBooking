@@ -53,8 +53,8 @@
             }).then(function(result) {
               const formData = new FormData()
               formData.append('title', result.value)
-              formData.append('date_start', info.start)
-              formData.append('date_end', info.end)
+              formData.append('dateStart', info.start)
+              formData.append('dateEnd', info.end)
               formData.append('duration',diff)
               if (result.isConfirmed) {
             	  if(diff <= ${employee.remainingHolidays}){

@@ -23,7 +23,6 @@
       </c:if>
       <c:if test="${sessionScope.admin != null || sessionScope.employee != null}">
         <a href='/${sessionScope.admin == null ? "dashboard" : "admin"}' class="px-3 text-slate-700 font-medium">Dashboard</a>
-        <a href="/profile" class="px-3 text-slate-700 font-medium">Profile</a>
         <a href="/logout" class="px-3 text-slate-700 font-medium">Logout</a>
       </c:if>
       <a href="/about" class="px-3 text-slate-700 font-medium">About</a>
