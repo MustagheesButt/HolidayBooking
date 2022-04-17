@@ -6,7 +6,7 @@
   <persistence-unit name="TestUnit">
     <jta-data-source>local-mysql</jta-data-source>
     <properties>
-      <property name="javax.persistence.schema-generation.database.action" value="drop-and-create" />
+      <property name="javax.persistence.schema-generation.database.action" value="create" />
       <property name="javax.persistence.sql-load-script-source" value="META-INF/defaultdata.sql" />
       <property name="eclipselink.logging.level" value="FINEST" />
     </properties>

@@ -3,6 +3,7 @@ package holidayBooking.models;
 import java.io.Serializable;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -180,13 +181,16 @@ public class Employee implements Serializable {
 	  }
 
   public int getRemainingHolidays() {
+	Integer bonusHolidays = (int)ChronoUnit.YEARS.between(this.joiningDate, LocalDateTime.now())/5;
+	System.out.println("DEBUG---------");
+	System.out.println(bonusHolidays);
     Long approvedHolidays = this.getHolidayBookings()
         .stream()
         .reduce(0L, (sum, hr) -> {
             // System.out.println(Duration.between(hr.getDateStart(), hr.getDateEnd()).toDays());
             return sum + Duration.between(hr.getDateStart(), hr.getDateEnd()).toDays();
           }, Long::sum);
-    return Employee.HOLIDAYS_PER_YEAR - approvedHolidays.intValue();
+    return Employee.HOLIDAYS_PER_YEAR - approvedHolidays.intValue() + bonusHolidays;
   }
 
   public String getHolidayBookingsSerialized() {
