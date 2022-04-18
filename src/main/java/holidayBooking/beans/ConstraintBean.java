@@ -1,8 +1,6 @@
 package holidayBooking.beans;
 
-import java.io.Console;
 import java.time.LocalDateTime;
-import java.time.Month;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;

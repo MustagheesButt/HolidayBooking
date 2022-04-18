@@ -157,53 +157,14 @@ public class Employee implements Serializable {
         .filter(hr -> hr.getStatus().equals("approved"))
         .collect(Collectors.toList());
   }
-<<<<<<< HEAD
-  public List<HolidayRequest> getRoleBookings(Long id, LocalDateTime start, LocalDateTime end) {
-	  return this.getHolidayRequests()
-		        .stream()
-		        .filter(hr -> hr.getStatus().equals("approved"))
-		        .filter(hr -> hr.getEmployee().getRole().getId().equals(id))
-		        .filter(hr -> ( (hr.getDateStart().compareTo(start)>=0 && hr.getDateStart().compareTo(end)<0) 
-		        		|| (hr.getDateStart().compareTo(start)<=0 && hr.getDateEnd().compareTo(start)>0 ))  )    
-		        .collect(Collectors.toList());  
-	  }
-  
-  public List<HolidayRequest> getHoliday(LocalDateTime start, LocalDateTime end ) {
-	    
-	  return this.getHolidayRequests()
-	        .stream()
-	        .filter(hr -> hr.getStatus().equals("pending"))
-	        .filter(hr -> ( (hr.getDateStart().compareTo(start)>=0 && hr.getDateStart().compareTo(end)<0) 
-	        		|| (hr.getDateStart().compareTo(start)<=0 && hr.getDateEnd().compareTo(start)>0 ))  )         
-	        .collect(Collectors.toList());  
-	  }
-  public List<HolidayRequest> getApprovedHoliday(LocalDateTime start, LocalDateTime end ) {
-	    
-	  return this.getHolidayRequests()
-	        .stream()
-	        .filter(hr -> hr.getStatus().equals("approved"))
-	        .filter(hr -> ( (hr.getDateStart().compareTo(start)>=0 && hr.getDateStart().compareTo(end)<0) 
-	        		|| (hr.getDateStart().compareTo(start)<=0 && hr.getDateEnd().compareTo(start)>0 ))  )     
-	        .collect(Collectors.toList()); 
-	  }
-=======
->>>>>>> a377fe53ba2fe58e69cba97cb5fc094ea1eacd9d
-
-  public Long getHolidayBookingsDayCount() {
-    return this.getHolidayBookings()
-        .stream()
-        .reduce(0L, (sum, hr) -> {
-          return sum + Duration.between(hr.getDateStart(), hr.getDateEnd()).toDays();
-        }, Long::sum);
-  }
 
   public List<HolidayRequest> getRoleBookings(Long id, LocalDateTime start, LocalDateTime end) {
     return this.getHolidayRequests()
         .stream()
         .filter(hr -> hr.getStatus().equals("approved"))
         .filter(hr -> hr.getEmployee().getRole().getId().equals(id))
-        .filter(hr -> hr.getDateStart().compareTo(start) >= 0 && hr.getDateStart().compareTo(end) < 0)
-        .filter(hr -> start.compareTo(hr.getDateStart()) >= 0 && start.compareTo(hr.getDateEnd()) < 0)
+        .filter(hr -> ((hr.getDateStart().compareTo(start) >= 0 && hr.getDateStart().compareTo(end) < 0)
+            || (hr.getDateStart().compareTo(start) <= 0 && hr.getDateEnd().compareTo(start) > 0)))
         .collect(Collectors.toList());
   }
 
@@ -215,6 +176,14 @@ public class Employee implements Serializable {
         .filter(hr -> ((hr.getDateStart().compareTo(start) >= 0 && hr.getDateStart().compareTo(end) < 0)
             || (hr.getDateStart().compareTo(start) <= 0 && hr.getDateEnd().compareTo(start) > 0)))
         .collect(Collectors.toList());
+  }
+
+  public Long getHolidayBookingsDayCount() {
+    return this.getHolidayBookings()
+        .stream()
+        .reduce(0L, (sum, hr) -> {
+          return sum + Duration.between(hr.getDateStart(), hr.getDateEnd()).toDays();
+        }, Long::sum);
   }
 
   public List<HolidayRequest> getApprovedHoliday(LocalDateTime start, LocalDateTime end) {
