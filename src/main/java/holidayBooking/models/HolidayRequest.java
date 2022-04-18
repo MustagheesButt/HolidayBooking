@@ -1,6 +1,7 @@
 package holidayBooking.models;
 
 import java.io.Serializable;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -50,6 +51,10 @@ public class HolidayRequest implements Serializable {
     return this.dateEnd;
   }
   public long getDuration() {
+    if (this.duration == null || this.duration <= 0) {
+      this.setDuration(Duration.between(this.dateStart, this.dateEnd).toDays());
+    }
+
 	  return this.duration;
   }
   public Employee getEmployee() {
@@ -86,6 +91,7 @@ public class HolidayRequest implements Serializable {
     return this.title + ":" + this.status;
   }
 
+  @JsonbTransient
   public List<String> getConstraintViolations() {
     return ConstraintBean.brokenContraints(this);
   }

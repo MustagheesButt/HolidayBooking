@@ -20,7 +20,12 @@ public class HolidayRequestBean {
     hr.setStatus("pending");
     hr.setEmployee(e);
     
-    holidayRequestService.persist(hr);
+    try {
+      holidayRequestService.persist(hr);
+    } catch (Exception exception) {
+      exception.printStackTrace();
+      return null;
+    }
 
     return hr;
   }
