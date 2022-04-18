@@ -161,23 +161,33 @@ public class Employee implements Serializable {
         .filter(hr -> hr.getStatus().equals("approved"))
         .collect(Collectors.toList());
   }
-  public List<HolidayRequest> getRoleBookings(Long id) {
-	    return this.getHolidayRequests()
-	        .stream()
-	        .filter(hr -> hr.getStatus().equals("approved"))
-	        .filter(hr -> hr.getEmployee().getRole().getId().equals(id))
-	        .collect(Collectors.toList());
+  public List<HolidayRequest> getRoleBookings(Long id, LocalDateTime start, LocalDateTime end) {
+	  return this.getHolidayRequests()
+		        .stream()
+		        .filter(hr -> hr.getStatus().equals("approved"))
+		        .filter(hr -> hr.getEmployee().getRole().getId().equals(id))
+		        .filter(hr -> hr.getDateStart().compareTo(start)>=0 && hr.getDateStart().compareTo(end)<0 ) 
+		        .filter(hr -> start.compareTo(hr.getDateStart())>=0 && start.compareTo(hr.getDateEnd())<0 )
+		        .collect(Collectors.toList());  
 	  }
-  
   
   public List<HolidayRequest> getHoliday(LocalDateTime start, LocalDateTime end ) {
 	    
 	  return this.getHolidayRequests()
 	        .stream()
-	        .filter(hr -> hr.getStatus().equals("approved"))
-	        .filter(hr -> hr.getDateStart().compareTo(start)>=0)
-	        .filter(hr -> hr.getDateEnd().compareTo(end) < 0)
+	        .filter(hr -> hr.getStatus().equals("pending"))
+	        .filter(hr -> ( (hr.getDateStart().compareTo(start)>=0 && hr.getDateStart().compareTo(end)<0) 
+	        		|| (hr.getDateStart().compareTo(start)<=0 && hr.getDateEnd().compareTo(start)>0 ))  )         
 	        .collect(Collectors.toList());  
+	  }
+  public List<HolidayRequest> getApprovedHoliday(LocalDateTime start, LocalDateTime end ) {
+	    
+	  return this.getHolidayRequests()
+	        .stream()
+	        .filter(hr -> hr.getStatus().equals("approved"))
+	        .filter(hr -> ( (hr.getDateStart().compareTo(start)>=0 && hr.getDateStart().compareTo(end)<0) 
+	        		|| (hr.getDateStart().compareTo(start)<=0 && hr.getDateEnd().compareTo(start)>0 ))  )     
+	        .collect(Collectors.toList()); 
 	  }
 
   public int getRemainingHolidays() {

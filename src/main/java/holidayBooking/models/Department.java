@@ -58,6 +58,14 @@ public class Department implements Serializable {
 		 }
 		 return hr;
 	  }
+  public List<HolidayRequest> getAllRequests(LocalDateTime start, LocalDateTime end){
+		 List<Employee> e = this.getEmployees();
+		 List<HolidayRequest> hr = new ArrayList<HolidayRequest>();
+		 for(int i=0; i<e.size();i++) {		
+			 hr.addAll(e.get(i).getHoliday(start, end));
+		 }
+		 return hr;
+	  }
   
   public List<HolidayRequest> getAprrovedRequests(){
 	 List<Employee> e = this.getEmployees();
@@ -67,11 +75,20 @@ public class Department implements Serializable {
 	 }
 	 return hr;
   }
-  public List<HolidayRequest> getRoleRequests(long id){
+  public List<HolidayRequest> getAprrovedRequests(LocalDateTime start, LocalDateTime end){
+		 List<Employee> e = this.getEmployees();
+		 List<HolidayRequest> hr = new ArrayList<HolidayRequest>();
+		 for(int i=0; i<e.size();i++) {		
+			 hr.addAll(e.get(i).getApprovedHoliday(start ,end));
+		 }
+		 return hr;
+	  }
+  
+  public List<HolidayRequest> getRoleRequests(long id, LocalDateTime start, LocalDateTime end){
 		 List<Employee> e = this.getEmployees();
 		 List<HolidayRequest> hr = new ArrayList<HolidayRequest>();
 		 for(int i=0; i<e.size();i++) {
-			 hr.addAll(e.get(i).getRoleBookings(id));
+			 hr.addAll(e.get(i).getRoleBookings(id,start, end));
 		 }
 		 return hr;
 	  }

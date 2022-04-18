@@ -1,6 +1,8 @@
 package holidayBooking.beans;
 
+import java.io.Console;
 import java.time.LocalDateTime;
+import java.time.Month;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -18,12 +20,28 @@ public class ConstraintBean {
 
 		List<HolidayRequest> hr_approved = holidayRequest.getEmployee().getDepartment().getAprrovedRequests();
 
-		List<HolidayRequest> hr_m = holidayRequest.getEmployee().getDepartment().getRoleRequests(3);
+		List<HolidayRequest> hr_m = holidayRequest.getEmployee().getDepartment().getRoleRequests(3,holidayRequest.getDateStart(),holidayRequest.getDateEnd());
 
-		List<HolidayRequest> hr_s = holidayRequest.getEmployee().getDepartment().getRoleRequests(4);
+		List<HolidayRequest> hr_s = holidayRequest.getEmployee().getDepartment().getRoleRequests(4,holidayRequest.getDateStart(),holidayRequest.getDateEnd());
 
+// No constraints from December 23rd to January 3rd.	
+		boolean constraints = true;
+if(holidayRequest.getDateStart().getMonthValue() == 12 &&  holidayRequest.getDateStart().getDayOfMonth() >= 23) {
+		if(holidayRequest.getDateEnd().getMonthValue() == 1 && holidayRequest.getDateEnd().getDayOfMonth() <= 3){
+			constraints = false;
+		}	
+		else if( (holidayRequest.getDateEnd().getMonthValue() == 12 && holidayRequest.getDateEnd().getDayOfMonth() >= 23 ) ) {
+			constraints = false;
+		}
+		else {
+			constraints = true;
+		}	
+}
+else if((holidayRequest.getDateStart().getMonthValue() == 1) && ( holidayRequest.getDateStart().getDayOfMonth() >= 1 && holidayRequest.getDateEnd().getDayOfMonth() <= 4 ) ) {
+	constraints = false;
+}
+else if(constraints== true) {
 		// 1. Has consumed yearly holidays
-
 		if (e.getHolidayBookings().size() >= e.getRemainingHolidays()) {
 			reasons.add("used up all holidays.");
 		}
@@ -73,31 +91,68 @@ public class ConstraintBean {
 		// At least 1 Manager must be on duty
 		if (holidayRequest.getEmployee().getRole().getId() == 3) {
 			List<HolidayRequest> Temp_hr = new ArrayList<HolidayRequest>();
-
-			for (HolidayRequest h : hr_m) {
+			List<Employee> em = holidayRequest.getEmployee().getDepartment().getRoleSpecific(3);
+			if(em.size()>1) {
+				for (HolidayRequest h : hr_m) {
+					if (Temp_hr.isEmpty()) {
+						Temp_hr.add(h);
+					}
+					boolean exists = false;
+					for (HolidayRequest t : Temp_hr) {
+						if (h.getEmployee().getId() == t.getEmployee().getId()) {
+							exists = true;
+						}
+					}
+					if(exists==false)
+						Temp_hr.add(h);
+				}									
+					if(em.size() == Temp_hr.size()+1 ) 
+					{									
+							reasons.add("Atleast One manager must be on duty");						
+					}							
+			}
+			else{
+				reasons.add("Atleast One manager must be on duty");
+			}
+		}
+		
+		// 60% must be on duty
+		if(true)
+		{
+			List<Employee> em = holidayRequest.getEmployee().getDepartment().getEmployees();
+			List<HolidayRequest> Temp_hr = new ArrayList<HolidayRequest>();
+			List<HolidayRequest> hr_temp = holidayRequest.getEmployee().getDepartment().getAprrovedRequests(holidayRequest.getDateStart(),holidayRequest.getDateEnd());
+			for (HolidayRequest h : hr_temp) {
 				if (Temp_hr.isEmpty()) {
 					Temp_hr.add(h);
 				}
+				boolean exists = false;
 				for (HolidayRequest t : Temp_hr) {
-					if (h.getEmployee().getId() != t.getEmployee().getId()) {
-						Temp_hr.add(h);
+					if (h.getEmployee().getId() == t.getEmployee().getId()) {
+						exists = true;
 					}
 				}
+				if(exists==false)
+					Temp_hr.add(h);
 			}
-
-			for (int i = 0; i < hr_all.size(); i++) {
-				HolidayRequest hr = hr_m.get(i);
-				if (hr.getEmployee().getRole().getId() == 3) {
+			int em_duty= em.size()-Temp_hr.size()-1;
+			if(holidayRequest.getDateStart().getMonthValue() == 8 || holidayRequest.getDateEnd().getMonthValue()== 8) {
+				if((float)em_duty/em.size()*100 < 40.0) {					
+					reasons.add("At least 40% deparment must be on duty in August");	
 				}
-
+			}
+			else {				
+				if((float)em_duty/em.size()*100 < 60.0) {					
+					reasons.add("At least 60% deparment must be on duty");	
+				}
 			}
 		}
-
+		
 		// remove this. not an actual constraint. just here for testing
-		if (ConstraintBean.isPeakTime(holidayRequest.getDateStart()) || ConstraintBean.isPeakTime(holidayRequest.getDateEnd())) {
-			reasons.add("at peak time");
-		}
-
+		//if (ConstraintBean.isPeakTime(holidayRequest.getDateStart()) || ConstraintBean.isPeakTime(holidayRequest.getDateEnd())) {
+		//	reasons.add("at peak time");
+		//}
+	}
 		return reasons;
 	}
 
