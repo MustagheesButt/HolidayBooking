@@ -4,7 +4,10 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+import javax.annotation.Resource;
 import javax.inject.Inject;
+import javax.jms.ConnectionFactory;
+import javax.jms.Queue;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
@@ -14,6 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import holidayBooking.beans.HolidayRequestBean;
+import holidayBooking.beans.MessageSender;
 import holidayBooking.models.Employee;
 import holidayBooking.models.HolidayRequest;
 import holidayBooking.services.HolidayRequestService;
@@ -24,6 +28,11 @@ public class HolidayRequestServlet extends HttpServlet {
   @Inject
   private HolidayRequestService holidayRequestService;
 
+  @Resource(mappedName = "java:/ConnectionFactory")
+  private ConnectionFactory connectionFactory;
+
+  @Resource(mappedName = "java:/jms/myQueue")
+  private Queue myQueue;
 
   @Override
   protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -49,7 +58,10 @@ public class HolidayRequestServlet extends HttpServlet {
       hr.setDateStart(dateStart);
       hr.setDateEnd(dateEnd);
       hr.setDuration(duration);
-      HolidayRequestBean.createHolidayRequest(hr, holidayRequestService, (Employee) session.getAttribute("employee"));
+
+      Employee e = (Employee) session.getAttribute("employee");
+      HolidayRequestBean.createHolidayRequest(hr, holidayRequestService, e);
+      MessageSender.sendMessage(String.format("Received holiday request from %s", e.getFullName()), connectionFactory, myQueue);
     } else if (uri.contains("approve-request")) {
       HolidayRequestBean.approveRequest(req, holidayRequestService);
       redirectTo = "/admin/manage-requests";

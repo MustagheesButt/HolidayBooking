@@ -44,15 +44,16 @@ public class EmployeeService {
   }
 
   public void update(Employee e) {
-	   entityManager.merge(e);    	   
+    entityManager.merge(e);
   }
 
   public boolean persist(Employee e) {
-	  try {
-    entityManager.persist(e);  
-  }catch (Exception ex) {
+    try {
+      entityManager.persist(e);
+    } catch (Exception ex) {
       return false;
-    }  
-	  return true;  
+    }
+
+    return true;
   }
 }

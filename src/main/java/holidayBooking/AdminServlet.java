@@ -13,7 +13,6 @@ import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
 
 import holidayBooking.beans.AdminBean;
-import holidayBooking.beans.MessageReceiver;
 import holidayBooking.models.Admin;
 import holidayBooking.services.DepartmentService;
 import holidayBooking.services.EmployeeService;
@@ -47,10 +46,6 @@ public class AdminServlet extends HttpServlet {
 
 		Admin admin = (Admin) session.getAttribute("admin");
 		req.setAttribute("admin", admin);
-
-		MessageReceiver mr = new MessageReceiver();
-		req.setAttribute("notifications", mr.receiveMessage());
-		System.out.println(mr.receiveMessage());
 
 		if (uri.contains("manage-departments")) {
 			view = AdminBean.getManageDepartments(req, departmentService);

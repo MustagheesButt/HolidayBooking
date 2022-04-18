@@ -8,8 +8,6 @@ import java.util.List;
 import holidayBooking.models.Employee;
 import holidayBooking.models.HolidayRequest;
 
-// TODO add constrain business logic here
-
 public class ConstraintBean {
 
 	public static List<String> brokenContraints(HolidayRequest holidayRequest) {

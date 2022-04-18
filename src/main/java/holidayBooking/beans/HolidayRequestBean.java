@@ -19,9 +19,6 @@ public class HolidayRequestBean {
   public static HolidayRequest createHolidayRequest(HolidayRequest hr, HolidayRequestService holidayRequestService, Employee e) {
     hr.setStatus("pending");
     hr.setEmployee(e);
-
-    MessageSender ms = new MessageSender();
-    ms.sendMessage(String.format("Received holiday request from %s", e.getFullName()));
     
     holidayRequestService.persist(hr);
 

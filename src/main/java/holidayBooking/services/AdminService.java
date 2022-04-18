@@ -8,6 +8,7 @@ import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 
 import holidayBooking.models.Admin;
+import holidayBooking.models.Notification;
 
 @ApplicationScoped
 @Transactional
@@ -31,5 +32,13 @@ public class AdminService {
 
   public List<Admin> getAll() {
     return entityManager.createQuery("SELECT a FROM Admin a", Admin.class).getResultList();
+  }
+
+  public void sendNotification(Notification notification) {
+    this.getAll().forEach(admin -> {
+      notification.setSendTo(admin.getEmail());
+      notification.setMsgStatus("unread");
+      entityManager.persist(notification);
+    });
   }
 }
