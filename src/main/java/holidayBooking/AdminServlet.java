@@ -1,6 +1,8 @@
 package holidayBooking;
 
 import java.io.IOException;
+import java.util.Comparator;
+import java.util.List;
 
 import javax.inject.Inject;
 import javax.servlet.RequestDispatcher;
@@ -14,6 +16,7 @@ import javax.transaction.Transactional;
 
 import holidayBooking.beans.AdminBean;
 import holidayBooking.models.Admin;
+import holidayBooking.models.HolidayRequest;
 import holidayBooking.services.DepartmentService;
 import holidayBooking.services.EmployeeService;
 import holidayBooking.services.HolidayRequestService;
@@ -54,7 +57,20 @@ public class AdminServlet extends HttpServlet {
 			req.setAttribute("departments", departmentService.getAll());
 			view = req.getRequestDispatcher("/views/admin/create_employee.jsp");
 		} else if (uri.contains("manage-requests")) {
-			req.setAttribute("holidayRequests", holidayRequestService.getPending());
+			List<HolidayRequest> pendingRequests = holidayRequestService.getPending();
+
+			// Functionality G - Prioritize by # of holidays already approved, and days
+			// requested during peak time
+			pendingRequests.sort(new Comparator<HolidayRequest>() {
+				@Override
+				public int compare(HolidayRequest hr1, HolidayRequest hr2) {
+					Long total1 = hr1.getDaysDuringPeakTime() + hr1.getEmployee().getHolidayBookingsDayCount();
+					Long total2 = hr2.getDaysDuringPeakTime() + hr2.getEmployee().getHolidayBookingsDayCount();
+					return total1.compareTo(total2);
+				}
+			});
+
+			req.setAttribute("holidayRequests", pendingRequests);
 			view = req.getRequestDispatcher("/views/admin/manage_requests.jsp");
 		} else if (uri.contains("edit-employee")) {
 			req.setAttribute("employee", employeeService.find(Long.parseLong(req.getParameter("id"))));
@@ -81,31 +97,27 @@ public class AdminServlet extends HttpServlet {
 		String redirectTo = "/admin";
 		if (uri.contains("delete-employee")) {
 			AdminBean.deleteEmployee(req, employeeService);
-			
+
 		} else if (uri.contains("update-employee")) {
 			String msg = AdminBean.updateEmployee(req, employeeService, roleService, departmentService);
-			if(msg == "Head") {
+			if (msg == "Head") {
 				redirectTo = "/admin?error=Head";
-			}	
-			else if (msg == "Deputy") {
+			} else if (msg == "Deputy") {
 				redirectTo = "/admin?error=Deputy";
-			}
-			else if (msg == "Email") {
+			} else if (msg == "Email") {
 				redirectTo = "/admin?error=Email";
-			}	
-		} 
-		
+			}
+		}
+
 		else if (uri.contains("add-employee")) {
 			String msg = AdminBean.addEmployee(req, employeeService, roleService, departmentService);
-			if(msg == "Head") {
+			if (msg == "Head") {
 				redirectTo = "/admin?error=Head";
-			}
-			else if (msg == "Deputy") {
+			} else if (msg == "Deputy") {
 				redirectTo = "/admin?error=Deputy";
-			}	
-			else if (msg == "Email") {
+			} else if (msg == "Email") {
 				redirectTo = "/admin?error=Email";
-			}	
+			}
 		}
 
 		resp.sendRedirect(redirectTo);

@@ -60,10 +60,10 @@ else if(constraints== true) {
 							&& hr.getEmployee().getDepartment().getId() == holidayRequest.getEmployee().getDepartment().getId()) {
 						if (hr.getDateStart().compareTo(holidayRequest.getDateStart()) >= 0
 								&& hr.getDateStart().compareTo(holidayRequest.getDateEnd()) < 0) {
-							reasons.add("Deapartment Head is aleady on holiday");
+							reasons.add("Department Head is already on holiday");
 						} else if (holidayRequest.getDateStart().compareTo(hr.getDateStart()) >= 0
 								&& holidayRequest.getDateStart().compareTo(hr.getDateEnd()) < 0) {
-							reasons.add("Deapartment Head is aleady on holiday");
+							reasons.add("Department Head is already on holiday");
 						}
 					}
 				}
@@ -94,7 +94,7 @@ else if(constraints== true) {
 			List<Employee> em = holidayRequest.getEmployee().getDepartment().getRoleSpecific(3);
 			if(em.size()>1) {
 				for (HolidayRequest h : hr_m) {
-					if (Temp_hr.isEmpty()) {
+					if (Temp_hr.isEmpty()) {						
 						Temp_hr.add(h);
 					}
 					boolean exists = false;
@@ -103,9 +103,10 @@ else if(constraints== true) {
 							exists = true;
 						}
 					}
-					if(exists==false)
+					if(exists==false) {
 						Temp_hr.add(h);
-				}									
+					}
+				}	
 					if(em.size() == Temp_hr.size()+1 ) 
 					{									
 							reasons.add("Atleast One manager must be on duty");						
@@ -113,6 +114,36 @@ else if(constraints== true) {
 			}
 			else{
 				reasons.add("Atleast One manager must be on duty");
+			}
+		}
+		
+		
+		// At least one Senior Staff must be on duty
+		if (holidayRequest.getEmployee().getRole().getId() == 4) {
+			List<HolidayRequest> Temp_hr = new ArrayList<HolidayRequest>();
+			List<Employee> em = holidayRequest.getEmployee().getDepartment().getRoleSpecific(4);
+			if(em.size()>1) {
+				for (HolidayRequest h : hr_s) {
+					if (Temp_hr.isEmpty()) {						
+						Temp_hr.add(h);
+					}
+					boolean exists = false;
+					for (HolidayRequest t : Temp_hr) {
+						if (h.getEmployee().getId() == t.getEmployee().getId()) {
+							exists = true;
+						}
+					}
+					if(exists==false) {
+						Temp_hr.add(h);
+					}
+				}								
+					if(em.size() == Temp_hr.size()+1 ) 
+					{									
+							reasons.add("Atleast One Senior Staff must be on duty");						
+					}							
+			}
+			else{
+				reasons.add("Atleast One Senior Staff must be on duty");
 			}
 		}
 		
