@@ -95,4 +95,16 @@ public class HolidayRequest implements Serializable {
   public List<String> getConstraintViolations() {
     return ConstraintBean.brokenContraints(this);
   }
+
+  public Long getDaysDuringPeakTime() {
+    Long counter = 0L;
+
+    for (LocalDateTime currDate = this.getDateStart(); currDate.compareTo(this.getDateEnd()) == 0; currDate.plusDays(1)) {
+      if (ConstraintBean.isPeakTime(currDate)) {
+        counter++;
+      }
+    }
+
+    return counter;
+  }
 }

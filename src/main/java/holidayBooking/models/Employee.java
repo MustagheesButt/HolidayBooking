@@ -23,14 +23,10 @@ import javax.persistence.UniqueConstraint;
 import javax.json.bind.annotation.JsonbTransient;
 
 @Entity
-@Table(name = "employees", uniqueConstraints={@UniqueConstraint(columnNames = {"email"})})
-
-
-
+@Table(name = "employees", uniqueConstraints = { @UniqueConstraint(columnNames = { "email" }) })
 public class Employee implements Serializable {
   static final int HOLIDAYS_PER_YEAR = 30; // For testing can set it 1 or something
 
- 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
@@ -40,7 +36,7 @@ public class Employee implements Serializable {
   private String lastName;
 
   @Column(name = "email")
-  private  String email;
+  private String email;
 
   private String password;
 
@@ -161,43 +157,48 @@ public class Employee implements Serializable {
         .filter(hr -> hr.getStatus().equals("approved"))
         .collect(Collectors.toList());
   }
-  public List<HolidayRequest> getRoleBookings(Long id, LocalDateTime start, LocalDateTime end) {
-	  return this.getHolidayRequests()
-		        .stream()
-		        .filter(hr -> hr.getStatus().equals("approved"))
-		        .filter(hr -> hr.getEmployee().getRole().getId().equals(id))
-		        .filter(hr -> hr.getDateStart().compareTo(start)>=0 && hr.getDateStart().compareTo(end)<0 ) 
-		        .filter(hr -> start.compareTo(hr.getDateStart())>=0 && start.compareTo(hr.getDateEnd())<0 )
-		        .collect(Collectors.toList());  
-	  }
-  
-  public List<HolidayRequest> getHoliday(LocalDateTime start, LocalDateTime end ) {
-	    
-	  return this.getHolidayRequests()
-	        .stream()
-	        .filter(hr -> hr.getStatus().equals("pending"))
-	        .filter(hr -> ( (hr.getDateStart().compareTo(start)>=0 && hr.getDateStart().compareTo(end)<0) 
-	        		|| (hr.getDateStart().compareTo(start)<=0 && hr.getDateEnd().compareTo(start)>0 ))  )         
-	        .collect(Collectors.toList());  
-	  }
-  public List<HolidayRequest> getApprovedHoliday(LocalDateTime start, LocalDateTime end ) {
-	    
-	  return this.getHolidayRequests()
-	        .stream()
-	        .filter(hr -> hr.getStatus().equals("approved"))
-	        .filter(hr -> ( (hr.getDateStart().compareTo(start)>=0 && hr.getDateStart().compareTo(end)<0) 
-	        		|| (hr.getDateStart().compareTo(start)<=0 && hr.getDateEnd().compareTo(start)>0 ))  )     
-	        .collect(Collectors.toList()); 
-	  }
 
-  public int getRemainingHolidays() {
-	Integer bonusHolidays = (int)ChronoUnit.YEARS.between(this.joiningDate, LocalDateTime.now())/5;
-    Long approvedHolidays = this.getHolidayBookings()
+  public Long getHolidayBookingsDayCount() {
+    return this.getHolidayBookings()
         .stream()
         .reduce(0L, (sum, hr) -> {
-            // System.out.println(Duration.between(hr.getDateStart(), hr.getDateEnd()).toDays());
-            return sum + Duration.between(hr.getDateStart(), hr.getDateEnd()).toDays();
-          }, Long::sum);
+          return sum + Duration.between(hr.getDateStart(), hr.getDateEnd()).toDays();
+        }, Long::sum);
+  }
+
+  public List<HolidayRequest> getRoleBookings(Long id, LocalDateTime start, LocalDateTime end) {
+    return this.getHolidayRequests()
+        .stream()
+        .filter(hr -> hr.getStatus().equals("approved"))
+        .filter(hr -> hr.getEmployee().getRole().getId().equals(id))
+        .filter(hr -> hr.getDateStart().compareTo(start) >= 0 && hr.getDateStart().compareTo(end) < 0)
+        .filter(hr -> start.compareTo(hr.getDateStart()) >= 0 && start.compareTo(hr.getDateEnd()) < 0)
+        .collect(Collectors.toList());
+  }
+
+  public List<HolidayRequest> getHoliday(LocalDateTime start, LocalDateTime end) {
+
+    return this.getHolidayRequests()
+        .stream()
+        .filter(hr -> hr.getStatus().equals("pending"))
+        .filter(hr -> ((hr.getDateStart().compareTo(start) >= 0 && hr.getDateStart().compareTo(end) < 0)
+            || (hr.getDateStart().compareTo(start) <= 0 && hr.getDateEnd().compareTo(start) > 0)))
+        .collect(Collectors.toList());
+  }
+
+  public List<HolidayRequest> getApprovedHoliday(LocalDateTime start, LocalDateTime end) {
+
+    return this.getHolidayRequests()
+        .stream()
+        .filter(hr -> hr.getStatus().equals("approved"))
+        .filter(hr -> ((hr.getDateStart().compareTo(start) >= 0 && hr.getDateStart().compareTo(end) < 0)
+            || (hr.getDateStart().compareTo(start) <= 0 && hr.getDateEnd().compareTo(start) > 0)))
+        .collect(Collectors.toList());
+  }
+
+  public int getRemainingHolidays() {
+    Integer bonusHolidays = (int) ChronoUnit.YEARS.between(this.joiningDate, LocalDateTime.now()) / 5;
+    Long approvedHolidays = this.getHolidayBookingsDayCount();
     return Employee.HOLIDAYS_PER_YEAR - approvedHolidays.intValue() + bonusHolidays;
   }
 
@@ -205,8 +206,6 @@ public class Employee implements Serializable {
     return "[" +
         String.join(",", this.getHolidayBookings()
             .stream()
-            // .map(hr -> "{\\\"start\\\": \\\"" + hr.getDateStart() + "\\\", \\\"end\\\":
-            // \\\"" + hr.getDateEnd() + "\\\"}")
             .map(hr -> "{\"start\": \"" + hr.getDateStart() + "\", \"end\": \"" + hr.getDateEnd() + "\"}")
             .collect(Collectors.toList()))
         + "]";

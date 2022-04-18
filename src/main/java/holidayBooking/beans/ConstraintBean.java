@@ -60,10 +60,10 @@ else if(constraints== true) {
 							&& hr.getEmployee().getDepartment().getId() == holidayRequest.getEmployee().getDepartment().getId()) {
 						if (hr.getDateStart().compareTo(holidayRequest.getDateStart()) >= 0
 								&& hr.getDateStart().compareTo(holidayRequest.getDateEnd()) < 0) {
-							reasons.add("Deapartment Head is aleady on holiday");
+							reasons.add("Department Head is already on holiday");
 						} else if (holidayRequest.getDateStart().compareTo(hr.getDateStart()) >= 0
 								&& holidayRequest.getDateStart().compareTo(hr.getDateEnd()) < 0) {
-							reasons.add("Deapartment Head is aleady on holiday");
+							reasons.add("Department Head is already on holiday");
 						}
 					}
 				}
