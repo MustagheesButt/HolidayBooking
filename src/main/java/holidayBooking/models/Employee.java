@@ -151,6 +151,22 @@ public class Employee implements Serializable {
     return this.firstName + " " + this.lastName;
   }
 
+  public boolean isHeadOfDept() {
+    return this.getRole().getId() == 1;
+  }
+
+  public boolean isDeputyHeadOfDept() {
+    return this.getRole().getId() == 2;
+  }
+
+  public boolean isManager() {
+    return this.getRole().getId() == 3;
+  }
+
+  public boolean isSeniorStaff() {
+    return this.getRole().getId() == 4;
+  }
+
   public List<HolidayRequest> getHolidayBookings() {
     return this.getHolidayRequests()
         .stream()

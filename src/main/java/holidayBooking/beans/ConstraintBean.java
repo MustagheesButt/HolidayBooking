@@ -14,31 +14,25 @@ public class ConstraintBean {
 		List<String> reasons = new ArrayList<String>();
 		Employee e = holidayRequest.getEmployee();
 
-		List<HolidayRequest> hr_all = holidayRequest.getEmployee().getDepartment().getAllRequests();
-
 		List<HolidayRequest> hr_approved = holidayRequest.getEmployee().getDepartment().getAprrovedRequests();
 
 		List<HolidayRequest> hr_m = holidayRequest.getEmployee().getDepartment().getRoleRequests(3,holidayRequest.getDateStart(),holidayRequest.getDateEnd());
 
 		List<HolidayRequest> hr_s = holidayRequest.getEmployee().getDepartment().getRoleRequests(4,holidayRequest.getDateStart(),holidayRequest.getDateEnd());
 
-// No constraints from December 23rd to January 3rd.	
-		boolean constraints = true;
-if(holidayRequest.getDateStart().getMonthValue() == 12 &&  holidayRequest.getDateStart().getDayOfMonth() >= 23) {
-		if(holidayRequest.getDateEnd().getMonthValue() == 1 && holidayRequest.getDateEnd().getDayOfMonth() <= 3){
-			constraints = false;
-		}	
-		else if( (holidayRequest.getDateEnd().getMonthValue() == 12 && holidayRequest.getDateEnd().getDayOfMonth() >= 23 ) ) {
-			constraints = false;
+    // No constraints from December 23rd to January 3rd.
+    if(holidayRequest.getDateStart().getMonthValue() == 12 &&  holidayRequest.getDateStart().getDayOfMonth() >= 23) {
+			if (holidayRequest.getDateEnd().getMonthValue() == 1 && holidayRequest.getDateEnd().getDayOfMonth() <= 3){
+				return reasons;
+			}	
+			else if( (holidayRequest.getDateEnd().getMonthValue() == 12 && holidayRequest.getDateEnd().getDayOfMonth() >= 23 ) ) {
+				return reasons;
+			}
+    }
+		else if((holidayRequest.getDateStart().getMonthValue() == 1) && ( holidayRequest.getDateStart().getDayOfMonth() >= 1 && holidayRequest.getDateEnd().getDayOfMonth() <= 4 ) ) {
+			return reasons;
 		}
-		else {
-			constraints = true;
-		}	
-}
-else if((holidayRequest.getDateStart().getMonthValue() == 1) && ( holidayRequest.getDateStart().getDayOfMonth() >= 1 && holidayRequest.getDateEnd().getDayOfMonth() <= 4 ) ) {
-	constraints = false;
-}
-else if(constraints== true) {
+
 		// 1. Has consumed yearly holidays
 		if (e.getHolidayBookings().size() >= e.getRemainingHolidays()) {
 			reasons.add("used up all holidays.");
@@ -49,99 +43,30 @@ else if(constraints== true) {
 		}
 
 		// 3. Department Head is on Holiday. Deputy head has to be on duty.
-
-		if (holidayRequest.getEmployee().getRole().getId() == 2) {
-			for (int i = 0; i < hr_approved.size(); i++) {
-				HolidayRequest hr = hr_approved.get(i);
-				if (hr.getEmployee().getId() != holidayRequest.getEmployee().getId()) {
-					if (hr.getEmployee().getRole().getId() == 1
-							&& hr.getEmployee().getDepartment().getId() == holidayRequest.getEmployee().getDepartment().getId()) {
-						if (hr.getDateStart().compareTo(holidayRequest.getDateStart()) >= 0
-								&& hr.getDateStart().compareTo(holidayRequest.getDateEnd()) < 0) {
-							reasons.add("Department Head is already on holiday");
-						} else if (holidayRequest.getDateStart().compareTo(hr.getDateStart()) >= 0
-								&& holidayRequest.getDateStart().compareTo(hr.getDateEnd()) < 0) {
-							reasons.add("Department Head is already on holiday");
-						}
-					}
-				}
+		if (holidayRequest.getEmployee().isDeputyHeadOfDept()) {
+			if (isHeadOnHoliday(holidayRequest, hr_approved)) {
+				reasons.add("Department Head is already on holiday");
 			}
 		}
+
 		// 4. Department Deputy Head is on Holiday. Head has to be on duty.
-		if (holidayRequest.getEmployee().getRole().getId() == 1) {
-			for (int i = 0; i < hr_approved.size(); i++) {
-				HolidayRequest hr = hr_approved.get(i);
-				if (hr.getEmployee().getId() != holidayRequest.getEmployee().getId()) {
-					if (hr.getEmployee().getRole().getId() == 2
-							&& hr.getEmployee().getDepartment().getId() == holidayRequest.getEmployee().getDepartment().getId()) {
-						if (hr.getDateStart().compareTo(holidayRequest.getDateStart()) >= 0
-								&& hr.getDateStart().compareTo(holidayRequest.getDateEnd()) < 0) {
-							reasons.add("Department Deputy Head is aleady on holiday");
-						} else if (holidayRequest.getDateStart().compareTo(hr.getDateStart()) >= 0
-								&& holidayRequest.getDateStart().compareTo(hr.getDateEnd()) < 0) {
-							reasons.add("Department Deputy Head is aleady on holiday");
-						}
-					}
-				}
+		if (holidayRequest.getEmployee().isHeadOfDept()) {
+			if (isDeputyHeadOnHoliday(holidayRequest, hr_approved)) {
+				reasons.add("Department Deputy Head is already on holiday");
 			}
 		}
 
 		// At least 1 Manager must be on duty
-		if (holidayRequest.getEmployee().getRole().getId() == 3) {
-			List<HolidayRequest> Temp_hr = new ArrayList<HolidayRequest>();
-			List<Employee> em = holidayRequest.getEmployee().getDepartment().getRoleSpecific(3);
-			if(em.size()>1) {
-				for (HolidayRequest h : hr_m) {
-					if (Temp_hr.isEmpty()) {						
-						Temp_hr.add(h);
-					}
-					boolean exists = false;
-					for (HolidayRequest t : Temp_hr) {
-						if (h.getEmployee().getId() == t.getEmployee().getId()) {
-							exists = true;
-						}
-					}
-					if(exists==false) {
-						Temp_hr.add(h);
-					}
-				}	
-					if(em.size() == Temp_hr.size()+1 ) 
-					{									
-							reasons.add("Atleast One manager must be on duty");						
-					}							
-			}
-			else{
-				reasons.add("Atleast One manager must be on duty");
+		if (holidayRequest.getEmployee().isManager()) {
+			if (isNoOtherManagerOnDuty(holidayRequest, hr_m)) {
+				reasons.add("Atleast one manager must be on duty");
 			}
 		}
-		
-		
+
 		// At least one Senior Staff must be on duty
-		if (holidayRequest.getEmployee().getRole().getId() == 4) {
-			List<HolidayRequest> Temp_hr = new ArrayList<HolidayRequest>();
-			List<Employee> em = holidayRequest.getEmployee().getDepartment().getRoleSpecific(4);
-			if(em.size()>1) {
-				for (HolidayRequest h : hr_s) {
-					if (Temp_hr.isEmpty()) {						
-						Temp_hr.add(h);
-					}
-					boolean exists = false;
-					for (HolidayRequest t : Temp_hr) {
-						if (h.getEmployee().getId() == t.getEmployee().getId()) {
-							exists = true;
-						}
-					}
-					if(exists==false) {
-						Temp_hr.add(h);
-					}
-				}								
-					if(em.size() == Temp_hr.size()+1 ) 
-					{									
-							reasons.add("Atleast One Senior Staff must be on duty");						
-					}							
-			}
-			else{
-				reasons.add("Atleast One Senior Staff must be on duty");
+		if (holidayRequest.getEmployee().isSeniorStaff()) {
+			if (isNoOtherSeniorStaffOnDuty(holidayRequest, hr_s)) {
+				reasons.add("Atleast one senior staff must be on duty");
 			}
 		}
 		
@@ -164,16 +89,15 @@ else if(constraints== true) {
 				if(exists==false)
 					Temp_hr.add(h);
 			}
+
 			int em_duty= em.size()-Temp_hr.size()-1;
 			if(holidayRequest.getDateStart().getMonthValue() == 8 || holidayRequest.getDateEnd().getMonthValue()== 8) {
 				if((float)em_duty/em.size()*100 < 40.0) {					
-					reasons.add("At least 40% deparment must be on duty in August");	
+					reasons.add("At least 40% department must be on duty in August");	
 				}
 			}
-			else {				
-				if((float)em_duty/em.size()*100 < 60.0) {					
-					reasons.add("At least 60% deparment must be on duty");	
-				}
+			else if((float)em_duty/em.size()*100 < 60.0) {					
+				reasons.add("At least 60% department must be on duty");	
 			}
 		}
 		
@@ -181,8 +105,116 @@ else if(constraints== true) {
 		//if (ConstraintBean.isPeakTime(holidayRequest.getDateStart()) || ConstraintBean.isPeakTime(holidayRequest.getDateEnd())) {
 		//	reasons.add("at peak time");
 		//}
-	}
+
 		return reasons;
+	}
+
+	public static boolean isHeadOnHoliday(HolidayRequest reqToCheck, List<HolidayRequest> approvedRequests) {
+		for (int i = 0; i < approvedRequests.size(); i++) {
+			HolidayRequest hr = approvedRequests.get(i);
+			if (hr.getEmployee().getId() != reqToCheck.getEmployee().getId()) {
+				if (hr.getEmployee().isHeadOfDept()
+						&& hr.getEmployee().getDepartment().getId() == reqToCheck.getEmployee().getDepartment().getId()) {
+					if (hr.getDateStart().compareTo(reqToCheck.getDateStart()) >= 0
+							&& hr.getDateStart().compareTo(reqToCheck.getDateEnd()) < 0) {
+						// reasons.add("Department Head is already on holiday");
+						return true;
+					} else if (reqToCheck.getDateStart().compareTo(hr.getDateStart()) >= 0
+							&& reqToCheck.getDateStart().compareTo(hr.getDateEnd()) < 0) {
+						// reasons.add("Department Head is already on holiday");
+						return true;
+					}
+				}
+			}
+		}
+
+		return false;
+	}
+
+	public static boolean isDeputyHeadOnHoliday(HolidayRequest reqToCheck, List<HolidayRequest> approvedRequests) {
+		for (int i = 0; i < approvedRequests.size(); i++) {
+			HolidayRequest hr = approvedRequests.get(i);
+			if (hr.getEmployee().getId() != reqToCheck.getEmployee().getId()) {
+				if (hr.getEmployee().isDeputyHeadOfDept()
+						&& hr.getEmployee().getDepartment().getId() == reqToCheck.getEmployee().getDepartment().getId()) {
+					if (hr.getDateStart().compareTo(reqToCheck.getDateStart()) >= 0
+							&& hr.getDateStart().compareTo(reqToCheck.getDateEnd()) < 0) {
+						// reasons.add("Department Deputy Head is aleady on holiday");
+						return true;
+					} else if (reqToCheck.getDateStart().compareTo(hr.getDateStart()) >= 0
+							&& reqToCheck.getDateStart().compareTo(hr.getDateEnd()) < 0) {
+						// reasons.add("Department Deputy Head is aleady on holiday");
+						return true;
+					}
+				}
+			}
+		}
+
+		return false;
+	}
+
+	public static boolean isNoOtherManagerOnDuty(HolidayRequest reqToCheck, List<HolidayRequest> managerRequests) {
+		List<HolidayRequest> Temp_hr = new ArrayList<HolidayRequest>();
+		List<Employee> em = reqToCheck.getEmployee().getDepartment().getRoleSpecific(3);
+		if(em.size()>1) {
+			for (HolidayRequest h : managerRequests) {
+				if (Temp_hr.isEmpty()) {						
+					Temp_hr.add(h);
+				}
+				boolean exists = false;
+				for (HolidayRequest t : Temp_hr) {
+					if (h.getEmployee().getId() == t.getEmployee().getId()) {
+						exists = true;
+					}
+				}
+				if(exists==false) {
+					Temp_hr.add(h);
+				}
+			}	
+				if(em.size() == Temp_hr.size()+1 ) 
+				{									
+					// reasons.add("Atleast One manager must be on duty");
+					return true;
+				}							
+		}
+		else{
+			// reasons.add("Atleast One manager must be on duty");
+			return true;
+		}
+
+		return false;
+	}
+
+	public static boolean isNoOtherSeniorStaffOnDuty(HolidayRequest reqToCheck, List<HolidayRequest> seniorStaffRequests) {
+		List<HolidayRequest> Temp_hr = new ArrayList<HolidayRequest>();
+		List<Employee> em = reqToCheck.getEmployee().getDepartment().getRoleSpecific(4);
+		if(em.size()>1) {
+			for (HolidayRequest h : seniorStaffRequests) {
+				if (Temp_hr.isEmpty()) {
+					Temp_hr.add(h);
+				}
+				boolean exists = false;
+				for (HolidayRequest t : Temp_hr) {
+					if (h.getEmployee().getId() == t.getEmployee().getId()) {
+						exists = true;
+					}
+				}
+				if(exists==false) {
+					Temp_hr.add(h);
+				}
+			}								
+				if(em.size() == Temp_hr.size()+1 ) 
+				{									
+					// reasons.add("Atleast One Senior Staff must be on duty");
+					return true;
+				}
+		}
+		else{
+			// reasons.add("Atleast One Senior Staff must be on duty");
+			return true;
+		}
+
+		return false;
 	}
 
 	public static boolean isPeakTime(LocalDateTime dateToTest) {
