@@ -1,7 +1,9 @@
 package holidayBooking;
 
 import java.io.IOException;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 import javax.servlet.RequestDispatcher;
@@ -17,7 +19,7 @@ import holidayBooking.models.HolidayRequest;
 import holidayBooking.services.EmployeeService;
 import holidayBooking.services.HolidayRequestService;
 
-@WebServlet({"/dashboard", "/request-holidays", "/manage-requests", "/profile"})
+@WebServlet({"/dashboard", "/request-holidays", "/manage-requests", "/profile", "/manage-department-requests"})
 public class EmployeeServlet extends HttpServlet {
   @Inject
   private EmployeeService employeeService;
@@ -30,19 +32,39 @@ public class EmployeeServlet extends HttpServlet {
     HttpSession session = req.getSession();
     String uri = req.getRequestURI();
 
-    if (session.getAttribute("employee") == null) {
+    Employee currEmployee = (Employee)session.getAttribute("employee");
+    if (currEmployee == null) {
       resp.sendRedirect("/login");
       return;
     } else {
       // to update session in case employee was updated by admin
-      Employee e = (Employee)session.getAttribute("employee");
-      session.setAttribute("employee", employeeService.find(e.getId()));
+      session.setAttribute("employee", employeeService.find(currEmployee.getId()));
     }
 
     if (uri.contains("manage-requests")) {
       List<HolidayRequest> requests = holidayRequestService.findAllByEmployee((Employee)session.getAttribute("employee"));
       req.setAttribute("holidayRequests", requests);
       view = req.getRequestDispatcher("views/employees/manage_requests.jsp");
+    } else if (uri.contains("manage-department-requests")) {
+      List<HolidayRequest> pendingRequests = holidayRequestService
+        .getPending()
+        .stream()
+        .filter(hr -> hr.getEmployee().getDepartment().getId() == currEmployee.getDepartment().getId())
+        .collect(Collectors.toList());
+
+			// Functionality G - Prioritize by # of holidays already approved, and days
+			// requested during peak 
+			pendingRequests.sort(new Comparator<HolidayRequest>() {
+				@Override
+				public int compare(HolidayRequest hr1, HolidayRequest hr2) {
+					Long total1 = hr1.getDaysDuringPeakTime() + hr1.getEmployee().getHolidayBookingsDayCount();
+					Long total2 = hr2.getDaysDuringPeakTime() + hr2.getEmployee().getHolidayBookingsDayCount();
+					return total1.compareTo(total2);
+				}
+			});
+
+			req.setAttribute("holidayRequests", pendingRequests);
+      view = req.getRequestDispatcher("views/employees/manage_department_requests.jsp");
     }
 
     view.forward(req, resp);

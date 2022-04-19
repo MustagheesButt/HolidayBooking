@@ -97,7 +97,7 @@
                   <th>Reason for Holiday</th>
                   <th>Employee Name</th>
                   <th>Employee Email</th>
-                  <th>Employee Department</th>
+                  <th>Department</th>
                   <th>Date Start</th>
                   <th>Date End</th>
                 </tr>
@@ -109,8 +109,8 @@
                     <td class="filter1-target">${hb.employee.fullName}</td>
                     <td class="filter1-target">${hb.employee.email}</td>
                     <td>${hb.employee.department}</td>
-                    <td>${hb.dateStart}</td>
-                    <td>${hb.dateEnd}</td>
+                    <td class="datetime">${hb.dateStart}</td>
+                    <td class="datetime">${hb.dateEnd}</td>
                   </tr>
                 </c:forEach>
               </tbody>
@@ -138,17 +138,17 @@
         </section>
 
         <section class="m-5 p-5 bg-gray-200">
-          <h2 class="text-xl">Search Employees on Leave/Work by Date</h2>
-          <input type="date" id="filter2" />
+          <h2 class="text-xl font-bold mb-5">Search Employees on Leave/Work by Date</h2>
+          <input type="date" id="filter2" class="mb-5" />
           <div class="flex">
-            <div>
-              <h3>On Duty</h3>
+            <div class="p-10 bg-gray-100 mr-5">
+              <h3 class="font-bold">On Duty</h3>
               <table>
                 <thead>
                   <tr>
                     <th>Employee Name</th>
-                    <th>Employee Email</th>
-                    <th>Employee Department</th>
+                    <th>Email</th>
+                    <th>Department</th>
                     <th>Role</th>
                   </tr>
                 </thead>
@@ -165,14 +165,14 @@
               </table>
             </div>
 
-            <div>
-              <h3>On Leave</h3>
+            <div class="p-10 bg-gray-100">
+              <h3 class="font-bold">On Leave</h3>
               <table>
                 <thead>
                   <tr>
                     <th>Employee Name</th>
-                    <th>Employee Email</th>
-                    <th>Employee Department</th>
+                    <th>Email</th>
+                    <th>Department</th>
                     <th>Role</th>
                   </tr>
                 </thead>
@@ -234,8 +234,6 @@
               })
             })
           </script>
-          
-       
         </section>
       </section>
     </div>

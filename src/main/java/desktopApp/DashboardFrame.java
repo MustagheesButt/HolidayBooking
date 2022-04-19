@@ -29,7 +29,7 @@ public class DashboardFrame extends JFrame {
 
     Integer remainHolidays = 30 - Helpers.getApprovedHolidayRequests(employee).size();
     JLabel heading1 = new JLabel(String.format("Welcome %s! Remaining holidays: %d", employee.getFullName(), remainHolidays));
-    heading1.setBounds(W / 2 - W / 4, 20, W / 2, 50);
+    heading1.setBounds(W/5, 20, W, 50);
 
     JLabel heading2 = new JLabel("Create a Holiday Request");
     heading2.setBounds(W / 2 - W / 6, 90, W / 3, 50);
@@ -57,6 +57,9 @@ public class DashboardFrame extends JFrame {
     });
     datePicker.setBounds(W / 2 - W / 6, 170, W / 3, 50);
 
+    JLabel label1 = new JLabel("Start date:");
+    label1.setBounds(W / 2 - W / 4 - 50, 150, W / 3, 50);
+
     UtilDateModel model2 = new UtilDateModel();
     JDatePanelImpl datePanel2 = new JDatePanelImpl(model2, new Properties());
     JDatePickerImpl datePicker2 = new JDatePickerImpl(datePanel2, new AbstractFormatter() {
@@ -79,6 +82,9 @@ public class DashboardFrame extends JFrame {
       }
     });
     datePicker2.setBounds(W / 2 - W / 6, 250, W / 3, 50);
+
+    JLabel label2 = new JLabel("End date:");
+    label2.setBounds(W / 2 - W / 4 - 50, 230, W / 3, 50);
 
     JTextField inputTitle = new JTextField("Reason for holiday");
     inputTitle.setBounds(W / 2 - W / 6, 330, W / 3, 50);
@@ -106,7 +112,9 @@ public class DashboardFrame extends JFrame {
     this.add(heading1);
     this.add(heading2);
     this.add(datePicker);
+    this.add(label1);
     this.add(datePicker2);
+    this.add(label2);
     this.add(inputTitle);
     this.add(submitButton);
 

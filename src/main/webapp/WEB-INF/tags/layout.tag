@@ -33,6 +33,14 @@
     </main>
 
     <footer>
+      <script>
+        // format dates
+        const datetimeElements = document.querySelectorAll('.datetime')
+        datetimeElements.forEach(ele => {
+          const d = new Date(ele.innerHTML)
+          ele.innerHTML = d.toLocaleDateString()
+        })
+      </script>
       <jsp:invoke fragment="footer"/>
     </footer>
   </body>

@@ -60,10 +60,20 @@ public class HolidayRequestServlet extends HttpServlet {
       // MessageSender.sendMessage(String.format("Received holiday request from %s", e.getFullName()), connectionFactory, myQueue);
     } else if (uri.contains("approve-request")) {
       HolidayRequestBean.approveRequest(req, holidayRequestService);
-      redirectTo = "/admin/manage-requests";
+
+      if (session.getAttribute("admin") == null) {
+        redirectTo = "/manage-department-requests";
+      } else {
+        redirectTo = "/admin/manage-requests";
+      }
     } else if (uri.contains("reject-request")) {
       HolidayRequestBean.rejectRequest(req, holidayRequestService);
-      redirectTo = "/admin/manage-requests";
+
+      if (session.getAttribute("admin") == null) {
+        redirectTo = "/manage-department-requests";
+      } else {
+        redirectTo = "/admin/manage-requests";
+      }
     }
 
     resp.sendRedirect(redirectTo);

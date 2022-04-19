@@ -38,21 +38,9 @@
                   <tr>
                     <td>${hr.id}</td>
                     <td>${hr.title}</td>
-                    <td>${hr.dateStart}</td>
-                    <td>${hr.dateEnd}</td>
+                    <td class="datetime">${hr.dateStart}</td>
+                    <td class="datetime">${hr.dateEnd}</td>
                     <td class='capitalize ${hr.status == "pending" ? "bg-yellow-200" : hr.status == "approved" ? "bg-green-200": "bg-red-200"}'>${hr.status}</td>
-                    <!-- <td class="flex justify-between">
-                      <a href="/admin/edit-employee/${employee.id}">
-                        <svg aria-hidden="true" focusable="false" class="h-6 w-6">
-                          <use xlink:href="#pencil"></use>
-                        </svg>
-                      </a>
-                      <a href="/admin/delete-employee/${employee.id}">
-                        <svg aria-hidden="true" focusable="false" class="h-6 w-6">
-                          <use xlink:href="#trash"></use>
-                        </svg>
-                      </a>
-                    </td> -->
                   </tr>
                 </c:forEach>
               </tbody>
