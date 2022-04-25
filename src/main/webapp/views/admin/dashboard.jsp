@@ -105,12 +105,12 @@
               <tbody>
                 <c:forEach var="hb" items="${holidayBookings}">
                   <tr>
-                    <td>${hb.title}</td>
-                    <td class="filter1-target">${hb.employee.fullName}</td>
-                    <td class="filter1-target">${hb.employee.email}</td>
-                    <td>${hb.employee.department}</td>
-                    <td class="datetime">${hb.dateStart}</td>
-                    <td class="datetime">${hb.dateEnd}</td>
+                    <td class="p-2">${hb.title}</td>
+                    <td class="p-2 filter1-target">${hb.employee.fullName}</td>
+                    <td class="p-2 filter1-target">${hb.employee.email}</td>
+                    <td class="p-2">${hb.employee.department}</td>
+                    <td class="p-2 datetime">${hb.dateStart}</td>
+                    <td class="p-2 datetime">${hb.dateEnd}</td>
                   </tr>
                 </c:forEach>
               </tbody>
@@ -155,10 +155,10 @@
                 <tbody>
                   <c:forEach var="employee" items="${employees}">
                     <tr class="filter2-target onduty" data-holiday-bookings='${employee.holidayBookingsSerialized}'>
-                      <td>${employee.fullName}</td>
-                      <td>${employee.email}</td>
-                      <td>${employee.department}</td>
-                      <td>${employee.role}</td>
+                      <td class="p-2">${employee.fullName}</td>
+                      <td class="p-2">${employee.email}</td>
+                      <td class="p-2">${employee.department}</td>
+                      <td class="p-2">${employee.role}</td>
                     </tr>
                   </c:forEach>
                 </tbody>
@@ -180,10 +180,10 @@
                   <c:forEach var="employee" items="${employees}">
                     <tr class="filter2-target onleave"
                       data-holiday-bookings='${employee.holidayBookingsSerialized}'>
-                      <td>${employee.fullName}</td>
-                      <td>${employee.email}</td>
-                      <td>${employee.department}</td>
-                      <td>${employee.role}</td>
+                      <td class="p-2">${employee.fullName}</td>
+                      <td class="p-2">${employee.email}</td>
+                      <td class="p-2">${employee.department}</td>
+                      <td class="p-2">${employee.role}</td>
                     </tr>
                   </c:forEach>
                 </tbody>
@@ -205,16 +205,17 @@
                 const bookings = JSON.parse(ele.getAttribute("data-holiday-bookings"))
                 if (bookings.length === 0) ele.classList.add('hidden')
 
+                let toHide = true
                 bookings.forEach((booking) => {
                   const startDate = (new Date(new Date(booking.start).toDateString()))
                   const endDate = (new Date(new Date(booking.end).toDateString()))
-                  // console.log(startDate)
-                  // console.log(endDate)
-                  // console.log(selectedDate)
-                  if (!(selectedDate >= startDate && selectedDate <= endDate)) {
-                    ele.classList.add('hidden')
+
+                  if ((selectedDate >= startDate && selectedDate <= endDate)) {
+                    toHide = false
                   }
                 })
+
+                if (toHide) ele.classList.add('hidden')
               })
 
               document.querySelectorAll('.filter2-target.onduty').forEach((ele) => {
@@ -224,9 +225,7 @@
                 bookings.forEach((booking) => {
                   const startDate = (new Date(new Date(booking.start).toDateString()))
                   const endDate = (new Date(new Date(booking.end).toDateString()))
-                  // console.log(startDate)
-                  // console.log(endDate)
-                  // console.log(selectedDate)
+
                   if ((selectedDate >= startDate && selectedDate <= endDate)) {
                     ele.classList.add('hidden')
                   }

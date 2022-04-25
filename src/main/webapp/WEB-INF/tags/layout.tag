@@ -38,7 +38,7 @@
         const datetimeElements = document.querySelectorAll('.datetime')
         datetimeElements.forEach(ele => {
           const d = new Date(ele.innerHTML)
-          ele.innerHTML = d.toLocaleDateString()
+          ele.innerHTML = d.toLocaleString()
         })
       </script>
       <jsp:invoke fragment="footer"/>
