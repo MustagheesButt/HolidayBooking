@@ -24,23 +24,19 @@ public class HolidayRequestServlet extends HttpServlet {
   @Inject
   private HolidayRequestService holidayRequestService;
 
-  // @Resource(mappedName = "java:/ConnectionFactory")
-  // private ConnectionFactory connectionFactory;
-
-  // @Resource(mappedName = "java:/jms/myQueue")
-  // private Queue myQueue;
-
   @Override
   protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
     HttpSession session = req.getSession();
     String uri = req.getRequestURI();
 
+    // require login
     if (session.getAttribute("employee") == null && session.getAttribute("admin") == null) {
       resp.sendRedirect("/login");
       return;
     }
 
     String redirectTo = "/dashboard";
+    // match requested URI and perform appropriate action
     if (uri.contains("create-holiday-request")) {
       String title = req.getParameter("title");
 

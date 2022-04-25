@@ -30,51 +30,16 @@ public class MessageReceiver implements MessageListener {
   @Inject
   AdminService adminService;
 
-  // public List<String> receiveMessage() {
-  //   List<String> tms = new ArrayList<String>();
-
-  //   try {
-  //     Connection connection = null;
-  //     InitialContext ctx = new InitialContext();
-
-  //     if (connectionFactory != null) {
-  //       connection = connectionFactory.createConnection();
-  //     } else {
-  //       ConnectionFactory factory = (ConnectionFactory) ctx.lookup("java:jboss/DefaultJMSConnectionFactory");
-  //       connection = factory.createConnection();
-  //     }
-      
-  //     if (myQueue == null) {
-  //         myQueue = (Queue)ctx.lookup("java:/jms/myQueue");
-  //       }
-
-  //     Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-  //     QueueBrowser queueBrowser = session.createBrowser(myQueue);
-  //     Enumeration enumeration = queueBrowser.getEnumeration();
-  //     while (enumeration.hasMoreElements()) {
-  //       TextMessage tm = (TextMessage) enumeration.nextElement();
-  //       tms.add(tm.getText());
-  //     }
-
-  //     session.close();
-  //     connection.close();
-  //   } catch (Exception e) {
-  //     e.printStackTrace();
-  //   }
-
-  //   return tms;
-  // }
-
+  // this gets automatically called when there is a message in the JMS queue
   @Override
   public void onMessage(Message message) {
     try {
       String msg = ((TextMessage)message).getText();
-      System.out.println("RECEIVED MESSAGE");
-      System.out.println(msg);
 
       Notification n = new Notification();
       n.setMessage(msg);
 
+      // send notification to all admins
       adminService.sendNotification(n);
     } catch (Exception e) {
       e.printStackTrace();

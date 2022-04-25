@@ -31,33 +31,41 @@ public class AdminBean {
     Department d = departmentService.find(department);
     LocalDateTime now = LocalDateTime.now();
 
+    // validate new data for employee
     String str = null;
     List<Employee> e_list = d.getEmployees();
     boolean update = true;
     for (int i = 0; i < e_list.size(); i++) {
       if (e_list.get(i).getId() != e.getId()) {
         if (e_list.get(i).getDepartment().getId() == d.getId()) {
-          if (e_list.get(i).getRole().getId() == 1 && r.getId() == 1) {
+          // a head of dept already exists
+          if (e_list.get(i).isHeadOfDept() && r.getId() == 1) {
             update = false;
             str = "Head";
           }
-          if (e_list.get(i).getRole().getId() == 2 && r.getId() == 2) {
+
+          // a deputy head already exists
+          if (e_list.get(i).isDeputyHeadOfDept() && r.getId() == 2) {
             update = false;
             str = "Deputy";
           }
         }
+
+        // cant update if another employee with same email exists
         if (e_list.get(i).getEmail().equalsIgnoreCase(e.getEmail())) {
           update = false;
           str = "Email";
         }
       }
 
-      if (update == false) {
+      // dont need to validate further
+      if (!update) {
         break;
       }
     }
 
-    if (update == true) {
+    // can update employee
+    if (update) {
       e.setFirstName(req.getParameter("fname"));
       e.setLastName(req.getParameter("lname"));
       e.setEmail(req.getParameter("email"));
@@ -83,6 +91,7 @@ public class AdminBean {
     String str = null;
     List<Employee> e_list = d.getEmployees();
 
+    // test requirements to create a new employee
     boolean create = true;
     for (int i = 0; i < e_list.size(); i++) {
 
@@ -101,7 +110,10 @@ public class AdminBean {
         break;
       }
     }
-    if (create == true) {
+
+
+    // can create new employee
+    if (create) {
       boolean ex = true;
       e.setFirstName(req.getParameter("fname"));
       e.setLastName(req.getParameter("lname"));
@@ -117,11 +129,17 @@ public class AdminBean {
         str = "Email";
       }
     }
+
     return str;
   }
 
   public static RequestDispatcher getManageDepartments(HttpServletRequest req, DepartmentService d) {
     req.setAttribute("departments", d.getAll());
     return req.getRequestDispatcher("/views/admin/manage_departments.jsp");
+  }
+
+  public static RequestDispatcher getManageRoles(HttpServletRequest req, RoleService r) {
+    req.setAttribute("roles", r.getAll());
+    return req.getRequestDispatcher("/views/admin/manage_roles.jsp");
   }
 }

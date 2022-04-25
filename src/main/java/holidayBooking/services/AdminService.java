@@ -34,6 +34,7 @@ public class AdminService {
     return entityManager.createQuery("SELECT a FROM Admin a", Admin.class).getResultList();
   }
 
+  // save notification for each admin
   public void sendNotification(Notification notification) {
     this.getAll().forEach(admin -> {
       notification.setSendTo(admin.getEmail());

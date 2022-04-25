@@ -8,6 +8,7 @@ import holidayBooking.services.AdminService;
 import holidayBooking.services.EmployeeService;
 
 public class LoginBean {
+  // if matching admin or employee email found, set session and redirect to dashboard
   public static LoginResponse login(String email, String password, EmployeeService employeeService, AdminService adminService, HttpSession session) {
     Employee employee = employeeService.findByEmail(email);
     if (employee != null) {

@@ -7,6 +7,7 @@ import com.google.gson.GsonBuilder;
 import holidayBooking.models.Admin;
 import holidayBooking.models.Employee;
 
+// Helper class to store login response
 public class LoginResponse {
   private Employee employee;
   private Admin admin;

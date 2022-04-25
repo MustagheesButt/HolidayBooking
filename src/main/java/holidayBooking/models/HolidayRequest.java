@@ -96,6 +96,7 @@ public class HolidayRequest implements Serializable {
     return ConstraintBean.brokenContraints(this);
   }
 
+  // number of days this request has in common with peak time periods
   public Long getDaysDuringPeakTime() {
     Long counter = 0L;
 

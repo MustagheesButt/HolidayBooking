@@ -15,7 +15,9 @@ import holidayBooking.models.Employee;
 import holidayBooking.models.HolidayRequest;
 import holidayBooking.services.HolidayRequestService;
 
+// Helper methods for holiday requests
 public class HolidayRequestBean {
+  // create a new holiday request
   public static HolidayRequest createHolidayRequest(HolidayRequest hr, HolidayRequestService holidayRequestService, Employee e) {
     hr.setStatus("pending");
     hr.setEmployee(e);

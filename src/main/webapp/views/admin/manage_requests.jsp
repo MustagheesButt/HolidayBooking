@@ -37,14 +37,14 @@
               </thead>
               <tbody>
                 <c:forEach var="hr" items="${holidayRequests}">
-                  <tr class='capitalize ${hr.constraintViolations.size() > 0 ? "bg-red-200" : ""}'>
+                  <tr class='capitalize ${hr.constraintViolations.isEmpty() ? "" : "bg-red-200"}'>
                     <td class="p-2">${hr.id}</td>
                     <td class="p-2">${hr.employee.fullName}</td>
                     <td class="p-2">${hr.title}</td>
                     <td class="p-2 datetime">${hr.dateStart}</td>
                     <td class="p-2 datetime">${hr.dateEnd}</td>
                     <td class="p-2">${hr.duration}</td>
-                    <td class="p-2">${String.join(", ", hr.constraintViolations)}</td>
+                    <td class="p-2">${hr.constraintViolations.isEmpty() ? "None" : String.join(", ", hr.constraintViolations)}</td>
                     <td class="flex justify-between p-2">
                       <c:if test="${hr.constraintViolations.size() == 0 }">
                         <form action="/approve-request" method="post">

@@ -8,6 +8,9 @@ import javax.jms.Session;
 import javax.jms.TextMessage;
 
 public class MessageSender {
+
+  // use this method whenever you want to register any message in the queue
+  // currently it's used only when we receive a request from REST API (aka Web service)
   public static void sendMessage(String message, ConnectionFactory connectionFactory, Queue queue) {
     MessageProducer mProducer;
     TextMessage textMessage;

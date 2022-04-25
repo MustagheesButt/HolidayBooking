@@ -167,6 +167,7 @@ public class Employee implements Serializable {
     return this.getRole().getId() == 4;
   }
 
+  // Holiday bookings == approved holiday requests
   public List<HolidayRequest> getHolidayBookings() {
     return this.getHolidayRequests()
         .stream()
@@ -174,6 +175,7 @@ public class Employee implements Serializable {
         .collect(Collectors.toList());
   }
 
+  // get approved requests for a specific role, between a specific datetime period
   public List<HolidayRequest> getRoleBookings(Long id, LocalDateTime start, LocalDateTime end) {
     return this.getHolidayRequests()
         .stream()
@@ -184,6 +186,7 @@ public class Employee implements Serializable {
         .collect(Collectors.toList());
   }
 
+  // get pending requests between a datetime period
   public List<HolidayRequest> getHoliday(LocalDateTime start, LocalDateTime end) {
 
     return this.getHolidayRequests()
@@ -194,6 +197,7 @@ public class Employee implements Serializable {
         .collect(Collectors.toList());
   }
 
+  // number of approved holidays
   public Long getHolidayBookingsDayCount() {
     return this.getHolidayBookings()
         .stream()
@@ -218,6 +222,7 @@ public class Employee implements Serializable {
     return Employee.HOLIDAYS_PER_YEAR - approvedHolidays.intValue() + bonusHolidays;
   }
 
+  // this is used on admin dashboard, where we can filter employees by date and check whether they are on leave or on duty
   public String getHolidayBookingsSerialized() {
     return "[" +
         String.join(",", this.getHolidayBookings()

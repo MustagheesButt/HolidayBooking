@@ -29,8 +29,17 @@ public class LoginServlet extends HttpServlet {
     String uri = req.getRequestURI();
     HttpSession session = req.getSession();
 
+    // if logout url is requested
     if (uri.contains("logout")) {
       session.invalidate();
+    }
+    // redirect, if either admin or employee is already logged in
+    else if (session.getAttribute("admin") != null) {
+      resp.sendRedirect("/admin");
+      return;
+    } else if (session.getAttribute("employee") != null) {
+      resp.sendRedirect("/dashboard");
+      return;
     }
 
     view.forward(req, resp);
@@ -41,15 +50,19 @@ public class LoginServlet extends HttpServlet {
     String email = req.getParameter("email");
     String password = req.getParameter("password");
     HttpSession session = req.getSession();
-    // session.invalidate(); // clear session
 
     LoginResponse loginStatus = LoginBean.login(email, password, employeeService, adminService, session);
 
+    // if niether employee nor admin user found with matching email, show error
     if (loginStatus.getEmployee() == null && loginStatus.getAdmin() == null) {
       resp.sendRedirect("/login?error=email");
-    } else if (loginStatus.getEmployee() != null) {
+    }
+    // if it's employee
+    else if (loginStatus.getEmployee() != null) {
       resp.sendRedirect("/dashboard");
-    } else {
+    }
+    // if it's an admin
+    else {
       resp.sendRedirect("/admin");
     }
   }

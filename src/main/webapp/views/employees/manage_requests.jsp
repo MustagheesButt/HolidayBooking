@@ -21,7 +21,7 @@
             <p class="text-2xl text-gray-500">No holiday requests yet.</p>
           </c:if>
           <c:if test="${holidayRequests.size() > 0}">
-            <h1>Your Holiday Requests</h1>
+            <h1 class="text-xl font-bold mb-5">Your Holiday Requests</h1>
             <table>
               <thead>
                 <tr>
@@ -36,11 +36,11 @@
               <tbody>
                 <c:forEach var="hr" items="${holidayRequests}">
                   <tr>
-                    <td>${hr.id}</td>
-                    <td>${hr.title}</td>
-                    <td class="datetime">${hr.dateStart}</td>
-                    <td class="datetime">${hr.dateEnd}</td>
-                    <td class='capitalize ${hr.status == "pending" ? "bg-yellow-200" : hr.status == "approved" ? "bg-green-200": "bg-red-200"}'>${hr.status}</td>
+                    <td class="p-2">${hr.id}</td>
+                    <td class="p-2">${hr.title}</td>
+                    <td class="p-2 datetime">${hr.dateStart}</td>
+                    <td class="p-2 datetime">${hr.dateEnd}</td>
+                    <td class='capitalize p-2 ${hr.status == "pending" ? "bg-yellow-200" : hr.status == "approved" ? "bg-green-200": "bg-red-200"}'>${hr.status}</td>
                   </tr>
                 </c:forEach>
               </tbody>

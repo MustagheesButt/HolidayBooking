@@ -70,41 +70,42 @@ public class ConstraintBean {
 			}
 		}
 		
-		// 60% must be on duty
-		if(true)
-		{
-			List<Employee> em = holidayRequest.getEmployee().getDepartment().getEmployees();
-			List<HolidayRequest> Temp_hr = new ArrayList<HolidayRequest>();
-			List<HolidayRequest> hr_temp = holidayRequest.getEmployee().getDepartment().getAprrovedRequests(holidayRequest.getDateStart(),holidayRequest.getDateEnd());
-			for (HolidayRequest h : hr_temp) {
-				if (Temp_hr.isEmpty()) {
-					Temp_hr.add(h);
-				}
-				boolean exists = false;
-				for (HolidayRequest t : Temp_hr) {
-					if (h.getEmployee().getId() == t.getEmployee().getId()) {
-						exists = true;
-					}
-				}
-				if(exists==false)
-					Temp_hr.add(h);
+		/**
+		 * 60% of department must be on duty (40% during certain times)
+		 **/ 
+		List<Employee> em = holidayRequest.getEmployee().getDepartment().getEmployees();
+		
+		// to store only 1 request of an employee in a specific time period (of which HolidayRequest we are compairing against)
+		List<HolidayRequest> uniqueRequests = new ArrayList<HolidayRequest>();
+		List<HolidayRequest> hr_temp = holidayRequest.getEmployee()
+			.getDepartment()
+			.getAprrovedRequests(holidayRequest.getDateStart(), holidayRequest.getDateEnd());
+		for (HolidayRequest h : hr_temp) {
+			if (uniqueRequests.isEmpty()) {
+				uniqueRequests.add(h);
 			}
 
-			int em_duty= em.size()-Temp_hr.size()-1;
-			if(holidayRequest.getDateStart().getMonthValue() == 8 || holidayRequest.getDateEnd().getMonthValue()== 8) {
-				if((float)em_duty/em.size()*100 < 40.0) {					
-					reasons.add("At least 40% department must be on duty in August");	
+			boolean exists = false;
+			for (HolidayRequest t : uniqueRequests) {
+				if (h.getEmployee().getId() == t.getEmployee().getId()) {
+					exists = true;
 				}
 			}
-			else if((float)em_duty/em.size()*100 < 60.0) {					
-				reasons.add("At least 60% department must be on duty");	
+
+			if(!exists)
+				uniqueRequests.add(h);
+		}
+
+		// to calculate percentage of employees on holiday
+		int em_duty = em.size() - uniqueRequests.size() - 1;
+		if (holidayRequest.getDateStart().getMonthValue() == 8 || holidayRequest.getDateEnd().getMonthValue()== 8) {
+			if((float)em_duty/em.size()*100 < 40.0) {					
+				reasons.add("At least 40% department must be on duty in August");	
 			}
 		}
-		
-		// remove this. not an actual constraint. just here for testing
-		//if (ConstraintBean.isPeakTime(holidayRequest.getDateStart()) || ConstraintBean.isPeakTime(holidayRequest.getDateEnd())) {
-		//	reasons.add("at peak time");
-		//}
+		else if ((float)em_duty/em.size()*100 < 60.0) {					
+			reasons.add("At least 60% department must be on duty");	
+		}
 
 		return reasons;
 	}
@@ -217,6 +218,7 @@ public class ConstraintBean {
 		return false;
 	}
 
+	// check if a date overlaps with peak time periods
 	public static boolean isPeakTime(LocalDateTime dateToTest) {
 		if (dateToTest == null)
 			dateToTest = LocalDateTime.now();

@@ -20,7 +20,8 @@
         </section>
     
         <section class="m-5 p-5 bg-gray-200">
-          <h1>Holiday Calendar</h1>
+          <h1 class="text-2xl font-bold">Holiday Calendar</h1>
+          <p class="my-3">Select a single date, or drag to select a range of dates.</p>
           <div id="calendar" class="w-1/2"></div>
         </section>
       </section>

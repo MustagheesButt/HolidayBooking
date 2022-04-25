@@ -3,7 +3,7 @@
 
 <t:layout>
   <jsp:attribute name="head">
-    <title>Manage Departments - Holiday Booking System</title>
+    <title>Manage Roles - Holiday Booking System</title>
   </jsp:attribute>
   
   <jsp:body>
@@ -16,22 +16,20 @@
         </section>
 
         <section class="m-5 p-5 bg-gray-200">
-          <h2>List of all departments</h2>
+          <h2>List of all Roles</h2>
           <table>
             <thead>
               <tr>
                 <th>ID</th>
-                <th>Department</th>
-                <th>Employee Count</th>
+                <th>Role</th>
                 <!-- <th>Actions</th> -->
               </tr>
             </thead>
             <tbody>
-              <c:forEach var="department" items="${departments}">
+              <c:forEach var="role" items="${roles}">
                 <tr>
-                  <td>${department.id}</td>
-                  <td>${department.title}</td>
-                  <td>${department.employees.size()}</td>
+                  <td>${role.id}</td>
+                  <td>${role.title}</td>
                   <!-- <td class="flex justify-between">
                     <a href="/admin/edit-department/${department.id}">
                       <svg aria-hidden="true" focusable="false" class="h-6 w-6">

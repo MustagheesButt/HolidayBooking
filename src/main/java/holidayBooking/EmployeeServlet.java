@@ -33,6 +33,7 @@ public class EmployeeServlet extends HttpServlet {
     String uri = req.getRequestURI();
 
     Employee currEmployee = (Employee)session.getAttribute("employee");
+    // require login
     if (currEmployee == null) {
       resp.sendRedirect("/login");
       return;
@@ -41,6 +42,7 @@ public class EmployeeServlet extends HttpServlet {
       session.setAttribute("employee", employeeService.find(currEmployee.getId()));
     }
 
+    // match requested URL and load appropriate view/jsp
     if (uri.contains("manage-requests")) {
       List<HolidayRequest> requests = holidayRequestService.findAllByEmployee((Employee)session.getAttribute("employee"));
       req.setAttribute("holidayRequests", requests);

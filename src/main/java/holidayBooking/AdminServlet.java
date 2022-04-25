@@ -50,11 +50,15 @@ public class AdminServlet extends HttpServlet {
 		Admin admin = (Admin) session.getAttribute("admin");
 		req.setAttribute("admin", admin);
 
+		// check requested URL and load appropriate view
 		if (uri.contains("manage-departments")) {
 			view = AdminBean.getManageDepartments(req, departmentService);
+		} else if (uri.contains("manage-roles")) {
+			view = AdminBean.getManageRoles(req, roleService);
 		} else if (uri.contains("create-employee")) {
 			req.setAttribute("roles", roleService.getAll());
 			req.setAttribute("departments", departmentService.getAll());
+
 			view = req.getRequestDispatcher("/views/admin/create_employee.jsp");
 		} else if (uri.contains("manage-requests")) {
 			List<HolidayRequest> pendingRequests = holidayRequestService.getPending();
