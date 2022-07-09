@@ -14,15 +14,15 @@ import holidaysManager.entities.Notification;
 import holidaysManager.services.AdminService;
 
 @MessageDriven(activationConfig = {
-  @ActivationConfigProperty(propertyName = "destinationLookup", propertyValue = "java:/jms/myQueue"),
+  @ActivationConfigProperty(propertyName = "destinationLookup", propertyValue = "java:/jms/holidayQueue"),
   @ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.Queue")
 })
 public class MessageReceiver implements MessageListener {
   @Resource(mappedName = "java:jboss/DefaultJMSConnectionFactory")
   private ConnectionFactory connectionFactory;
 
-  @Resource(mappedName = "java:/jms/myQueue")
-  private Queue myQueue;
+  @Resource(mappedName = "java:/jms/holidayQueue")
+  private Queue holidayQueue;
 
   public MessageReceiver() {
   }

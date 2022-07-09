@@ -5,7 +5,7 @@ Download and install/configure:
 - [JDK](https://openjdk.java.net/install/) (openjdk 17.0.2 2022-01-18)
 - Maven (3.8.5)
 - Eclipse (optional)
-- ~~Glassfish (6)~~ [Wildfly 26.1](https://www.wildfly.org/downloads/)
+- [Wildfly 26.1](https://www.wildfly.org/downloads/)
   if you have installed Eclipse, you can do this inside Eclipse by adding a new server.
 - MySQL (using XAMPP or any other)
 
@@ -25,12 +25,6 @@ Then run the server:
 
 `./<wildfly-dir>/bin/standalone.sh`
 
-### Glassfish
-
-`./glassfish6/bin/asadmin start-domain`
-
-Then if you will open localhost:8080 it will show a page with link to admin panel. From the admin panel, you can find a link to this application from "List Deployed Applications".
-
 
 ## Setting Up Database
 
@@ -42,22 +36,7 @@ Follow this: https://medium.com/@hasnat.saeed/install-and-configure-mysql-jdbc-d
 
 Make sure the connector file name in `module.xml` and the one you downloaded match.
 
-When adding DataSource, keep JNDI name: java:/mysqlds
-
-### Glassfish
-Download MySQL connector from https://dev.mysql.com/downloads/connector/j/
-Select platform independent and download zip or tar file. Extract and find `jar` file and put in `glassfish6/glassfish/lib` and in `glassfish6/glassfish/domains/domain1/lib`
-
-Create a JDBC Connection pool
- - Pool name: HBPool
- - Resource type: java.sql.Driver
- - Driver Class name: com.mysql.jdbc.Driver
- - Additional properties:
-   - user, password, url = jdbc:mysql://localhost:3306/holiday-booking
-
-After saving, in General tab, click ping button to test if connection is successfull.
-
-After that create a JDBC Resource named `local-mysql`
+When adding DataSource, keep JNDI name: `java:/holidayds`
 
 ## Setting up JMS
 
@@ -65,7 +44,7 @@ To enable messaging services in Wildfly, rename `<wildfly-dir>/standalone/config
 
 Copy your existing `<datasources>` from the `standalone.old` file, if any, so you don't have to create them again.
 
-Next you need to create a JMS Queue, name `myQueue`, from the admin panel. Use `java:/jms/myQueue` as the entries value.
+Next you need to create a JMS Queue, named `holidayQueue`, from the admin panel. Use `java:/jms/holidayQueue` as the entries value.
 
 Find the menu from:
 Configuration > Subsystems > Messaging > Server > default > Destinations > JMS Queue > Add

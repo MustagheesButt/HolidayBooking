@@ -4,7 +4,7 @@
              xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence https://jakarta.ee/xml/ns/persistence/persistence_3_0.xsd"
              version="3.0">
   <persistence-unit name="TestUnit">
-    <jta-data-source>local-mysql</jta-data-source>
+    <jta-data-source>holidayds</jta-data-source>
     <properties>
       <property name="javax.persistence.schema-generation.database.action" value="drop-and-create" /> <!-- set to "create" to create tables, or "drop-and-create" to recreate DB -->
       <property name="javax.persistence.sql-load-script-source" value="META-INF/seed.sql" />

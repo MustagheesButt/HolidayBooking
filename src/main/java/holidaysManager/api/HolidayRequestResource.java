@@ -33,8 +33,8 @@ public class HolidayRequestResource {
   @Resource(mappedName = "java:/ConnectionFactory")
   private ConnectionFactory connectionFactory;
 
-  @Resource(mappedName = "java:/jms/myQueue")
-  private Queue myQueue;
+  @Resource(mappedName = "java:/jms/holidayQueue")
+  private Queue holidayQueue;
 
   @GET
   @Path("/{id}")
@@ -65,7 +65,7 @@ public class HolidayRequestResource {
     HolidayRequest rv = HolidayRequestBean.createHolidayRequest(hr, holidayRequestService, e);
 
     if (rv != null) {
-      MessageSender.sendMessage(String.format("Received holiday request from %s", e.getFullName()), connectionFactory, myQueue);
+      MessageSender.sendMessage(String.format("Received holiday request from %s", e.getFullName()), connectionFactory, holidayQueue);
     }
 
     return rv;
