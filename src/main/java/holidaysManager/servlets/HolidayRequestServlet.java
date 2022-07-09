@@ -40,20 +40,19 @@ public class HolidayRequestServlet extends HttpServlet {
     if (uri.contains("create-holiday-request")) {
       String title = req.getParameter("title");
 
-      DateTimeFormatter pattern = DateTimeFormatter.ofPattern("EEE MMM dd yyyy HH:mm:ss 'GMT'xx '('zzzz')'");
+      DateTimeFormatter pattern = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
       LocalDateTime dateStart = LocalDateTime.parse(req.getParameter("dateStart"), pattern);
       LocalDateTime dateEnd = LocalDateTime.parse(req.getParameter("dateEnd"), pattern);
-      Long duration = Long.parseLong(req.getParameter("duration"));
 
       HolidayRequest hr = new HolidayRequest();
       hr.setTitle(title);
       hr.setDateStart(dateStart);
       hr.setDateEnd(dateEnd);
-      hr.setDuration(duration);
 
       Employee e = (Employee) session.getAttribute("employee");
       HolidayRequestBean.createHolidayRequest(hr, holidayRequestService, e);
-      // MessageSender.sendMessage(String.format("Received holiday request from %s", e.getFullName()), connectionFactory, myQueue);
+
+      redirectTo = "/manage-requests";
     } else if (uri.contains("approve-request")) {
       HolidayRequestBean.approveRequest(req, holidayRequestService);
 

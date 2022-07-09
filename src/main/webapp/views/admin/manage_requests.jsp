@@ -11,7 +11,7 @@
       <jsp:include page="_sidebar.jsp" />
 
       <div class="row">
-        <section class="col-6 m-5 p-5 text-bg-dark rounded">
+        <section class="col-7 m-5 p-5 text-bg-dark rounded">
           <c:if test="${holidayRequests.isEmpty()}">
             <h3 class="text-center">No pending requests</h3>
           </c:if>

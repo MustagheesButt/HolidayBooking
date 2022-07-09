@@ -138,7 +138,7 @@
               <table class="table text-bg-dark">
                 <thead>
                   <tr>
-                    <th>Employee Name</th>
+                    <th>Name</th>
                     <th>Email</th>
                     <th>Department</th>
                     <th>Role</th>

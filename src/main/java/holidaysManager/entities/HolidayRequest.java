@@ -28,15 +28,14 @@ public class HolidayRequest implements Serializable {
   private LocalDateTime dateStart;
 
   private LocalDateTime dateEnd;
-  
-  private Long duration;
 
   @JsonbTransient
   @ManyToOne
   @JoinColumn(name = "employee_id")
   private Employee employee;
 
-  private String status; // pending, approved, rejected
+  // Can be one of the following values ['pending', 'approved', 'rejected']
+  private String status;
   
   public Long getId() {
     return this.id;
@@ -51,11 +50,7 @@ public class HolidayRequest implements Serializable {
     return this.dateEnd;
   }
   public long getDuration() {
-    if (this.duration == null || this.duration <= 0) {
-      this.setDuration(Duration.between(this.dateStart, this.dateEnd).toDays());
-    }
-
-	  return this.duration;
+    return Duration.between(this.dateStart, this.dateEnd).toDays();
   }
   public Employee getEmployee() {
     return this.employee;
@@ -75,9 +70,6 @@ public class HolidayRequest implements Serializable {
   }
   public void setDateEnd(LocalDateTime dateEnd) {
     this.dateEnd = dateEnd;
-  }
-  public void setDuration(long duration) {
-	  this.duration = duration;
   }
   public void setEmployee(Employee employee) {
     this.employee = employee;
