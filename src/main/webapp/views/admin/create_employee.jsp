@@ -3,7 +3,7 @@
 
   <t:layout>
   <jsp:attribute name="head">
-    <title>Create New Employee | HolidayBooking</title>
+    <title>Create New Employee | HolidaysManager</title>
   </jsp:attribute>
   
   <jsp:body>
@@ -11,12 +11,12 @@
       <jsp:include page="_sidebar.jsp" />
 
 			<div class="row">
-				<section class="m-4 p-4 col-6 card text-bg-dark">  
-					<form action="/add-employee" method="post" class=">
-						<input type="text" name="fname"  Placeholder="First Name" required  class="form-control mb-4">
-						<input type="text" name="lname"  Placeholder="last Name" required  class="form-control mb-4">
+				<section class="m-4 p-4 col-6 card text-bg-dark rounded">  
+					<form action="/add-employee" method="post" class="">
+						<input type="text" name="fname" placeholder="First name" required  class="form-control mb-4">
+						<input type="text" name="lname" placeholder="Last name" required  class="form-control mb-4">
 						<input type="Password" name="password"  Placeholder="Password" required  class="form-control mb-4">
-						<input type="email" name="email" required  placeholder="email@google.com" class="form-control mb-4">
+						<input type="email" name="email" required  placeholder="email@gmail.com" class="form-control mb-4">
 	
 						<select name="role" required class="form-control mb-4">
 							<c:forEach var="role" items="${roles}">

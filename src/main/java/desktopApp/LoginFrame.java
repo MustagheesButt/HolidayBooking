@@ -9,8 +9,8 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
-import holidayBooking.beans.LoginResponse;
-import holidayBooking.models.Employee;
+import holidaysManager.entities.Employee;
+import holidaysManager.helpers.LoginResponse;
 
 public class LoginFrame extends JFrame {
   public LoginFrame(int W, int H) {

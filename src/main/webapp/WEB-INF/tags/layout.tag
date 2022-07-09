@@ -12,6 +12,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link href="/assets/bootstrap5.css" rel="stylesheet" />
+    <link href="/assets/custom.css" rel="stylesheet" />
     <script src="/assets/bootstrap5.js"></script>
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.3/font/bootstrap-icons.css">
@@ -35,7 +36,7 @@
               <a class="nav-link" href="${sessionScope.admin == null ? "/dashboard" : "/admin"}">Dashboard</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/logout">Logout, ${admin.email}</a>
+              <a class="nav-link" href="/logout">Logout, ${admin == null ? employee.email : admin.email}</a>
             </li>
             </c:if>
           </ul>
@@ -58,6 +59,10 @@
         })
       </script>
       <jsp:invoke fragment="footer"/>
+
+      <div class="p-3">
+        &copy; Copyright Straight Walls Ltd, 2022. All rights reserved.
+      </div>
     </footer>
   </body>
 </html>

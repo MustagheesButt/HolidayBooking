@@ -3,7 +3,7 @@
 
 <t:layout>
   <jsp:attribute name="head">
-    <title>Manage Departments - Holiday Booking System</title>
+    <title>Departments | HolidaysManager</title>
   </jsp:attribute>
   
   <jsp:body>
@@ -12,13 +12,13 @@
 
       <div class="row">
         <section class="col-6 m-5 p-5 text-bg-dark">
-          <h2>List of all departments</h2>
+          <h2>All departments</h2>
           <table class="table text-bg-dark">
             <thead>
               <tr>
                 <th>ID</th>
                 <th>Department</th>
-                <th>Employee Count</th>
+                <th># of Employees</th>
               </tr>
             </thead>
             <tbody>

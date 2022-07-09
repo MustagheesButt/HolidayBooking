@@ -13,10 +13,10 @@ import java.util.List;
 
 import javax.swing.JTextField;
 
-import holidayBooking.beans.HolidayRequestBean;
-import holidayBooking.beans.LoginResponse;
-import holidayBooking.models.Employee;
-import holidayBooking.models.HolidayRequest;
+import holidaysManager.entities.Employee;
+import holidaysManager.entities.HolidayRequest;
+import holidaysManager.helpers.HolidayRequestBean;
+import holidaysManager.helpers.LoginResponse;
 
 public class Helpers {
   public static void setupInput(JTextField input, String placeholder) {

@@ -3,7 +3,7 @@
 
   <t:layout>
   <jsp:attribute name="head">
-    <title>Editing Employee | HolidayBooking</title>
+    <title>Editing Employee | HolidaysManager</title>
   </jsp:attribute>
   
   <jsp:body>
@@ -14,10 +14,10 @@
 				<section class="m-4 p-4 col-6 text-bg-dark">
 					<form action="/update-employee" method="post" class="flex flex-col mt-2 pt-2">
 						<input type="hidden" name="id" value="${employee.id}" class="">
-						<input type="text" name="fname" value="${employee.firstName}" Placeholder="First Name" class="form-control mb-4">
-						<input type="text" name="lname" value="${employee.lastName}" Placeholder="last Name" class="form-control mb-4">
-						<input type="Password" name="password" value="${employee.password}" Placeholder="" class="form-control mb-4">
-						<input type="email" name="email" value="${employee.email}" Placeholder="xyz@google.com" class="form-control mb-4">
+						<input type="text" name="fname" value="${employee.firstName}" placeholder="First name" class="form-control mb-4">
+						<input type="text" name="lname" value="${employee.lastName}" placeholder="Last name" class="form-control mb-4">
+						<input type="password" name="password" value="${employee.password}" placeholder="" class="form-control mb-4">
+						<input type="email" name="email" value="${employee.email}" placeholder="email@gmail.com" class="form-control mb-4">
 						<select name="role"  class="form-control mb-4">
 							<c:forEach var="role" items="${roles}">
 								<option value="${role.id}" ${employee.role.equals(role) ? "selected=true" : "" }>${role.title}</option>

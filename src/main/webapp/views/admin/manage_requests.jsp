@@ -3,7 +3,7 @@
 
 <t:layout>
   <jsp:attribute name="head">
-    <title>Dashboard - Holiday Booking System</title>
+    <title>Requests | HolidaysManager</title>
   </jsp:attribute>
 
   <jsp:body>
@@ -11,52 +11,52 @@
       <jsp:include page="_sidebar.jsp" />
 
       <div class="row">
-        <section class="col-6 m-5 p-5 text-bg-dark">
-          <c:if test="${holidayRequests.size() == 0}">
-            <p class="text-2xl text-gray-500">No pending holiday requests :)</p>
+        <section class="col-6 m-5 p-5 text-bg-dark rounded">
+          <c:if test="${holidayRequests.isEmpty()}">
+            <h3 class="text-center">No pending requests</h3>
           </c:if>
           <c:if test="${holidayRequests.size() > 0}">
-            <h2 class="text-xl font-bold mb-5">Pending Holiday Requests</h2>
+            <h2 class="mb-5">Pending Requests</h2>
             <table class="table text-bg-dark">
               <thead>
                 <tr>
                   <th>ID</th>
-                  <th>Employee Name</th>
-                  <th>Title</th>
-                  <th>Date Start</th>
-                  <th>Date End</th>
-                  <th>Duration</th>
-                  <th>Constraint Violations</th>
+                  <th>Name</th>
+                  <th>Reason</th>
+                  <th>Period</th>
+                  <th>Violations</th>
                   <th>Actions</th>
                 </tr>
               </thead>
               <tbody>
                 <c:forEach var="hr" items="${holidayRequests}">
-                  <tr class='capitalize ${hr.constraintViolations.isEmpty() ? "" : "bg-red-200"}'>
-                    <td class="p-2">${hr.id}</td>
-                    <td class="p-2">${hr.employee.fullName}</td>
-                    <td class="p-2">${hr.title}</td>
-                    <td class="p-2 datetime">${hr.dateStart}</td>
-                    <td class="p-2 datetime">${hr.dateEnd}</td>
-                    <td class="p-2">${hr.duration}</td>
-                    <td class="p-2">${hr.constraintViolations.isEmpty() ? "None" : String.join(", ", hr.constraintViolations)}</td>
-                    <td class="flex justify-between p-2">
-                      <c:if test="${hr.constraintViolations.size() == 0 }">
-                        <form action="/approve-request" method="post">
+                  <tr class='text-capitalize ${hr.violations.isEmpty() ? "" : "bg-danger"}'>
+                    <td>${hr.id}</td>
+                    <td>${hr.employee.fullName}</td>
+                    <td>${hr.title}</td>
+                    <td>
+                      <span class="datetime">${hr.dateStart}</span> - <span class="datetime">${hr.dateEnd}</span> (${hr.duration} days)
+                    </td>
+                    <td>${hr.violations.isEmpty() ? "None" : String.join(", ", hr.violations)}</td>
+                    <td>
+                      <div class="d-flex">
+                        <c:if test="${hr.violations.isEmpty()}">
+                          <form action="/approve-request" method="post">
+                            <input type="hidden" name="id" value="${hr.id}" />
+  
+                            <button type="submit" class="btn btn-success me-3">
+                              <i class="bi bi-check-circle-fill"></i>
+                            </button>
+                          </form>
+                        </c:if>
+                        <form action="/reject-request" method="post">
                           <input type="hidden" name="id" value="${hr.id}" />
-
-                          <button type="submit" class="btn btn-success">
-                            <i class="bi bi-check-circle-fill"></i>
+  
+                          <button type="submit" class="btn btn-danger">
+                            <i class="bi bi-x-circle-fill"></i>
                           </button>
                         </form>
-                      </c:if>
-                      <form action="/reject-request" method="post">
-                        <input type="hidden" name="id" value="${hr.id}" />
-
-                        <button type="submit" class="btn btn-danger">
-                          <i class="bi bi-x-circle-fill"></i>
-                        </button>
-                      </form>
+                      </div>
                     </td>
                   </tr>
                 </c:forEach>

@@ -8,9 +8,9 @@
   <jsp:body>
     <div class="vh-100 text-bg-secondary row"
          style="background-image: url(https://unsplash.com/photos/e6n7uoEnYbA/download?ixid=MnwxMjA3fDB8MXxhbGx8fHx8fHx8fHwxNjU3MzU5MjQ3&force=true&w=1920); background-size: cover;">
-      <section class="text-bg-dark bg-opacity-75 p-5 col-3 m-auto text-center">
-        <h2 class="text-3xl">Straight Walls Ltd</h2>
-        <form class="mt-10" action="/login" method="POST">
+      <section class="text-bg-dark bg-opacity-75 p-5 col-3 m-auto text-center rounded">
+        <h2 class="mb-4">Login</h2>
+        <form class="" action="/login" method="POST">
           <div class="mb-4">
             <input class="form-control" name="email" type="email"
               placeholder="example@gmail.com" />

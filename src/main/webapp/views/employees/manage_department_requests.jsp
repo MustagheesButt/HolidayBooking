@@ -3,65 +3,60 @@
 
 <t:layout>
   <jsp:attribute name="head">
-    <title>Dashboard - Holiday Booking System</title>
+    <title>Department Requests - HolidaysManager</title>
   </jsp:attribute>
 
   <jsp:body>
-    <div class="flex flex-col md:flex-row">
+    <div class="container-fluid text-bg-secondary min-vh-100">
       <jsp:include page="_sidebar.jsp" />
 
-      <section class="flex flex-col">
-        <!-- <section class="m-5 p-5 bg-gray-200">
-      <h2 class="text-xl">${employee.email} - ${employee.department}</h2>
-      <p>You have <strong>${employee.remainingHolidays}</strong> holidays remaining.</p>
-    </section> -->
-
-        <section class="m-5 p-5 bg-gray-200">
-          <c:if test="${holidayRequests.size() == 0}">
-            <p class="text-2xl text-gray-500">No pending holiday requests :)</p>
+      <div class="row">
+        <section class="col-11 m-5 p-5 card text-bg-dark rounded">
+          <c:if test="${holidayRequests.isEmpty()}">
+            <h3 class="text-center">No pending holiday requests</h3>
           </c:if>
           <c:if test="${holidayRequests.size() > 0}">
             <h2 class="text-xl font-bold mb-5">Pending Holiday Requests</h2>
-            <table>
+            <table class="table text-bg-dark">
               <thead>
                 <tr>
                   <th>ID</th>
                   <th>Employee Name</th>
                   <th>Title</th>
-                  <th>Date Start</th>
-                  <th>Date End</th>
-                  <th>Duration</th>
-                  <th>Constraint Violations</th>
+                  <th>Period</th>
+                  <th>Violations</th>
                   <th>Actions</th>
                 </tr>
               </thead>
               <tbody>
                 <c:forEach var="hr" items="${holidayRequests}">
-                  <tr class='capitalize ${hr.constraintViolations.isEmpty() ? "" : "bg-red-200"}'>
-                    <td class="p-2">${hr.id}</td>
-                    <td class="p-2">${hr.employee.fullName}</td>
-                    <td class="p-2">${hr.title}</td>
-                    <td class="p-2 datetime">${hr.dateStart}</td>
-                    <td class="p-2 datetime">${hr.dateEnd}</td>
-                    <td class="p-2">${hr.duration}</td>
-                    <td class="p-2">${hr.constraintViolations.isEmpty() ? "None" : String.join(", ", hr.constraintViolations)}</td>
-                    <td class="flex justify-between p-2">
-                      <c:if test="${hr.constraintViolations.size() == 0 }">
-                        <form action="/approve-request" method="post">
+                  <tr class='text-capitalize ${hr.violations.isEmpty() ? "" : "bg-danger"}'>
+                    <td>${hr.id}</td>
+                    <td>${hr.employee.fullName}</td>
+                    <td>${hr.title}</td>
+                    <td>
+                      <span class="datetime">${hr.dateStart}</span> - <span class="datetime">${hr.dateEnd}</span> (${hr.duration} days)
+                    </td>
+                    <td>${hr.violations.isEmpty() ? "None" : String.join(", ", hr.violations)}</td>
+                    <td>
+                      <div class="d-flex">
+                        <c:if test="${hr.violations.isEmpty()}">
+                          <form action="/approve-request" method="post">
+                            <input type="hidden" name="id" value="${hr.id}" />
+  
+                            <button type="submit" class="btn btn-success me-3">
+                              <i class="bi bi-check-circle-fill"></i>
+                            </button>
+                          </form>
+                        </c:if>
+                        <form action="/reject-request" method="post">
                           <input type="hidden" name="id" value="${hr.id}" />
-
-                          <button type="submit">
-                            <i class="bi bi-check-circle-fill"></i>
+  
+                          <button type="submit" class="btn btn-danger">
+                            <i class="bi bi-x-circle-fill"></i>
                           </button>
                         </form>
-                      </c:if>
-                      <form action="/reject-request" method="post">
-                        <input type="hidden" name="id" value="${hr.id}" />
-
-                        <button type="submit">
-                          <i class="bi bi-x-circle-fill link-danger"></i>
-                        </button>
-                      </form>
+                      </div>
                     </td>
                   </tr>
                 </c:forEach>
@@ -69,7 +64,7 @@
             </table>
           </c:if>
         </section>
-      </section>
+      </div>
     </div>
   </jsp:body>
 </t:layout>

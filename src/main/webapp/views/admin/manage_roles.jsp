@@ -3,7 +3,7 @@
 
 <t:layout>
   <jsp:attribute name="head">
-    <title>Manage Roles - Holiday Booking System</title>
+    <title>Roles - HolidaysManager</title>
   </jsp:attribute>
   
   <jsp:body>

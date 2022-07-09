@@ -3,24 +3,23 @@
 
 <t:layout>
   <jsp:attribute name="head">
-    <title>Dashboard - Holiday Booking System</title>
+    <title>Dashboard | HolidaysManager</title>
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.2/main.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.2/main.css">
   </jsp:attribute>
   
   <jsp:body>
-    <div class="flex flex-col md:flex-row bg-gray-400">
+    <div class="container-fluid text-bg-secondary">
       <jsp:include page="_sidebar.jsp" />
   
-      <section class="flex flex-col w-full">
-        <section class="m-5 p-5 bg-gray-200">
-          <h2 class="text-md">${employee.email}</h2>
-          <h3 class="text-xl">${employee.fullName} - ${employee.department}</h3>
+      <div class="row">
+        <section class="col-11 m-5 p-5 card text-bg-dark rounded">
+          <h3 class="">${employee.fullName} - ${employee.department}</h3>
           <p>You have <strong>${employee.remainingHolidays}</strong> holidays remaining.</p>
         </section>
     
-        <section class="m-5 p-5 bg-gray-200">
-          <h1 class="text-2xl font-bold">Holiday Calendar</h1>
+        <section class="col-5 m-5 p-5 card text-bg-dark rounded">
+          <h1 class="">Holiday Calendar</h1>
           <p class="my-3">Select a single date, or drag to select a range of dates.</p>
           <div id="calendar" class="w-1/2"></div>
         </section>

@@ -7,7 +7,7 @@
     <jta-data-source>local-mysql</jta-data-source>
     <properties>
       <property name="javax.persistence.schema-generation.database.action" value="drop-and-create" /> <!-- set to "create" to create tables, or "drop-and-create" to recreate DB -->
-      <property name="javax.persistence.sql-load-script-source" value="META-INF/defaultdata.sql" />
+      <property name="javax.persistence.sql-load-script-source" value="META-INF/seed.sql" />
       <property name="eclipselink.logging.level" value="FINEST" />
     </properties>
   </persistence-unit>

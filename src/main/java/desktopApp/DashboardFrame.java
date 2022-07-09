@@ -20,8 +20,8 @@ import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
 
-import holidayBooking.models.Employee;
-import holidayBooking.models.HolidayRequest;
+import holidaysManager.entities.Employee;
+import holidaysManager.entities.HolidayRequest;
 
 public class DashboardFrame extends JFrame {
   public DashboardFrame(int W, int H, Employee employee) {
