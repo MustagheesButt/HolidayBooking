@@ -1,6 +1,18 @@
-<aside class="flex flex-col w-full md:w-1/6 bg-blue-200 min-h-screen">
-  <a href="/admin/manage-employees" class="p-3 hover:bg-blue-400">Manage Employees</a>
-  <a href="/admin/manage-requests" class="p-3 hover:bg-blue-400">Manage Holiday Requests</a>
-  <a href="/admin/manage-roles" class="p-3 hover:bg-blue-400">Manage Roles</a>
-  <a href="/admin/manage-departments" class="p-3 hover:bg-blue-400">Manage Departments</a>
+<aside class="container py-3">
+  <ul class="nav nav-pills">
+    <li class="nav-item">
+      <a class="nav-link 
+                ${requestScope['javax.servlet.forward.request_uri'] == '/admin' || requestScope['javax.servlet.forward.request_uri'].contains('manage-employees') ? 'active' : ''}"
+         aria-current="page" href="/admin/manage-employees">Employees</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link ${requestScope['javax.servlet.forward.request_uri'].contains('manage-requests') ? 'active' : ''}" href="/admin/manage-requests">Holiday Requests</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link ${requestScope['javax.servlet.forward.request_uri'].contains('manage-roles') ? 'active' : ''}" href="/admin/manage-roles">Roles</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link ${requestScope['javax.servlet.forward.request_uri'].contains('manage-departments') ? 'active' : ''}" href="/admin/manage-departments">Departments</a>
+    </li>
+  </ul>
 </aside>

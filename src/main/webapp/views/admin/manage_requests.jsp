@@ -7,22 +7,17 @@
   </jsp:attribute>
 
   <jsp:body>
-    <div class="flex flex-col md:flex-row">
+    <div class="container-fluid text-bg-secondary min-vh-100">
       <jsp:include page="_sidebar.jsp" />
 
-      <section class="flex flex-col">
-        <!-- <section class="m-5 p-5 bg-gray-200">
-      <h2 class="text-xl">${employee.email} - ${employee.department}</h2>
-      <p>You have <strong>${employee.remainingHolidays}</strong> holidays remaining.</p>
-    </section> -->
-
-        <section class="m-5 p-5 bg-gray-200">
+      <div class="row">
+        <section class="col-6 m-5 p-5 text-bg-dark">
           <c:if test="${holidayRequests.size() == 0}">
             <p class="text-2xl text-gray-500">No pending holiday requests :)</p>
           </c:if>
           <c:if test="${holidayRequests.size() > 0}">
             <h2 class="text-xl font-bold mb-5">Pending Holiday Requests</h2>
-            <table>
+            <table class="table text-bg-dark">
               <thead>
                 <tr>
                   <th>ID</th>
@@ -50,20 +45,16 @@
                         <form action="/approve-request" method="post">
                           <input type="hidden" name="id" value="${hr.id}" />
 
-                          <button type="submit">
-                            <svg aria-hidden="true" focusable="false" class="h-5 w-5 hover:text-green-600">
-                              <use href="#check"></use>
-                            </svg>
+                          <button type="submit" class="btn btn-success">
+                            <i class="bi bi-check-circle-fill"></i>
                           </button>
                         </form>
                       </c:if>
                       <form action="/reject-request" method="post">
                         <input type="hidden" name="id" value="${hr.id}" />
 
-                        <button type="submit">
-                          <svg aria-hidden="true" focusable="false" class="h-5 w-5 hover:text-red-500">
-                            <use href="#cross"></use>
-                          </svg>
+                        <button type="submit" class="btn btn-danger">
+                          <i class="bi bi-x-circle-fill"></i>
                         </button>
                       </form>
                     </td>
@@ -73,7 +64,7 @@
             </table>
           </c:if>
         </section>
-      </section>
+      </div>
     </div>
   </jsp:body>
 </t:layout>

@@ -11,20 +11,36 @@
     <jsp:invoke fragment="head" />
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="/assets/bootstrap5.css" rel="stylesheet" />
+    <script src="/assets/bootstrap5.js"></script>
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <t:svg-icons></t:svg-icons>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.3/font/bootstrap-icons.css">
   </head>
   <body>
-    <nav class="justify-center flex space-x-4 bg-purple-200 py-4">
-      <a href="/" class="px-3 text-slate-700 font-medium">Home</a>
-      <c:if test="${sessionScope.admin == null && sessionScope.employee == null}">
-        <a href="/login" class="px-3 text-slate-700 font-medium">Login</a>
-      </c:if>
-      <c:if test="${sessionScope.admin != null || sessionScope.employee != null}">
-        <a href='/${sessionScope.admin == null ? "dashboard" : "admin"}' class="px-3 text-slate-700 font-medium">Dashboard</a>
-        <a href="/logout" class="px-3 text-slate-700 font-medium">Logout</a>
-      </c:if>
+    <nav class="navbar navbar-expand-lg bg-light">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="/">HolidayBooking</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <c:if test="${sessionScope.admin == null && sessionScope.employee == null}">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="/login">Login</a>
+            </li>
+            </c:if>
+            <c:if test="${sessionScope.admin != null || sessionScope.employee != null}">
+            <li class="nav-item">
+              <a class="nav-link" href="${sessionScope.admin == null ? "/dashboard" : "/admin"}">Dashboard</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/logout">Logout, ${admin.email}</a>
+            </li>
+            </c:if>
+          </ul>
+        </div>
+      </div>
     </nav>
     <main>
       <jsp:invoke fragment="header"/>

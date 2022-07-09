@@ -9,36 +9,33 @@
   <jsp:body>
   <script>
 		    const params = new URLSearchParams(window.location.search)
-		    if(params.get("error")==="Head"){
+		    if(["Head", "Deputy"].includes(params.get("error"))) {
 		    	Swal.fire({
-					  title: 'This Department Already Has a Head',
+					  title: 'This Department Already Has a ' + params.get('error'),
 					  icon: 'error'
 				  })
 		    }
-		    else if(params.get("error")==="Deputy"){
-		    	Swal.fire({
-					  title: 'This Department Already Has a Deputy Head',
-					  icon: 'error'
-				  })
-		    }
-		    else if(params.get("error")==="Email"){
+		    else if(params.get("error") === "Email"){
 		    	Swal.fire({
 					  title: 'Email Already Exists. Please use another Email.',
 					  icon: 'error'
 				  })
 		    }
-</script>
-    <div class="flex flex-col md:flex-row">
+  </script>
+
+    <div class="container-fluid text-bg-secondary">
       <jsp:include page="_sidebar.jsp" />
   
-      <section class="flex flex-col p-5 w-full">
-        <section class="m-2 p-2 place-self-center">
-          <h2>Welcome ${admin.email}!</h2>
+      <section class="row">
+        <section class="card text-bg-dark col-8 m-4">
+          <div class="card-body">
+            <a href="/admin/create-employee" class="btn btn-primary">New Employee</a>
+          </div>
         </section>
     
-        <section class="m-2 p-2 place-self-center">
-          <h2>List of all employees</h2>
-          <table>
+        <section class="col-11 m-4 p-5 card text-bg-dark">
+          <h2>All Employees</h2>
+          <table class="table text-bg-dark">
             <thead>
               <tr>
                 <th>ID</th>
@@ -58,19 +55,14 @@
                   <td>${employee.department}</td>
                   <td>${employee.role}</td>
                   <td class="flex justify-between">
-                    <a href="/admin/edit-employee?id=${employee.id}">
-                     <svg aria-hidden="true" focusable="false" class="h-6 w-6">
-                       <use xlink:href="#pencil"></use>
-                     </svg>
-                  </a> 
+                    <a href="/admin/edit-employee?id=${employee.id}" class="btn btn-primary">
+                      <i class="bi bi-pencil"></i>
+                    </a> 
                     <form action="/delete-employee" method="post">
                         <input type="hidden" name="id" value="${employee.id}" />
-                        <button type="submit">
-                   			
-                          <svg aria-hidden="true" focusable="false" class="h-6 w-6">
-                            <use xlink:href="#trash"></use>            
-                      </svg>
-                      </button>
+                        <button type="submit" class="btn btn-danger">
+                          <i class="bi bi-trash3"></i>
+                        </button>
                     </form>
                   </td>
                 </tr>
@@ -78,12 +70,8 @@
             </tbody>
           </table>
         </section>
-        
-        <section class="m-2 p-2 place-self-center">	
-        		<a href="/admin/create-employee" class="button p-2 bg-indigo-400 rounded-none hover:rounded-full">Create New Employee</a>       	
-        </section>
 
-        <section class="m-5 p-5 bg-gray-200">
+        <section class="col-6 m-4 p-5 card text-bg-dark">
           <h2 class="text-xl">Holiday Bookings</h2>
           <p class="mb-5 text-gray-500">These are approved holiday requests.</p>
           <c:if test="${holidayBookings.size() == 0}">
@@ -91,7 +79,7 @@
           </c:if>
           <c:if test="${holidayBookings.size() > 0}">
             <input id="filter1" type="text" placeholder="Filter by name/email" />
-            <table>
+            <table class="table text-bg-dark">
               <thead>
                 <tr>
                   <th>Reason for Holiday</th>
@@ -137,13 +125,13 @@
           </c:if>
         </section>
 
-        <section class="m-5 p-5 bg-gray-200">
+        <section class="col-5 m-4 p-5 card text-bg-dark">
           <h2 class="text-xl font-bold mb-5">Search Employees on Leave/Work by Date</h2>
           <input type="date" id="filter2" class="mb-5" />
           <div class="flex">
             <div class="p-10 bg-gray-100 mr-5">
               <h3 class="font-bold">On Duty</h3>
-              <table>
+              <table class="table text-bg-dark">
                 <thead>
                   <tr>
                     <th>Employee Name</th>
@@ -167,7 +155,7 @@
 
             <div class="p-10 bg-gray-100">
               <h3 class="font-bold">On Leave</h3>
-              <table>
+              <table class="table text-bg-dark">
                 <thead>
                   <tr>
                     <th>Employee Name</th>

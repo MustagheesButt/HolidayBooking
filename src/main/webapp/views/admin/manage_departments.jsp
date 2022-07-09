@@ -7,23 +7,18 @@
   </jsp:attribute>
   
   <jsp:body>
-    <div class="flex flex-col md:flex-row">
+    <div class="container-fluid text-bg-secondary min-vh-100">
       <jsp:include page="_sidebar.jsp" />
 
-      <section class="flex flex-col">
-        <section class="m-5 p-5 bg-gray-200">
-          <h2>Welcome ${admin.email}!</h2>
-        </section>
-
-        <section class="m-5 p-5 bg-gray-200">
+      <div class="row">
+        <section class="col-6 m-5 p-5 text-bg-dark">
           <h2>List of all departments</h2>
-          <table>
+          <table class="table text-bg-dark">
             <thead>
               <tr>
                 <th>ID</th>
                 <th>Department</th>
                 <th>Employee Count</th>
-                <!-- <th>Actions</th> -->
               </tr>
             </thead>
             <tbody>
@@ -32,24 +27,12 @@
                   <td>${department.id}</td>
                   <td>${department.title}</td>
                   <td>${department.employees.size()}</td>
-                  <!-- <td class="flex justify-between">
-                    <a href="/admin/edit-department/${department.id}">
-                      <svg aria-hidden="true" focusable="false" class="h-6 w-6">
-                        <use xlink:href="#pencil"></use>
-                      </svg>
-                    </a>
-                    <a href="/admin/delete-department/${department.id}">
-                      <svg aria-hidden="true" focusable="false" class="h-6 w-6">
-                        <use xlink:href="#trash"></use>
-                      </svg>
-                    </a>
-                  </td> -->
                 </tr>
               </c:forEach>
             </tbody>
           </table>
         </section>
-      </section>
+      </div>
     </div>
   </jsp:body>
 </t:layout>

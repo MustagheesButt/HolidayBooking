@@ -51,9 +51,7 @@
                           <input type="hidden" name="id" value="${hr.id}" />
 
                           <button type="submit">
-                            <svg aria-hidden="true" focusable="false" class="h-5 w-5 hover:text-green-600">
-                              <use href="#check"></use>
-                            </svg>
+                            <i class="bi bi-check-circle-fill"></i>
                           </button>
                         </form>
                       </c:if>
@@ -61,9 +59,7 @@
                         <input type="hidden" name="id" value="${hr.id}" />
 
                         <button type="submit">
-                          <svg aria-hidden="true" focusable="false" class="h-5 w-5 hover:text-red-500">
-                            <use href="#cross"></use>
-                          </svg>
+                          <i class="bi bi-x-circle-fill link-danger"></i>
                         </button>
                       </form>
                     </td>

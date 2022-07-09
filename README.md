@@ -4,24 +4,26 @@ Download and install/configure:
 
 - [JDK](https://openjdk.java.net/install/) (openjdk 17.0.2 2022-01-18)
 - Maven (3.8.5)
+- Eclipse (optional)
 - ~~Glassfish (6)~~ [Wildfly 26.1](https://www.wildfly.org/downloads/)
+  if you have installed Eclipse, you can do this inside Eclipse by adding a new server.
 - MySQL (using XAMPP or any other)
 
 ## Start Server
 
-Start MySQL server.
+Start MySQL server. Create a DB named or `holiday-booking` or anything, using phpMyAdmin from XAMPP (or any other UI manager of your choice).
 
 ### Wildfly
 
-First create a user:
+Note: To setup with Eclipse follow this guide https://docs.wildfly.org/26/Getting_Started_Developing_Applications_Guide.html
 
-`wildfly-26.1.0.Beta1/bin/add-user.sh`
+First create a user (Management User):
+
+`./<wildfly-dir>/bin/add-user.sh` (if it gives error, make sure this file has execution permission)
 
 Then run the server:
 
-`./wildfly-26.1.0.Beta1/bin/standalone.sh`
-
-Note: To setup with Eclipse follow this guide https://docs.wildfly.org/26/Getting_Started_Developing_Applications_Guide.html
+`./<wildfly-dir>/bin/standalone.sh`
 
 ### Glassfish
 
@@ -32,13 +34,15 @@ Then if you will open localhost:8080 it will show a page with link to admin pane
 
 ## Setting Up Database
 
+Before doing this, I recommend doing the file renaming part in `Setting Up JMS` section, so you don't have to move you datasources later in that section.
+
 ### Wildfly
 
 Follow this: https://medium.com/@hasnat.saeed/install-and-configure-mysql-jdbc-driver-on-jboss-wildfly-e751a3be60d3
 
 Make sure the connector file name in `module.xml` and the one you downloaded match.
 
-When adding DataSource, keep JNDI name: java:/local-mysql
+When adding DataSource, keep JNDI name: java:/mysqlds
 
 ### Glassfish
 Download MySQL connector from https://dev.mysql.com/downloads/connector/j/
@@ -62,6 +66,9 @@ To enable messaging services in Wildfly, rename `<wildfly-dir>/standalone/config
 Copy your existing `<datasources>` from the `standalone.old` file, if any, so you don't have to create them again.
 
 Next you need to create a JMS Queue, name `myQueue`, from the admin panel. Use `java:/jms/myQueue` as the entries value.
+
+Find the menu from:
+Configuration > Subsystems > Messaging > Server > default > Destinations > JMS Queue > Add
 
 ## Building/Compiling
 

@@ -2,26 +2,27 @@
 
 <t:layout>
   <jsp:attribute name="head">
-    <title>Login - Holiday Booking System</title>
+    <title>Login | HolidayBooking</title>
   </jsp:attribute>
 
   <jsp:body>
-    <div class="h-screen bg-blue-200">
-      <section class="h-full flex flex-col justify-center items-center">
+    <div class="vh-100 text-bg-secondary row"
+         style="background-image: url(https://unsplash.com/photos/e6n7uoEnYbA/download?ixid=MnwxMjA3fDB8MXxhbGx8fHx8fHx8fHwxNjU3MzU5MjQ3&force=true&w=1920); background-size: cover;">
+      <section class="text-bg-dark bg-opacity-75 p-5 col-3 m-auto text-center">
         <h2 class="text-3xl">Straight Walls Ltd</h2>
         <form class="mt-10" action="/login" method="POST">
           <div class="mb-4">
-            <input class="shadow appearance-none border w-full py-2 px-3" name="email" type="email"
+            <input class="form-control" name="email" type="email"
               placeholder="example@gmail.com" />
           </div>
   
           <div class="mb-4">
-            <input class="shadow appearance-none border w-full py-2 px-3" name="password" type="password"
+            <input class="form-control" name="password" type="password"
               placeholder="Password" />
           </div>
   
           <div class="mb-4 text-center">
-            <button type="submit" class="px-4 py-1 bg-white hover:bg-blue-400">Login</button>
+            <button type="submit" class="px-4 py-1 btn btn-primary">Login</button>
           </div>
         </form>
       </section>
