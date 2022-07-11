@@ -51,8 +51,6 @@ public class AdminServlet extends HttpServlet {
 
 		Admin admin = (Admin) session.getAttribute("admin");
 		req.setAttribute("admin", admin);
-
-		// check requested URL and load appropriate view
 		if (uri.contains("manage-departments")) {
 			view = AdminBean.getManageDepartments(req, departmentService);
 		} else if (uri.contains("manage-roles")) {
@@ -65,13 +63,11 @@ public class AdminServlet extends HttpServlet {
 		} else if (uri.contains("manage-requests")) {
 			List<HRequest> pendingRequests = holidayRequestService.getPending();
 
-			// Functionality G - Prioritize by # of holidays already approved, and days
-			// requested during peak time
 			pendingRequests.sort(new Comparator<HRequest>() {
 				@Override
 				public int compare(HRequest hr1, HRequest hr2) {
-					Long total1 = hr1.getDaysDuringPeakTime() + hr1.getEmp().getApprovedReqsDayCount();
-					Long total2 = hr2.getDaysDuringPeakTime() + hr2.getEmp().getApprovedReqsDayCount();
+					Long total1 = hr1.getPeakDaysCount() + hr1.getEmp().getApprovedReqsDayCount();
+					Long total2 = hr2.getPeakDaysCount() + hr2.getEmp().getApprovedReqsDayCount();
 					return total1.compareTo(total2);
 				}
 			});
@@ -85,7 +81,7 @@ public class AdminServlet extends HttpServlet {
 			view = req.getRequestDispatcher("/views/admin/edit_employee.jsp");
 		} else {
 			req.setAttribute("employees", employeeService.getAll());
-			req.setAttribute("holidayBookings", holidayRequestService.getApproved());
+			req.setAttribute("approvedReqs", holidayRequestService.getApproved());
 		}
 
 		view.forward(req, resp);

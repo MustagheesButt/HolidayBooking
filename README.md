@@ -25,10 +25,16 @@ Then run the server:
 
 `./<wildfly-dir>/bin/standalone.sh`
 
+## Setting up JMS
+
+To enable messaging services in Wildfly, rename `<wildfly-dir>/standalone/configuration/standalone.xml` to `standalone-backup.xml`, and then rename `standalone-full.xml` to `standalone.xml`.
+
+Next you need to create a JMS Queue, named `holidayQueue`, from the admin panel. Use `java:/jms/holidayQueue` as the entries value.
+
+Find the menu from:
+Configuration > Subsystems > Messaging > Server > default > Destinations > JMS Queue > Add
 
 ## Setting Up Database
-
-Before doing this, I recommend doing the file renaming part in `Setting Up JMS` section, so you don't have to move you datasources later in that section.
 
 ### Wildfly
 
@@ -37,17 +43,6 @@ Follow this: https://medium.com/@hasnat.saeed/install-and-configure-mysql-jdbc-d
 Make sure the connector file name in `module.xml` and the one you downloaded match.
 
 When adding DataSource, keep JNDI name: `java:/holidayds`
-
-## Setting up JMS
-
-To enable messaging services in Wildfly, rename `<wildfly-dir>/standalone/configuration/standalone.xml` to `standalone.old`, and then rename `standalone-full.xml` to `standalone.xml`.
-
-Copy your existing `<datasources>` from the `standalone.old` file, if any, so you don't have to create them again.
-
-Next you need to create a JMS Queue, named `holidayQueue`, from the admin panel. Use `java:/jms/holidayQueue` as the entries value.
-
-Find the menu from:
-Configuration > Subsystems > Messaging > Server > default > Destinations > JMS Queue > Add
 
 ## Building/Compiling
 
@@ -59,11 +54,12 @@ Or just use the menu shortcuts (if) provided by your IDE. This will create a `ho
 
 ## Deploying
 
+### Eclipse
+
+Make sure Project Properties > Web Project Settings > Context Root is set to `/`
+
+In Eclipse, you can simply launch it by right-clicking the project in left sidebar, and then clicking on Run As > Run on Server.
+
 ### Wildfly
 
 Use admin panel to upload `.war` file. After deployed successfully, it should be available at localhost:8080/
-
-### Glassfish
-You just have to copy the `target/holiday-booking.war` to glassfish (`glassfish6/glassfish/domains/domain1/autodeploy`).
-
-On Linux, you can just run `deploy.sh` (You might need to adjust `deploy.sh`)

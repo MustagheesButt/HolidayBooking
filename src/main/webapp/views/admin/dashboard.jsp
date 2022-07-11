@@ -68,11 +68,11 @@
         <section class="col-5 m-4 p-5 card text-bg-dark rounded">
           <h2 class="mb-4">Approved Holidays</h2>
 
-          <c:if test="${holidayBookings.isEmpty()}">
+          <c:if test="${approvedReqs.isEmpty()}">
             <p class="text-center">No approved holiday requests right now</p>
           </c:if>
-          <c:if test="${holidayBookings.size() > 0}">
-            <input id="filter1" type="text" placeholder="Filter by name/email" class="form-control mb-4" />
+          <c:if test="${approvedReqs.size() > 0}">
+            <input id="f1" type="text" placeholder="Filter by name/email" class="form-control mb-4" />
             <table class="table text-bg-dark">
               <thead>
                 <tr>
@@ -84,9 +84,9 @@
                 </tr>
               </thead>
               <tbody>
-                <c:forEach var="hb" items="${holidayBookings}">
+                <c:forEach var="hb" items="${approvedReqs}">
                   <tr>
-                    <td><span class="filter1-target">${hb.emp.fullName}</span> (<span class="filter1-target">${hb.emp.email}</span>)</td>
+                    <td><span class="f1t">${hb.emp.fullName}</span> (<span class="f1t">${hb.emp.email}</span>)</td>
                     <td>${hb.reason}</td>
                     <td>${hb.emp.dept}</td>
                     <td>${hb.emp.role}</td>
@@ -105,7 +105,7 @@
         <section class="col-11 m-4 p-5 card text-bg-dark rounded">
           <h2 class="mb-5">Search Employees on Leave/Work by Date</h2>
 
-          <input type="date" id="filter2" class="form-control mb-5" />
+          <input type="date" id="f2" class="form-control mb-5" />
           <div class="flex">
             <div class="mr-5">
               <h3 class="">On Duty</h3>
@@ -121,7 +121,7 @@
                 </thead>
                 <tbody>
                   <c:forEach var="employee" items="${employees}">
-                    <tr class="filter2-target onduty" data-holiday-bookings='${employee.holidayBookingsSerialized}'>
+                    <tr class="f2t onduty" data-holiday-bookings='${employee.appReqsS}'>
                       <td>${employee.fullName}</td>
                       <td>${employee.email}</td>
                       <td>${employee.dept}</td>
@@ -146,8 +146,8 @@
                 </thead>
                 <tbody>
                   <c:forEach var="employee" items="${employees}">
-                    <tr class="filter2-target onleave"
-                      data-holiday-bookings='${employee.holidayBookingsSerialized}'>
+                    <tr class="f2t onleave"
+                      data-holiday-bookings='${employee.appReqsS}'>
                       <td class="p-2">${employee.fullName}</td>
                       <td class="p-2">${employee.email}</td>
                       <td class="p-2">${employee.dept}</td>

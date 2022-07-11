@@ -1,16 +1,16 @@
-const filter2 = document.querySelector('#filter2')
+const f2 = document.querySelector('#f2')
 
 magic()
-filter2.addEventListener('input', magic)
+f2.addEventListener('input', magic)
 
 function magic() {
-  const selectedDate = new Date(filter2.value)
+  const selectedDate = new Date(f2.value)
 
-  document.querySelectorAll('.filter2-target').forEach((ele) => {
+  document.querySelectorAll('.f2t').forEach((ele) => {
     ele.classList.remove('d-none')
   })
 
-  document.querySelectorAll('.filter2-target.onleave').forEach((ele) => {
+  document.querySelectorAll('.f2t.onleave').forEach((ele) => {
     const bookings = JSON.parse(ele.getAttribute("data-holiday-bookings"))
     if (bookings.length === 0) ele.classList.add('d-none')
 
@@ -27,7 +27,7 @@ function magic() {
     if (toHide) ele.classList.add('d-none')
   })
 
-  document.querySelectorAll('.filter2-target.onduty').forEach((ele) => {
+  document.querySelectorAll('.f2t.onduty').forEach((ele) => {
     const bookings = JSON.parse(ele.getAttribute("data-holiday-bookings"))
 
     bookings.forEach((booking) => {

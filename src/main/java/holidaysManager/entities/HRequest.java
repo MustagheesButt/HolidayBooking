@@ -7,13 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import javax.json.bind.annotation.JsonbTransient;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import holidaysManager.helpers.ConstraintHelper;
 
@@ -84,30 +78,29 @@ public class HRequest implements Serializable {
     return ConstraintHelper.brokenContraints(this);
   }
 
-  public Long getDaysDuringPeakTime() {
-    Long counter = 0L;
+  public Long getPeakDaysCount() {
+    Long c = 0L;
 
     for (LocalDateTime currDate = this.getDateStart(); currDate.compareTo(this.getDateEnd()) == 0; currDate.plusDays(1)) {
-      if (isPeakTime(currDate)) {
-        counter++;
+      if (isPeak(currDate)) {
+        c++;
       }
     }
 
-    return counter;
+    return c;
   }
 
-	private static boolean isPeakTime(LocalDateTime dateToTest) {
-		if (dateToTest == null)
-			dateToTest = LocalDateTime.now();
+	private static boolean isPeak(LocalDateTime d) {
+		if (d == null) d = LocalDateTime.now();
 
 		List<LocalDateTime> periods = Arrays.asList(
-				LocalDateTime.of(dateToTest.getYear(), 7, 15, 0, 1), LocalDateTime.of(dateToTest.getYear(), 8, 31, 23, 59),
-				LocalDateTime.of(dateToTest.getYear(), 12, 15, 0, 1), LocalDateTime.of(dateToTest.getYear(), 12, 22, 23, 59),
-				getEasterSundayDate(dateToTest.getYear()).minusDays(7), getEasterSundayDate(dateToTest.getYear()).plusDays(7)
+				LocalDateTime.of(d.getYear(), 7, 15, 0, 1), LocalDateTime.of(d.getYear(), 8, 31, 23, 59),
+				LocalDateTime.of(d.getYear(), 12, 15, 0, 1), LocalDateTime.of(d.getYear(), 12, 22, 23, 59),
+				getEasterSundayDate(d.getYear()).minusDays(7), getEasterSundayDate(d.getYear()).plusDays(7)
 			);
 
 		for (int i = 0; i < periods.size(); i += 2) {
-			if (dateToTest.compareTo(periods.get(i)) >= 0 && dateToTest.compareTo(periods.get(i + 1)) <= 0) {
+			if (d.compareTo(periods.get(i)) >= 0 && d.compareTo(periods.get(i + 1)) <= 0) {
 				return true;
 			}
 		}

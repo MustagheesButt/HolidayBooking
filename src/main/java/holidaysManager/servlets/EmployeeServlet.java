@@ -55,8 +55,8 @@ public class EmployeeServlet extends HttpServlet {
 			pendingRequests.sort(new Comparator<HRequest>() {
 				@Override
 				public int compare(HRequest hr1, HRequest hr2) {
-					Long total1 = hr1.getDaysDuringPeakTime() + hr1.getEmp().getApprovedReqsDayCount();
-					Long total2 = hr2.getDaysDuringPeakTime() + hr2.getEmp().getApprovedReqsDayCount();
+					Long total1 = hr1.getPeakDaysCount() + hr1.getEmp().getApprovedReqsDayCount();
+					Long total2 = hr2.getPeakDaysCount() + hr2.getEmp().getApprovedReqsDayCount();
 					return total1.compareTo(total2);
 				}
 			});

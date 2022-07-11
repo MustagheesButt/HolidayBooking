@@ -146,7 +146,6 @@ public class Emp implements Serializable {
     this.updatedAt = updatedAt;
   }
 
-  /* Other helper methods */
   public String getFullName() {
     return this.firstName + " " + this.lastName;
   }
@@ -182,18 +181,15 @@ public class Emp implements Serializable {
         }, Long::sum);
   }
 
-  // get approved requests for a specific role, between a specific datetime period
   public List<HRequest> getRoleBookings(Long id, LocalDateTime start, LocalDateTime end) {
-    return this.getHolidayRequests()
+    return this.getApprovedReqs()
         .stream()
-        .filter(hr -> hr.getStatus().equals("approved"))
         .filter(hr -> hr.getEmp().getRole().getId().equals(id))
         .filter(hr -> ((hr.getDateStart().compareTo(start) >= 0 && hr.getDateStart().compareTo(end) < 0)
             || (hr.getDateStart().compareTo(start) <= 0 && hr.getDateEnd().compareTo(start) > 0)))
         .collect(Collectors.toList());
   }
 
-  // get pending requests between a datetime period
   public List<HRequest> getHoliday(LocalDateTime start, LocalDateTime end) {
 
     return this.getHolidayRequests()
@@ -220,14 +216,9 @@ public class Emp implements Serializable {
     return Emp.HOLIDAYS_PER_YEAR - approvedHolidays.intValue() + bonusHolidays;
   }
 
-  // this is used on admin dashboard, where we can filter employees by date and
-  // check whether they are on leave or on duty
-  public String getHolidayBookingsSerialized() {
+  public String getAppReqsS() {
     return "[" +
-        String.join(",", this.getApprovedReqs()
-            .stream()
-            .map(hr -> "{\"start\": \"" + hr.getDateStart() + "\", \"end\": \"" + hr.getDateEnd() + "\"}")
-            .collect(Collectors.toList()))
+        String.join(",", this.getApprovedReqs().stream().map(hr -> "{\"start\": \"" + hr.getDateStart() + "\", \"end\": \"" + hr.getDateEnd() + "\"}").collect(Collectors.toList()))
         + "]";
   }
 }
