@@ -70,14 +70,14 @@ public class AdminServlet extends HttpServlet {
 			pendingRequests.sort(new Comparator<HRequest>() {
 				@Override
 				public int compare(HRequest hr1, HRequest hr2) {
-					Long total1 = hr1.getDaysDuringPeakTime() + hr1.getEmp().getHolidayBookingsDayCount();
-					Long total2 = hr2.getDaysDuringPeakTime() + hr2.getEmp().getHolidayBookingsDayCount();
+					Long total1 = hr1.getDaysDuringPeakTime() + hr1.getEmp().getApprovedReqsDayCount();
+					Long total2 = hr2.getDaysDuringPeakTime() + hr2.getEmp().getApprovedReqsDayCount();
 					return total1.compareTo(total2);
 				}
 			});
 
 			req.setAttribute("holidayRequests", pendingRequests);
-			view = req.getRequestDispatcher("/views/admin/manage_requests.jsp");
+			view = req.getRequestDispatcher("/views/admin/requests.jsp");
 		} else if (uri.contains("edit-employee")) {
 			req.setAttribute("employee", employeeService.find(Long.parseLong(req.getParameter("id"))));
 			req.setAttribute("roles", roleService.getAll());

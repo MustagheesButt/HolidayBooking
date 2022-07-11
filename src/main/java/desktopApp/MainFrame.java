@@ -2,6 +2,7 @@ package desktopApp;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.Color;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.ZoneId;
@@ -26,12 +27,13 @@ public class MainFrame extends CustomFrame {
   public MainFrame(Emp e) {
     this.setTitle(String.format("Welcome %s", e.getFullName()));
 
-    Integer remainHolidays = 30 - Helpers.getApprovedHolidayRequests(e).size();
-    JLabel h1 = new JLabel(String.format("Remaining holidays: %d", remainHolidays));
-    h1.setBounds(width/5, 20, width, 50);
-
     JLabel h2 = new JLabel("New Holiday Request");
     h2.setBounds(width / 2 - width / 6, 90, width / 3, 50);
+    h2.setForeground(Color.WHITE);
+
+    JLabel l1 = new JLabel("Starts At:");
+    l1.setBounds(20, 150, width / 3, 50);
+    l1.setForeground(Color.WHITE);
 
     UtilDateModel model = new UtilDateModel();
     JDatePanelImpl datePanel = new JDatePanelImpl(model, new Properties());
@@ -54,10 +56,11 @@ public class MainFrame extends CustomFrame {
         return "";
       }
     });
-    dp1.setBounds(width / 2 - width / 6, 170, width / 3, 25);
+    dp1.setBounds(100, 170, width / 3, 25);
 
-    JLabel label1 = new JLabel("Starts At:");
-    label1.setBounds(width / 2 - width / 4 - 50, 150, width / 3, 50);
+    JLabel l2 = new JLabel("Ends At:");
+    l2.setBounds(20, 230, width / 3, 50);
+    l2.setForeground(Color.WHITE);
 
     UtilDateModel model2 = new UtilDateModel();
     JDatePanelImpl datePanel2 = new JDatePanelImpl(model2, new Properties());
@@ -80,21 +83,18 @@ public class MainFrame extends CustomFrame {
         return "";
       }
     });
-    dp2.setBounds(width / 2 - width / 6, 250, width / 3, 25);
+    dp2.setBounds(100, 250, width / 3, 25);
 
-    JLabel label2 = new JLabel("Ends At:");
-    label2.setBounds(width / 2 - width / 4 - 50, 230, width / 3, 50);
-
-    JTextField inputTitle = new JTextField("Reason for holiday");
-    inputTitle.setBounds(width / 2 - width / 6, 330, width / 3, 50);
-    Helpers.setupInput(inputTitle, "Reason for holiday");
+    JTextField reasonField = new JTextField("Reason for holiday");
+    reasonField.setBounds(width / 2, 170, width / 2 - 10, 105);
+    Helpers.setupInput(reasonField, "Reason for holiday");
 
     JButton btnSubmit = new JButton("Submit");
-    btnSubmit.setBounds(width / 2 - width / 6, 400, width / 3, 40);
+    btnSubmit.setBounds(width / 2 - width / 6, 330, width / 3, 40);
     btnSubmit.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent ev) {
         HRequest hr = new HRequest();
-        hr.setTitle(inputTitle.getText());
+        hr.setReason(reasonField.getText());
         Date startDate = (Date)dp1.getModel().getValue();
         hr.setDateStart(startDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime());
         Date endDate = (Date)dp2.getModel().getValue();
@@ -108,13 +108,12 @@ public class MainFrame extends CustomFrame {
       }
     });
 
-    this.add(h1);
     this.add(h2);
     this.add(dp1);
-    this.add(label1);
+    this.add(l1);
     this.add(dp2);
-    this.add(label2);
-    this.add(inputTitle);
+    this.add(l2);
+    this.add(reasonField);
     this.add(btnSubmit);
   }
 }

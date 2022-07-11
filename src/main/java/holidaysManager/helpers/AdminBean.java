@@ -135,11 +135,11 @@ public class AdminBean {
 
   public static RequestDispatcher getManageDepartments(HttpServletRequest req, DeptService d) {
     req.setAttribute("departments", d.getAll());
-    return req.getRequestDispatcher("/views/admin/manage_departments.jsp");
+    return req.getRequestDispatcher("/views/admin/departments.jsp");
   }
 
   public static RequestDispatcher getManageRoles(HttpServletRequest req, RoleService r) {
     req.setAttribute("roles", r.getAll());
-    return req.getRequestDispatcher("/views/admin/manage_roles.jsp");
+    return req.getRequestDispatcher("/views/admin/roles.jsp");
   }
 }

@@ -87,7 +87,7 @@
                 <c:forEach var="hb" items="${holidayBookings}">
                   <tr>
                     <td><span class="filter1-target">${hb.emp.fullName}</span> (<span class="filter1-target">${hb.emp.email}</span>)</td>
-                    <td>${hb.title}</td>
+                    <td>${hb.reason}</td>
                     <td>${hb.emp.dept}</td>
                     <td>${hb.emp.role}</td>
                     <td>

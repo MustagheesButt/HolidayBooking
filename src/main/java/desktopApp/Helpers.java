@@ -81,7 +81,7 @@ public class Helpers {
       HttpClient client = HttpClient.newHttpClient();
       HttpRequest request = HttpRequest.newBuilder(new URI(apiBaseUrl + "/api/holiday-requests/create/" + employee.getId()))
           .header("Content-Type", "application/json")
-          .POST(BodyPublishers.ofString(String.format("{\"title\": \"%s\", \"dateStart\": \"%s\", \"dateEnd\": \"%s\"}", req.getTitle(), req.getDateStart(), req.getDateEnd())))
+          .POST(BodyPublishers.ofString(String.format("{\"reason\": \"%s\", \"dateStart\": \"%s\", \"dateEnd\": \"%s\"}", req.getReason(), req.getDateStart(), req.getDateEnd())))
           .build();
       HRequest lr = client.sendAsync(request, BodyHandlers.ofString())
           .thenApply(HttpResponse::body)

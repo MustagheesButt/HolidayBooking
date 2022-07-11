@@ -27,9 +27,9 @@ INSERT INTO `Emp` (`createdat`, `updatedat`, `email`, `password`, `firstname`, `
 
 INSERT INTO `Admin` (`email`, `password`, `firstname`, `lastname`, `createdat`, `updatedat`) VALUES ('admin@admin.com', 'admin', 'Administrator', '11', CURRENT_TIME, CURRENT_TIME);
 
-INSERT INTO `HRequest` (`title`, `datestart`, `dateend`, `status`, `employee_id`) VALUES ('Sick leave', ADDTIME(CURRENT_DATE, '1 0:0:0.000000'), ADDTIME(CURRENT_DATE, '2 0:0:0.000000'), 'pending', 1);
-INSERT INTO `HRequest` (`title`, `datestart`, `dateend`, `status`, `employee_id`) VALUES ('Paid leave', ADDTIME(CURRENT_DATE, '1 0:0:0.000000'), ADDTIME(CURRENT_DATE, '2 0:0:0.000000'), 'pending', 2);
-INSERT INTO `HRequest` (`title`, `datestart`, `dateend`, `status`, `employee_id`) VALUES ('feeling sick', ADDTIME(CURRENT_DATE, '1 0:0:0.000000'), ADDTIME(CURRENT_DATE, '2 0:0:0.000000'), 'pending', 3);
-INSERT INTO `HRequest` (`title`, `datestart`, `dateend`, `status`, `employee_id`) VALUES ('health issues', ADDTIME(CURRENT_DATE, '1 0:0:0.000000'), ADDTIME(CURRENT_DATE, '2 0:0:0.000000'), 'pending', 4);
-INSERT INTO `HRequest` (`title`, `datestart`, `dateend`, `status`, `employee_id`) VALUES ('personal reasons', ADDTIME(CURRENT_DATE, '1 0:0:0.000000'), ADDTIME(CURRENT_DATE, '2 0:0:0.000000'), 'pending', 5);
-INSERT INTO `HRequest` (`title`, `datestart`, `dateend`, `status`, `employee_id`) VALUES ('need a break from work', ADDTIME(CURRENT_DATE, '1 0:0:0.000000'), ADDTIME(CURRENT_DATE, '2 0:0:0.000000'), 'pending', 6);
+INSERT INTO `HRequest` (`reason`, `datestart`, `dateend`, `status`, `employee_id`) VALUES ('Sick leave', ADDTIME(CURRENT_DATE, '1 0:0:0.000000'), ADDTIME(CURRENT_DATE, '2 0:0:0.000000'), 'pending', 1);
+INSERT INTO `HRequest` (`reason`, `datestart`, `dateend`, `status`, `employee_id`) VALUES ('Paid leave', ADDTIME(CURRENT_DATE, '1 0:0:0.000000'), ADDTIME(CURRENT_DATE, '2 0:0:0.000000'), 'pending', 2);
+INSERT INTO `HRequest` (`reason`, `datestart`, `dateend`, `status`, `employee_id`) VALUES ('feeling sick', ADDTIME(CURRENT_DATE, '1 0:0:0.000000'), ADDTIME(CURRENT_DATE, '2 0:0:0.000000'), 'pending', 3);
+INSERT INTO `HRequest` (`reason`, `datestart`, `dateend`, `status`, `employee_id`) VALUES ('health issues', ADDTIME(CURRENT_DATE, '1 0:0:0.000000'), ADDTIME(CURRENT_DATE, '2 0:0:0.000000'), 'pending', 4);
+INSERT INTO `HRequest` (`reason`, `datestart`, `dateend`, `status`, `employee_id`) VALUES ('personal reasons', ADDTIME(CURRENT_DATE, '1 0:0:0.000000'), ADDTIME(CURRENT_DATE, '2 0:0:0.000000'), 'pending', 5);
+INSERT INTO `HRequest` (`reason`, `datestart`, `dateend`, `status`, `employee_id`) VALUES ('need a break from work', ADDTIME(CURRENT_DATE, '1 0:0:0.000000'), ADDTIME(CURRENT_DATE, '2 0:0:0.000000'), 'pending', 6);

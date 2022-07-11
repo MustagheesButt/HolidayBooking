@@ -3,7 +3,7 @@
 
 <t:layout>
   <jsp:attribute name="head">
-    <title>Roles - HolidaysManager</title>
+    <title>Roles | HolidaysManager</title>
   </jsp:attribute>
   
   <jsp:body>

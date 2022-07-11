@@ -32,7 +32,7 @@
 
               <div class="mb-3">
                 <label>Reason</label>
-                <input name="title" class="form-control" type="text" required />
+                <input name="reason" class="form-control" type="text" required />
               </div>
 
               <button class="btn btn-primary" type="submit">Request</button>

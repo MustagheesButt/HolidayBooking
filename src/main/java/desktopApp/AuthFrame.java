@@ -17,19 +17,19 @@ public class AuthFrame extends CustomFrame {
     this.setTitle("HolidaysManager");
 
     JLabel h1 = new JLabel("Login to HolidaysManager");
-    h1.setBounds(width / 2 - width / 6, 20, width / 3, 40);
+    h1.setBounds(width / 2 - 100, 20, width / 3, 40);
     h1.setForeground(Color.WHITE);
 
     JTextField emailField = new JTextField("Email");
-    emailField.setBounds(width / 2 - width / 6, 100, width / 3, 30);
+    emailField.setBounds(width / 2 - 105, 100, width / 3, 30);
     Helpers.setupInput(emailField, "Email");
 
     JTextField passwdField = new JTextField("Password");
-    passwdField.setBounds(width / 2 - width / 6, 180, width / 3, 30);
+    passwdField.setBounds(width / 2 - 105, 180, width / 3, 30);
     Helpers.setupInput(passwdField, "Password");
 
     JButton lBtn = new JButton("Login");
-    lBtn.setBounds(width / 2 - width / 6, 260, width / 3, 40);
+    lBtn.setBounds(width / 2 - 105, 250, width / 3, 40);
     lBtn.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
         LoginResponse lr = Helpers.sendLoginReq(emailField.getText(), passwdField.getText());

@@ -36,14 +36,14 @@ public class HRServlet extends HttpServlet {
 
     String redirectTo = "/dashboard";
     if (uri.contains("create-holiday-request")) {
-      String title = req.getParameter("title");
+      String reason = req.getParameter("reason");
 
       DateTimeFormatter pattern = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
       LocalDateTime dateStart = LocalDateTime.parse(req.getParameter("dateStart"), pattern);
       LocalDateTime dateEnd = LocalDateTime.parse(req.getParameter("dateEnd"), pattern);
 
       HRequest hr = new HRequest();
-      hr.setTitle(title);
+      hr.setReason(reason);
       hr.setDateStart(dateStart);
       hr.setDateEnd(dateEnd);
 

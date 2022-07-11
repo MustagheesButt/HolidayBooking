@@ -25,7 +25,7 @@
             <table class="table text-bg-dark">
               <thead>
                 <tr>
-                  <th>Title</th>
+                  <th>Reason</th>
                   <th>Period</th>
                   <th>Status</th>
                 </tr>
@@ -33,7 +33,7 @@
               <tbody>
                 <c:forEach var="hr" items="${holidayRequests}">
                   <tr>
-                    <td>${hr.title}</td>
+                    <td>${hr.reason}</td>
                     <td>
                       <span class="datetime">${hr.dateStart}</span> - <span class="datetime">${hr.dateEnd}</span> (${hr.duration} days)
                     </td>

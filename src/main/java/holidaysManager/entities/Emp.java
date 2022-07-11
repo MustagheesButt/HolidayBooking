@@ -151,6 +151,14 @@ public class Emp implements Serializable {
     return this.firstName + " " + this.lastName;
   }
 
+  public boolean isManager() {
+    return this.getRole().getId() == 4;
+  }
+
+  public boolean isSeniorStaff() {
+    return this.getRole().getId() == 5;
+  }
+
   public boolean isHeadOfDept() {
     return this.getRole().getId() == 1;
   }
@@ -159,20 +167,19 @@ public class Emp implements Serializable {
     return this.getRole().getId() == 2;
   }
 
-  public boolean isManager() {
-    return this.getRole().getId() == 3;
-  }
-
-  public boolean isSeniorStaff() {
-    return this.getRole().getId() == 4;
-  }
-
-  // Holiday bookings == approved holiday requests
-  public List<HRequest> getHolidayBookings() {
+  public List<HRequest> getApprovedReqs() {
     return this.getHolidayRequests()
         .stream()
         .filter(hr -> hr.getStatus().equals("approved"))
         .collect(Collectors.toList());
+  }
+
+  public Long getApprovedReqsDayCount() {
+    return this.getApprovedReqs()
+        .stream()
+        .reduce(0L, (sum, hr) -> {
+          return sum + Duration.between(hr.getDateStart(), hr.getDateEnd()).toDays();
+        }, Long::sum);
   }
 
   // get approved requests for a specific role, between a specific datetime period
@@ -197,15 +204,6 @@ public class Emp implements Serializable {
         .collect(Collectors.toList());
   }
 
-  // number of approved holidays
-  public Long getHolidayBookingsDayCount() {
-    return this.getHolidayBookings()
-        .stream()
-        .reduce(0L, (sum, hr) -> {
-          return sum + Duration.between(hr.getDateStart(), hr.getDateEnd()).toDays();
-        }, Long::sum);
-  }
-
   public List<HRequest> getApprovedHoliday(LocalDateTime start, LocalDateTime end) {
 
     return this.getHolidayRequests()
@@ -218,14 +216,15 @@ public class Emp implements Serializable {
 
   public int getRemainingHolidays() {
     Integer bonusHolidays = (int) ChronoUnit.YEARS.between(this.joiningDate, LocalDateTime.now()) / 5;
-    Long approvedHolidays = this.getHolidayBookingsDayCount();
+    Long approvedHolidays = this.getApprovedReqsDayCount();
     return Emp.HOLIDAYS_PER_YEAR - approvedHolidays.intValue() + bonusHolidays;
   }
 
-  // this is used on admin dashboard, where we can filter employees by date and check whether they are on leave or on duty
+  // this is used on admin dashboard, where we can filter employees by date and
+  // check whether they are on leave or on duty
   public String getHolidayBookingsSerialized() {
     return "[" +
-        String.join(",", this.getHolidayBookings()
+        String.join(",", this.getApprovedReqs()
             .stream()
             .map(hr -> "{\"start\": \"" + hr.getDateStart() + "\", \"end\": \"" + hr.getDateEnd() + "\"}")
             .collect(Collectors.toList()))

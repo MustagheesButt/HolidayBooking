@@ -32,41 +32,37 @@ public class EmployeeServlet extends HttpServlet {
     HttpSession session = req.getSession();
     String uri = req.getRequestURI();
 
-    Emp currEmployee = (Emp)session.getAttribute("employee");
-    // require login
-    if (currEmployee == null) {
+    Emp currentEmp = (Emp)session.getAttribute("employee");
+
+    if (currentEmp == null) {
       resp.sendRedirect("/login");
       return;
     } else {
-      // to update session in case employee was updated by admin
-      session.setAttribute("employee", employeeService.find(currEmployee.getId()));
+      session.setAttribute("employee", employeeService.find(currentEmp.getId()));
     }
 
-    // match requested URL and load appropriate view/jsp
     if (uri.contains("manage-requests")) {
       List<HRequest> requests = holidayRequestService.findAllByEmployee((Emp)session.getAttribute("employee"));
       req.setAttribute("holidayRequests", requests);
-      view = req.getRequestDispatcher("views/employees/manage_requests.jsp");
+      view = req.getRequestDispatcher("views/employees/requests.jsp");
     } else if (uri.contains("manage-department-requests")) {
       List<HRequest> pendingRequests = holidayRequestService
         .getPending()
         .stream()
-        .filter(hr -> hr.getEmp().getDept().getId() == currEmployee.getDept().getId())
+        .filter(hr -> hr.getEmp().getDept().getId() == currentEmp.getDept().getId())
         .collect(Collectors.toList());
 
-			// Functionality G - Prioritize by # of holidays already approved, and days
-			// requested during peak 
 			pendingRequests.sort(new Comparator<HRequest>() {
 				@Override
 				public int compare(HRequest hr1, HRequest hr2) {
-					Long total1 = hr1.getDaysDuringPeakTime() + hr1.getEmp().getHolidayBookingsDayCount();
-					Long total2 = hr2.getDaysDuringPeakTime() + hr2.getEmp().getHolidayBookingsDayCount();
+					Long total1 = hr1.getDaysDuringPeakTime() + hr1.getEmp().getApprovedReqsDayCount();
+					Long total2 = hr2.getDaysDuringPeakTime() + hr2.getEmp().getApprovedReqsDayCount();
 					return total1.compareTo(total2);
 				}
 			});
 
 			req.setAttribute("holidayRequests", pendingRequests);
-      view = req.getRequestDispatcher("views/employees/manage_department_requests.jsp");
+      view = req.getRequestDispatcher("views/employees/department_requests.jsp");
     }
 
     view.forward(req, resp);

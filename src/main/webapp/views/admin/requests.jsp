@@ -31,7 +31,7 @@
                 <c:forEach var="hr" items="${holidayRequests}">
                   <tr class='text-capitalize ${hr.violations.isEmpty() ? "" : "bg-danger"}'>
                     <td>${hr.emp.fullName}</td>
-                    <td>${hr.title}</td>
+                    <td>${hr.reason}</td>
                     <td>
                       <span class="datetime">${hr.dateStart}</span> - <span class="datetime">${hr.dateEnd}</span> (${hr.duration} days)
                     </td>

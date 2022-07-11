@@ -73,16 +73,16 @@ public class Dept implements Serializable {
 		return hr;
 	}
 
-	public List<HRequest> getAprrovedRequests() {
+	public List<HRequest> getApprovedRequests() {
 		List<Emp> e = this.getEmployees();
 		List<HRequest> hr = new ArrayList<HRequest>();
 		for (int i = 0; i < e.size(); i++) {
-			hr.addAll(e.get(i).getHolidayBookings());
+			hr.addAll(e.get(i).getApprovedReqs());
 		}
 		return hr;
 	}
 
-	public List<HRequest> getAprrovedRequests(LocalDateTime start, LocalDateTime end) {
+	public List<HRequest> getApprovedRequestsBetween(LocalDateTime start, LocalDateTime end) {
 		List<Emp> e = this.getEmployees();
 		List<HRequest> hr = new ArrayList<HRequest>();
 		for (int i = 0; i < e.size(); i++) {
@@ -100,17 +100,16 @@ public class Dept implements Serializable {
 		return hr;
 	}
 
-	public List<Emp> getRoleSpecific(long id) {
-		List<Emp> Temp = new ArrayList<Emp>();
+	public List<Emp> getEmpsByRole(long id) {
+		List<Emp> emps = new ArrayList<Emp>();
 
 		for (Emp e : this.getEmployees()) {
-			if (!Temp.contains(e)) {
-				if (e.getRole().getId() == id) {
-					Temp.add(e);
-				}
+			if (!emps.contains(e)) {
+				if (e.getRole().getId() == id)
+					emps.add(e);
 			}
 		}
-		return Temp;
+		return emps;
 	}
 
 	public List<HRequest> getSpecificRequests(LocalDateTime start, LocalDateTime end) {
