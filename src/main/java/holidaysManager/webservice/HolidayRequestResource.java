@@ -1,4 +1,4 @@
-package holidaysManager.api;
+package holidaysManager.webservice;
 
 import java.util.List;
 
@@ -16,19 +16,19 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
-import holidaysManager.entities.Employee;
-import holidaysManager.entities.HolidayRequest;
-import holidaysManager.helpers.HolidayRequestBean;
+import holidaysManager.entities.Emp;
+import holidaysManager.entities.HRequest;
+import holidaysManager.helpers.HReqHelper;
 import holidaysManager.helpers.MessageSender;
-import holidaysManager.services.EmployeeService;
-import holidaysManager.services.HolidayRequestService;
+import holidaysManager.services.EmpService;
+import holidaysManager.services.HReqService;
 
 @Path("/holiday-requests")
 public class HolidayRequestResource {
   @Inject
-  HolidayRequestService holidayRequestService;
+  HReqService holidayRequestService;
   @Inject
-  EmployeeService employeeService;
+  EmpService employeeService;
 
   @Resource(mappedName = "java:/ConnectionFactory")
   private ConnectionFactory connectionFactory;
@@ -39,16 +39,16 @@ public class HolidayRequestResource {
   @GET
   @Path("/{id}")
   @Produces(MediaType.APPLICATION_JSON)
-  public List<HolidayRequest> list(@PathParam("id") Long id) {
-    Employee employee = employeeService.find(id);
+  public List<HRequest> list(@PathParam("id") Long id) {
+    Emp employee = employeeService.find(id);
     return holidayRequestService.findAllByEmployee(employee);
   }
 
   @GET
   @Path("/approved/{id}")
   @Produces(MediaType.APPLICATION_JSON)
-  public List<HolidayRequest> listApproved(@PathParam("id") Long id) {
-    Employee employee = employeeService.find(id);
+  public List<HRequest> listApproved(@PathParam("id") Long id) {
+    Emp employee = employeeService.find(id);
     return holidayRequestService.findAllByEmployee(employee)
         .stream()
         .filter(hr -> hr.getStatus().equals("approved"))
@@ -59,10 +59,10 @@ public class HolidayRequestResource {
   @Path("/create/{id}")
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
-  public HolidayRequest create(HolidayRequest hr, @Context HttpServletRequest request, @PathParam("id") Long id) {
-    Employee e = employeeService.find(id);
+  public HRequest create(HRequest hr, @Context HttpServletRequest request, @PathParam("id") Long id) {
+    Emp e = employeeService.find(id);
 
-    HolidayRequest rv = HolidayRequestBean.createHolidayRequest(hr, holidayRequestService, e);
+    HRequest rv = HReqHelper.createHolidayRequest(hr, holidayRequestService, e);
 
     if (rv != null) {
       MessageSender.sendMessage(String.format("Received holiday request from %s", e.getFullName()), connectionFactory, holidayQueue);

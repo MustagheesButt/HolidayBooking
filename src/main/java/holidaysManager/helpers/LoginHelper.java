@@ -3,14 +3,13 @@ package holidaysManager.helpers;
 import javax.servlet.http.HttpSession;
 
 import holidaysManager.entities.Admin;
-import holidaysManager.entities.Employee;
+import holidaysManager.entities.Emp;
 import holidaysManager.services.AdminService;
-import holidaysManager.services.EmployeeService;
+import holidaysManager.services.EmpService;
 
-public class LoginBean {
-  // if matching admin or employee email found, set session and redirect to dashboard
-  public static LoginResponse login(String email, String password, EmployeeService employeeService, AdminService adminService, HttpSession session) {
-    Employee employee = employeeService.findByEmail(email);
+public class LoginHelper {
+  public static LoginResponse login(String email, String password, EmpService employeeService, AdminService adminService, HttpSession session) {
+    Emp employee = employeeService.findByEmail(email);
     if (employee != null) {
       if (!employee.getPassword().equals(password)) {
         return new LoginResponse(null, null);

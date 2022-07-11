@@ -18,7 +18,7 @@ import holidaysManager.helpers.ConstraintBean;
 
 @Entity
 @Table
-public class HolidayRequest implements Serializable {
+public class HRequest implements Serializable {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
@@ -32,7 +32,7 @@ public class HolidayRequest implements Serializable {
   @JsonbTransient
   @ManyToOne
   @JoinColumn(name = "employee_id")
-  private Employee employee;
+  private Emp emp;
 
   // Can be one of the following values ['pending', 'approved', 'rejected']
   private String status;
@@ -52,8 +52,8 @@ public class HolidayRequest implements Serializable {
   public long getDuration() {
     return Duration.between(this.dateStart, this.dateEnd).toDays();
   }
-  public Employee getEmployee() {
-    return this.employee;
+  public Emp getEmp() {
+    return this.emp;
   }
   public String getStatus() {
     return this.status;
@@ -71,8 +71,8 @@ public class HolidayRequest implements Serializable {
   public void setDateEnd(LocalDateTime dateEnd) {
     this.dateEnd = dateEnd;
   }
-  public void setEmployee(Employee employee) {
-    this.employee = employee;
+  public void setEmployee(Emp employee) {
+    this.emp = employee;
   }
   public void setStatus(String status) {
     this.status = status;

@@ -13,12 +13,14 @@ import java.util.List;
 
 import javax.swing.JTextField;
 
-import holidaysManager.entities.Employee;
-import holidaysManager.entities.HolidayRequest;
-import holidaysManager.helpers.HolidayRequestBean;
+import holidaysManager.entities.Emp;
+import holidaysManager.entities.HRequest;
+import holidaysManager.helpers.HReqHelper;
 import holidaysManager.helpers.LoginResponse;
 
 public class Helpers {
+  private static String apiBaseUrl = "http://localhost:8080";
+
   public static void setupInput(JTextField input, String placeholder) {
     input.setForeground(Color.GRAY);
     input.addFocusListener(new FocusListener() {
@@ -43,7 +45,7 @@ public class Helpers {
   public static LoginResponse sendLoginReq(String email, String password) {
     try {
       HttpClient client = HttpClient.newHttpClient();
-      HttpRequest request = HttpRequest.newBuilder(new URI("http://localhost:8080/api/auth/login"))
+      HttpRequest request = HttpRequest.newBuilder(new URI(apiBaseUrl + "/api/auth/login"))
           .header("Content-Type", "application/json")
           .POST(BodyPublishers.ofString(String.format("{\"email\": \"%s\", \"password\": \"%s\"}", email, password)))
           .build();
@@ -58,34 +60,32 @@ public class Helpers {
     }
   }
 
-  public static List<HolidayRequest> getApprovedHolidayRequests(Employee employee) {
+  public static List<HRequest> getApprovedHolidayRequests(Emp employee) {
     try {
       HttpClient client = HttpClient.newHttpClient();
-      HttpRequest request = HttpRequest.newBuilder(new URI("http://localhost:8080/api/holiday-requests/approved/" + employee.getId()))
+      HttpRequest request = HttpRequest.newBuilder(new URI(apiBaseUrl + "/api/holiday-requests/approved/" + employee.getId()))
           .header("Content-Type", "application/json")
-          // .POST(BodyPublishers.ofString(String.format("{\"email\": \"%s\", \"password\": \"%s\"}", email, password)))
           .build();
-      List<HolidayRequest> lr = client.sendAsync(request, BodyHandlers.ofString())
+      List<HRequest> lr = client.sendAsync(request, BodyHandlers.ofString())
           .thenApply(HttpResponse::body)
-          .thenApply(HolidayRequestBean::parseHolidayRequests)
+          .thenApply(HReqHelper::hReqsFromJson)
           .join();
       return lr;
     } catch (Exception e) {
-      System.out.println(e.getMessage());
       return null;
     }
   }
 
-  public static HolidayRequest createHolidayRequest(HolidayRequest hr, Employee employee) {
+  public static HRequest createHolidayRequest(HRequest req, Emp employee) {
     try {
       HttpClient client = HttpClient.newHttpClient();
-      HttpRequest request = HttpRequest.newBuilder(new URI("http://localhost:8080/api/holiday-requests/create/" + employee.getId()))
+      HttpRequest request = HttpRequest.newBuilder(new URI(apiBaseUrl + "/api/holiday-requests/create/" + employee.getId()))
           .header("Content-Type", "application/json")
-          .POST(BodyPublishers.ofString(String.format("{\"title\": \"%s\", \"dateStart\": \"%s\", \"dateEnd\": \"%s\"}", hr.getTitle(), hr.getDateStart(), hr.getDateEnd())))
+          .POST(BodyPublishers.ofString(String.format("{\"title\": \"%s\", \"dateStart\": \"%s\", \"dateEnd\": \"%s\"}", req.getTitle(), req.getDateStart(), req.getDateEnd())))
           .build();
-      HolidayRequest lr = client.sendAsync(request, BodyHandlers.ofString())
+      HRequest lr = client.sendAsync(request, BodyHandlers.ofString())
           .thenApply(HttpResponse::body)
-          .thenApply(HolidayRequestBean::parseHolidayRequest)
+          .thenApply(HReqHelper::hReqFromJson)
           .join();
       return lr;
     } catch (Exception e) {

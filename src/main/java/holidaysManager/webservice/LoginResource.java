@@ -1,4 +1,4 @@
-package holidaysManager.api;
+package holidaysManager.webservice;
 
 import javax.ws.rs.Produces;
 import javax.inject.Inject;
@@ -11,15 +11,15 @@ import javax.ws.rs.Path;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
-import holidaysManager.helpers.LoginBean;
+import holidaysManager.helpers.LoginHelper;
 import holidaysManager.helpers.LoginResponse;
 import holidaysManager.services.AdminService;
-import holidaysManager.services.EmployeeService;
+import holidaysManager.services.EmpService;
 
 @Path("/auth")
 public class LoginResource {
   @Inject
-  EmployeeService employeeService;
+  EmpService employeeService;
   @Inject
   AdminService adminService;
 
@@ -36,7 +36,7 @@ public class LoginResource {
   public LoginResponse login(LoginJson lJson, @Context HttpServletRequest request) {
     System.out.println(lJson.getEmail() + " " + lJson.getPassword());
     HttpSession session = request.getSession();
-    LoginResponse loginStatus = LoginBean.login(lJson.getEmail(), lJson.getPassword(), employeeService, adminService,
+    LoginResponse loginStatus = LoginHelper.login(lJson.getEmail(), lJson.getPassword(), employeeService, adminService,
         session);
     return loginStatus;
   }

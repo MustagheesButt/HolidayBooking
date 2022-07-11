@@ -24,7 +24,7 @@ import javax.json.bind.annotation.JsonbTransient;
 
 @Entity
 @Table(uniqueConstraints = { @UniqueConstraint(columnNames = { "email" }) })
-public class Employee implements Serializable {
+public class Emp implements Serializable {
   static final int HOLIDAYS_PER_YEAR = 30;
 
   @Id
@@ -46,13 +46,13 @@ public class Employee implements Serializable {
   @JsonbTransient
   @ManyToOne
   @JoinColumn(name = "department_id")
-  private Department department;
+  private Dept dept;
 
   private LocalDateTime joiningDate;
 
   @JsonbTransient
-  @OneToMany(cascade = CascadeType.REMOVE, fetch = FetchType.EAGER, mappedBy = "employee")
-  private List<HolidayRequest> holidayRequests;
+  @OneToMany(cascade = CascadeType.REMOVE, fetch = FetchType.EAGER, mappedBy = "emp")
+  private List<HRequest> holidayRequests;
 
   private LocalDateTime createdAt;
 
@@ -82,15 +82,15 @@ public class Employee implements Serializable {
     return this.role;
   }
 
-  public Department getDepartment() {
-    return this.department;
+  public Dept getDept() {
+    return this.dept;
   }
 
   public LocalDateTime getJoiningDate() {
     return this.joiningDate;
   }
 
-  public List<HolidayRequest> getHolidayRequests() {
+  public List<HRequest> getHolidayRequests() {
     return this.holidayRequests;
   }
 
@@ -126,15 +126,15 @@ public class Employee implements Serializable {
     this.role = role;
   }
 
-  public void setDepartment(Department department) {
-    this.department = department;
+  public void setDepartment(Dept department) {
+    this.dept = department;
   }
 
   public void setJoiningDate(LocalDateTime joiningDate) {
     this.joiningDate = joiningDate;
   }
 
-  public void setHolidayRequests(List<HolidayRequest> holidayRequests) {
+  public void setHolidayRequests(List<HRequest> holidayRequests) {
     this.holidayRequests = holidayRequests;
   }
 
@@ -168,7 +168,7 @@ public class Employee implements Serializable {
   }
 
   // Holiday bookings == approved holiday requests
-  public List<HolidayRequest> getHolidayBookings() {
+  public List<HRequest> getHolidayBookings() {
     return this.getHolidayRequests()
         .stream()
         .filter(hr -> hr.getStatus().equals("approved"))
@@ -176,18 +176,18 @@ public class Employee implements Serializable {
   }
 
   // get approved requests for a specific role, between a specific datetime period
-  public List<HolidayRequest> getRoleBookings(Long id, LocalDateTime start, LocalDateTime end) {
+  public List<HRequest> getRoleBookings(Long id, LocalDateTime start, LocalDateTime end) {
     return this.getHolidayRequests()
         .stream()
         .filter(hr -> hr.getStatus().equals("approved"))
-        .filter(hr -> hr.getEmployee().getRole().getId().equals(id))
+        .filter(hr -> hr.getEmp().getRole().getId().equals(id))
         .filter(hr -> ((hr.getDateStart().compareTo(start) >= 0 && hr.getDateStart().compareTo(end) < 0)
             || (hr.getDateStart().compareTo(start) <= 0 && hr.getDateEnd().compareTo(start) > 0)))
         .collect(Collectors.toList());
   }
 
   // get pending requests between a datetime period
-  public List<HolidayRequest> getHoliday(LocalDateTime start, LocalDateTime end) {
+  public List<HRequest> getHoliday(LocalDateTime start, LocalDateTime end) {
 
     return this.getHolidayRequests()
         .stream()
@@ -206,7 +206,7 @@ public class Employee implements Serializable {
         }, Long::sum);
   }
 
-  public List<HolidayRequest> getApprovedHoliday(LocalDateTime start, LocalDateTime end) {
+  public List<HRequest> getApprovedHoliday(LocalDateTime start, LocalDateTime end) {
 
     return this.getHolidayRequests()
         .stream()
@@ -219,7 +219,7 @@ public class Employee implements Serializable {
   public int getRemainingHolidays() {
     Integer bonusHolidays = (int) ChronoUnit.YEARS.between(this.joiningDate, LocalDateTime.now()) / 5;
     Long approvedHolidays = this.getHolidayBookingsDayCount();
-    return Employee.HOLIDAYS_PER_YEAR - approvedHolidays.intValue() + bonusHolidays;
+    return Emp.HOLIDAYS_PER_YEAR - approvedHolidays.intValue() + bonusHolidays;
   }
 
   // this is used on admin dashboard, where we can filter employees by date and check whether they are on leave or on duty

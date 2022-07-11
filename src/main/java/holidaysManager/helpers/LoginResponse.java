@@ -5,26 +5,25 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import holidaysManager.entities.Admin;
-import holidaysManager.entities.Employee;
+import holidaysManager.entities.Emp;
 
-// Helper class to store login response
 public class LoginResponse {
-  private Employee employee;
+  private Emp employee;
   private Admin admin;
 
   public LoginResponse() {
   }
 
-  public LoginResponse(Employee employee, Admin admin) {
+  public LoginResponse(Emp employee, Admin admin) {
     this.employee = employee;
     this.admin = admin;
   }
 
-  public Employee getEmployee() {
+  public Emp getEmployee() {
     return this.employee;
   }
 
-  public void setEmployee(Employee e) {
+  public void setEmployee(Emp e) {
     this.employee = e;
   }
 

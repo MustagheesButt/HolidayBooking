@@ -6,39 +6,39 @@ import java.util.List;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 
-import holidaysManager.entities.Department;
-import holidaysManager.entities.Employee;
+import holidaysManager.entities.Dept;
+import holidaysManager.entities.Emp;
 import holidaysManager.entities.Role;
-import holidaysManager.services.DepartmentService;
-import holidaysManager.services.EmployeeService;
+import holidaysManager.services.DeptService;
+import holidaysManager.services.EmpService;
 import holidaysManager.services.RoleService;
 
 public class AdminBean {
-  public static void deleteEmployee(HttpServletRequest req, EmployeeService employeeService) {
+  public static void deleteEmployee(HttpServletRequest req, EmpService employeeService) {
     Long id = Long.parseLong(req.getParameter("id"));
-    Employee e = employeeService.find(id);
+    Emp e = employeeService.find(id);
     employeeService.delete(e);
   }
 
   public static String updateEmployee(
-      HttpServletRequest req, EmployeeService employeeService,
-      RoleService roleService, DepartmentService departmentService) {
+      HttpServletRequest req, EmpService employeeService,
+      RoleService roleService, DeptService departmentService) {
     Long id = Long.parseLong(req.getParameter("id"));
-    Employee e = employeeService.find(id);
+    Emp e = employeeService.find(id);
     Long role = Long.parseLong(req.getParameter("role"));
     Role r = roleService.findRole(role);
     Long department = Long.parseLong(req.getParameter("department"));
 
-    Department d = departmentService.find(department);
+    Dept d = departmentService.find(department);
     LocalDateTime now = LocalDateTime.now();
 
     // validate new data for employee
     boolean update = true;
     String str = null;
-    List<Employee> e_list = d.getEmployees();
+    List<Emp> e_list = d.getEmployees();
     for (int i = 0; i < e_list.size(); i++) {
       if (e_list.get(i).getId() != e.getId()) {
-        if (e_list.get(i).getDepartment().getId() == d.getId()) {
+        if (e_list.get(i).getDept().getId() == d.getId()) {
           // a head of dept already exists
           if (e_list.get(i).isHeadOfDept() && r.getId() == 1) {
             update = false;
@@ -80,23 +80,23 @@ public class AdminBean {
     return str;
   }
 
-  public static String addEmployee(HttpServletRequest req, EmployeeService employeeService, RoleService roleService,
-      DepartmentService departmentService) {
+  public static String addEmployee(HttpServletRequest req, EmpService employeeService, RoleService roleService,
+      DeptService departmentService) {
 
-    Employee e = new Employee();
+    Emp e = new Emp();
     Long role = Long.parseLong(req.getParameter("role"));
     Role r = roleService.findRole(role);
     Long department = Long.parseLong(req.getParameter("department"));
 
-    Department d = departmentService.find(department);
+    Dept d = departmentService.find(department);
     LocalDateTime now = LocalDateTime.now();
     
     // test requirements to create a new employee
     boolean create = true;
     String str = null;
-    List<Employee> e_list = d.getEmployees();
+    List<Emp> e_list = d.getEmployees();
     for (int i = 0; i < e_list.size(); i++) {
-      if (e_list.get(i).getDepartment().getId() == d.getId()) {
+      if (e_list.get(i).getDept().getId() == d.getId()) {
         if (e_list.get(i).getRole().getId() == 1 && r.getId() == 1) {
           create = false;
           str = "Head";
@@ -133,7 +133,7 @@ public class AdminBean {
     return str;
   }
 
-  public static RequestDispatcher getManageDepartments(HttpServletRequest req, DepartmentService d) {
+  public static RequestDispatcher getManageDepartments(HttpServletRequest req, DeptService d) {
     req.setAttribute("departments", d.getAll());
     return req.getRequestDispatcher("/views/admin/manage_departments.jsp");
   }

@@ -15,11 +15,11 @@ import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
 
 import holidaysManager.entities.Admin;
-import holidaysManager.entities.HolidayRequest;
+import holidaysManager.entities.HRequest;
 import holidaysManager.helpers.AdminBean;
-import holidaysManager.services.DepartmentService;
-import holidaysManager.services.EmployeeService;
-import holidaysManager.services.HolidayRequestService;
+import holidaysManager.services.DeptService;
+import holidaysManager.services.EmpService;
+import holidaysManager.services.HReqService;
 import holidaysManager.services.RoleService;
 
 @Transactional
@@ -30,13 +30,13 @@ import holidaysManager.services.RoleService;
 	"/admin/manage-roles", "/admin/manage-departments" })
 public class AdminServlet extends HttpServlet {
 	@Inject
-	private EmployeeService employeeService;
+	private EmpService employeeService;
 	@Inject
-	private DepartmentService departmentService;
+	private DeptService departmentService;
 	@Inject
 	private RoleService roleService;
 	@Inject
-	private HolidayRequestService holidayRequestService;
+	private HReqService holidayRequestService;
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -63,15 +63,15 @@ public class AdminServlet extends HttpServlet {
 
 			view = req.getRequestDispatcher("/views/admin/create_employee.jsp");
 		} else if (uri.contains("manage-requests")) {
-			List<HolidayRequest> pendingRequests = holidayRequestService.getPending();
+			List<HRequest> pendingRequests = holidayRequestService.getPending();
 
 			// Functionality G - Prioritize by # of holidays already approved, and days
 			// requested during peak time
-			pendingRequests.sort(new Comparator<HolidayRequest>() {
+			pendingRequests.sort(new Comparator<HRequest>() {
 				@Override
-				public int compare(HolidayRequest hr1, HolidayRequest hr2) {
-					Long total1 = hr1.getDaysDuringPeakTime() + hr1.getEmployee().getHolidayBookingsDayCount();
-					Long total2 = hr2.getDaysDuringPeakTime() + hr2.getEmployee().getHolidayBookingsDayCount();
+				public int compare(HRequest hr1, HRequest hr2) {
+					Long total1 = hr1.getDaysDuringPeakTime() + hr1.getEmp().getHolidayBookingsDayCount();
+					Long total2 = hr2.getDaysDuringPeakTime() + hr2.getEmp().getHolidayBookingsDayCount();
 					return total1.compareTo(total2);
 				}
 			});

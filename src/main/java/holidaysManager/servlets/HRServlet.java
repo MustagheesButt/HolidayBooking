@@ -13,30 +13,28 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import holidaysManager.entities.Employee;
-import holidaysManager.entities.HolidayRequest;
-import holidaysManager.helpers.HolidayRequestBean;
-import holidaysManager.services.HolidayRequestService;
+import holidaysManager.entities.Emp;
+import holidaysManager.entities.HRequest;
+import holidaysManager.helpers.HReqHelper;
+import holidaysManager.services.HReqService;
 
 @WebServlet({ "/create-holiday-request", "/delete-holiday-request", "/approve-request", "/reject-request" })
 @MultipartConfig
-public class HolidayRequestServlet extends HttpServlet {
+public class HRServlet extends HttpServlet {
   @Inject
-  private HolidayRequestService holidayRequestService;
+  private HReqService holidayRequestService;
 
   @Override
   protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
     HttpSession session = req.getSession();
     String uri = req.getRequestURI();
 
-    // require login
     if (session.getAttribute("employee") == null && session.getAttribute("admin") == null) {
       resp.sendRedirect("/login");
       return;
     }
 
     String redirectTo = "/dashboard";
-    // match requested URI and perform appropriate action
     if (uri.contains("create-holiday-request")) {
       String title = req.getParameter("title");
 
@@ -44,17 +42,17 @@ public class HolidayRequestServlet extends HttpServlet {
       LocalDateTime dateStart = LocalDateTime.parse(req.getParameter("dateStart"), pattern);
       LocalDateTime dateEnd = LocalDateTime.parse(req.getParameter("dateEnd"), pattern);
 
-      HolidayRequest hr = new HolidayRequest();
+      HRequest hr = new HRequest();
       hr.setTitle(title);
       hr.setDateStart(dateStart);
       hr.setDateEnd(dateEnd);
 
-      Employee e = (Employee) session.getAttribute("employee");
-      HolidayRequestBean.createHolidayRequest(hr, holidayRequestService, e);
+      Emp e = (Emp) session.getAttribute("employee");
+      HReqHelper.createHolidayRequest(hr, holidayRequestService, e);
 
       redirectTo = "/manage-requests";
     } else if (uri.contains("approve-request")) {
-      HolidayRequestBean.approveRequest(req, holidayRequestService);
+      HReqHelper.approveRequest(req, holidayRequestService);
 
       if (session.getAttribute("admin") == null) {
         redirectTo = "/manage-department-requests";
@@ -62,7 +60,7 @@ public class HolidayRequestServlet extends HttpServlet {
         redirectTo = "/admin/manage-requests";
       }
     } else if (uri.contains("reject-request")) {
-      HolidayRequestBean.rejectRequest(req, holidayRequestService);
+      HReqHelper.rejectRequest(req, holidayRequestService);
 
       if (session.getAttribute("admin") == null) {
         redirectTo = "/manage-department-requests";

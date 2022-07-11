@@ -5,20 +5,20 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import holidaysManager.entities.Employee;
-import holidaysManager.entities.HolidayRequest;
+import holidaysManager.entities.Emp;
+import holidaysManager.entities.HRequest;
 
 public class ConstraintBean {
 
-	public static List<String> brokenContraints(HolidayRequest holidayRequest) {
+	public static List<String> brokenContraints(HRequest holidayRequest) {
 		List<String> reasons = new ArrayList<String>();
-		Employee e = holidayRequest.getEmployee();
+		Emp emp = holidayRequest.getEmp();
 
-		List<HolidayRequest> hr_approved = holidayRequest.getEmployee().getDepartment().getAprrovedRequests();
+		List<HRequest> hr_approved = emp.getDept().getAprrovedRequests();
 
-		List<HolidayRequest> hr_m = holidayRequest.getEmployee().getDepartment().getRoleRequests(3,holidayRequest.getDateStart(),holidayRequest.getDateEnd());
+		List<HRequest> requestsByManagers = emp.getDept().getRoleRequests(4,holidayRequest.getDateStart(),holidayRequest.getDateEnd());
 
-		List<HolidayRequest> hr_s = holidayRequest.getEmployee().getDepartment().getRoleRequests(4,holidayRequest.getDateStart(),holidayRequest.getDateEnd());
+		List<HRequest> requestsBySeniors = emp.getDept().getRoleRequests(5,holidayRequest.getDateStart(),holidayRequest.getDateEnd());
 
     // No constraints from December 23rd to January 3rd.
     if(holidayRequest.getDateStart().getMonthValue() == 12 &&  holidayRequest.getDateStart().getDayOfMonth() >= 23) {
@@ -34,38 +34,38 @@ public class ConstraintBean {
 		}
 
 		// 1. Has consumed yearly holidays
-		if (e.getHolidayBookings().size() >= e.getRemainingHolidays()) {
+		if (emp.getHolidayBookings().size() >= emp.getRemainingHolidays()) {
 			reasons.add("used up all holidays.");
 		}
 		// 2. Request Limit Exceeds Remaining Holidays
-		else if (holidayRequest.getDuration() > e.getRemainingHolidays()) {
+		else if (holidayRequest.getDuration() > emp.getRemainingHolidays()) {
 			reasons.add("Not Enough Holidays Remaining.");
 		}
 
 		// 3. Department Head is on Holiday. Deputy head has to be on duty.
-		if (holidayRequest.getEmployee().isDeputyHeadOfDept()) {
+		if (holidayRequest.getEmp().isDeputyHeadOfDept()) {
 			if (isHeadOnHoliday(holidayRequest, hr_approved)) {
 				reasons.add("Department Head is already on holiday");
 			}
 		}
 
 		// 4. Department Deputy Head is on Holiday. Head has to be on duty.
-		if (holidayRequest.getEmployee().isHeadOfDept()) {
+		if (emp.isHeadOfDept()) {
 			if (isDeputyHeadOnHoliday(holidayRequest, hr_approved)) {
 				reasons.add("Department Deputy Head is already on holiday");
 			}
 		}
 
 		// At least 1 Manager must be on duty
-		if (holidayRequest.getEmployee().isManager()) {
-			if (isNoOtherManagerOnDuty(holidayRequest, hr_m)) {
+		if (emp.isManager()) {
+			if (isNoOtherManagerOnDuty(holidayRequest, requestsByManagers)) {
 				reasons.add("Atleast one manager must be on duty");
 			}
 		}
 
 		// At least one Senior Staff must be on duty
-		if (holidayRequest.getEmployee().isSeniorStaff()) {
-			if (isNoOtherSeniorStaffOnDuty(holidayRequest, hr_s)) {
+		if (emp.isSeniorStaff()) {
+			if (isNoOtherSeniorStaffOnDuty(holidayRequest, requestsBySeniors)) {
 				reasons.add("Atleast one senior staff must be on duty");
 			}
 		}
@@ -73,21 +73,21 @@ public class ConstraintBean {
 		/**
 		 * 60% of department must be on duty (40% during certain times)
 		 **/ 
-		List<Employee> em = holidayRequest.getEmployee().getDepartment().getEmployees();
+		List<Emp> em = holidayRequest.getEmp().getDept().getEmployees();
 		
 		// to store only 1 request of an employee in a specific time period (of which HolidayRequest we are compairing against)
-		List<HolidayRequest> uniqueRequests = new ArrayList<HolidayRequest>();
-		List<HolidayRequest> hr_temp = holidayRequest.getEmployee()
-			.getDepartment()
+		List<HRequest> uniqueRequests = new ArrayList<HRequest>();
+		List<HRequest> hr_temp = emp
+			.getDept()
 			.getAprrovedRequests(holidayRequest.getDateStart(), holidayRequest.getDateEnd());
-		for (HolidayRequest h : hr_temp) {
+		for (HRequest h : hr_temp) {
 			if (uniqueRequests.isEmpty()) {
 				uniqueRequests.add(h);
 			}
 
 			boolean exists = false;
-			for (HolidayRequest t : uniqueRequests) {
-				if (h.getEmployee().getId() == t.getEmployee().getId()) {
+			for (HRequest t : uniqueRequests) {
+				if (h.getEmp().getId() == t.getEmp().getId()) {
 					exists = true;
 				}
 			}
@@ -110,19 +110,17 @@ public class ConstraintBean {
 		return reasons;
 	}
 
-	public static boolean isHeadOnHoliday(HolidayRequest reqToCheck, List<HolidayRequest> approvedRequests) {
+	public static boolean isHeadOnHoliday(HRequest reqToCheck, List<HRequest> approvedRequests) {
 		for (int i = 0; i < approvedRequests.size(); i++) {
-			HolidayRequest hr = approvedRequests.get(i);
-			if (hr.getEmployee().getId() != reqToCheck.getEmployee().getId()) {
-				if (hr.getEmployee().isHeadOfDept()
-						&& hr.getEmployee().getDepartment().getId() == reqToCheck.getEmployee().getDepartment().getId()) {
+			HRequest hr = approvedRequests.get(i);
+			if (hr.getEmp().getId() != reqToCheck.getEmp().getId()) {
+				if (hr.getEmp().isHeadOfDept()
+						&& hr.getEmp().getDept().getId() == reqToCheck.getEmp().getDept().getId()) {
 					if (hr.getDateStart().compareTo(reqToCheck.getDateStart()) >= 0
 							&& hr.getDateStart().compareTo(reqToCheck.getDateEnd()) < 0) {
-						// reasons.add("Department Head is already on holiday");
 						return true;
 					} else if (reqToCheck.getDateStart().compareTo(hr.getDateStart()) >= 0
 							&& reqToCheck.getDateStart().compareTo(hr.getDateEnd()) < 0) {
-						// reasons.add("Department Head is already on holiday");
 						return true;
 					}
 				}
@@ -132,12 +130,12 @@ public class ConstraintBean {
 		return false;
 	}
 
-	public static boolean isDeputyHeadOnHoliday(HolidayRequest reqToCheck, List<HolidayRequest> approvedRequests) {
+	public static boolean isDeputyHeadOnHoliday(HRequest reqToCheck, List<HRequest> approvedRequests) {
 		for (int i = 0; i < approvedRequests.size(); i++) {
-			HolidayRequest hr = approvedRequests.get(i);
-			if (hr.getEmployee().getId() != reqToCheck.getEmployee().getId()) {
-				if (hr.getEmployee().isDeputyHeadOfDept()
-						&& hr.getEmployee().getDepartment().getId() == reqToCheck.getEmployee().getDepartment().getId()) {
+			HRequest hr = approvedRequests.get(i);
+			if (hr.getEmp().getId() != reqToCheck.getEmp().getId()) {
+				if (hr.getEmp().isDeputyHeadOfDept()
+						&& hr.getEmp().getDept().getId() == reqToCheck.getEmp().getDept().getId()) {
 					if (hr.getDateStart().compareTo(reqToCheck.getDateStart()) >= 0
 							&& hr.getDateStart().compareTo(reqToCheck.getDateEnd()) < 0) {
 						// reasons.add("Department Deputy Head is aleady on holiday");
@@ -154,17 +152,17 @@ public class ConstraintBean {
 		return false;
 	}
 
-	public static boolean isNoOtherManagerOnDuty(HolidayRequest reqToCheck, List<HolidayRequest> managerRequests) {
-		List<HolidayRequest> Temp_hr = new ArrayList<HolidayRequest>();
-		List<Employee> em = reqToCheck.getEmployee().getDepartment().getRoleSpecific(3);
+	public static boolean isNoOtherManagerOnDuty(HRequest reqToCheck, List<HRequest> managerRequests) {
+		List<HRequest> Temp_hr = new ArrayList<HRequest>();
+		List<Emp> em = reqToCheck.getEmp().getDept().getRoleSpecific(3);
 		if(em.size()>1) {
-			for (HolidayRequest h : managerRequests) {
+			for (HRequest h : managerRequests) {
 				if (Temp_hr.isEmpty()) {						
 					Temp_hr.add(h);
 				}
 				boolean exists = false;
-				for (HolidayRequest t : Temp_hr) {
-					if (h.getEmployee().getId() == t.getEmployee().getId()) {
+				for (HRequest t : Temp_hr) {
+					if (h.getEmp().getId() == t.getEmp().getId()) {
 						exists = true;
 					}
 				}
@@ -186,32 +184,30 @@ public class ConstraintBean {
 		return false;
 	}
 
-	public static boolean isNoOtherSeniorStaffOnDuty(HolidayRequest reqToCheck, List<HolidayRequest> seniorStaffRequests) {
-		List<HolidayRequest> Temp_hr = new ArrayList<HolidayRequest>();
-		List<Employee> em = reqToCheck.getEmployee().getDepartment().getRoleSpecific(4);
-		if(em.size()>1) {
-			for (HolidayRequest h : seniorStaffRequests) {
+	public static boolean isNoOtherSeniorStaffOnDuty(HRequest reqToCheck, List<HRequest> seniorStaffRequests) {
+		List<HRequest> Temp_hr = new ArrayList<HRequest>();
+		List<Emp> emps = reqToCheck.getEmp().getDept().getRoleSpecific(4);
+		if (emps.size() > 1) {
+			for (HRequest h : seniorStaffRequests) {
 				if (Temp_hr.isEmpty()) {
 					Temp_hr.add(h);
 				}
 				boolean exists = false;
-				for (HolidayRequest t : Temp_hr) {
-					if (h.getEmployee().getId() == t.getEmployee().getId()) {
+				for (HRequest t : Temp_hr) {
+					if (h.getEmp().getId() == t.getEmp().getId()) {
 						exists = true;
 					}
 				}
-				if(exists==false) {
+				if (!exists) {
 					Temp_hr.add(h);
 				}
 			}								
-				if(em.size() == Temp_hr.size()+1 ) 
-				{									
-					// reasons.add("Atleast One Senior Staff must be on duty");
+				if(emps.size() == Temp_hr.size()+1 ) 
+				{
 					return true;
 				}
 		}
-		else{
-			// reasons.add("Atleast One Senior Staff must be on duty");
+		else {
 			return true;
 		}
 

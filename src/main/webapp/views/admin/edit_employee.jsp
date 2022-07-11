@@ -26,7 +26,7 @@
 
 						<select name="department"  class="form-control mb-4">
 							<c:forEach var="department" items="${departments}">
-								<option value="${department.id}" ${employee.department.equals(department) ? "selected=true" : "" }>${department.title}</option>
+								<option value="${department.id}" ${employee.dept.equals(department) ? "selected=true" : "" }>${department.title}</option>
 							</c:forEach>
 						</select>
 

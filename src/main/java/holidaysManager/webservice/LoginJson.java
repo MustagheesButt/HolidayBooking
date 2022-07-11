@@ -1,4 +1,4 @@
-package holidaysManager.api;
+package holidaysManager.webservice;
 
 public class LoginJson {
   private String email;

@@ -11,15 +11,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import holidaysManager.helpers.LoginBean;
+import holidaysManager.helpers.LoginHelper;
 import holidaysManager.helpers.LoginResponse;
 import holidaysManager.services.AdminService;
-import holidaysManager.services.EmployeeService;
+import holidaysManager.services.EmpService;
 
 @WebServlet({"", "/login", "/logout"})
 public class LoginServlet extends HttpServlet {
   @Inject
-  private EmployeeService employeeService;
+  private EmpService employeeService;
   @Inject
   private AdminService adminService;
 
@@ -51,7 +51,7 @@ public class LoginServlet extends HttpServlet {
     String password = req.getParameter("password");
     HttpSession session = req.getSession();
 
-    LoginResponse loginStatus = LoginBean.login(email, password, employeeService, adminService, session);
+    LoginResponse loginStatus = LoginHelper.login(email, password, employeeService, adminService, session);
 
     // if niether employee nor admin user found with matching email, show error
     if (loginStatus.getEmployee() == null && loginStatus.getAdmin() == null) {

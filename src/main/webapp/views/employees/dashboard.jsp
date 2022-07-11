@@ -12,7 +12,7 @@
   
       <div class="row">
         <section class="col-11 m-5 p-5 card text-bg-dark rounded">
-          <h3 class="">${employee.fullName} - ${employee.department}</h3>
+          <h3 class="">${employee.fullName} - ${employee.dept}</h3>
           <p>You have <strong>${employee.remainingHolidays}</strong> holidays remaining.</p>
         </section>
     
@@ -59,11 +59,7 @@
 
         if (diff > remainingHolidays) {
           e.preventDefault()
-          Swal.fire({
-            title: 'Too Many Holidays',
-            html: `You requested ${diff} holidays, when you only have ${remainingHolidays} remaining holidays`,
-            icon: 'error'
-          })
+          alert(`Too Many Holidays: Requested ${diff} holidays, but only ${remainingHolidays} remaining`)
         }
       }
     </script>

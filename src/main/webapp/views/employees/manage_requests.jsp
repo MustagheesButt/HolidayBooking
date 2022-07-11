@@ -12,7 +12,7 @@
   
       <div class="row">
         <section class="col-11 m-5 p-5 text-bg-dark">
-          <h2 class="">${employee.fullName} - ${employee.department}</h2>
+          <h2 class="">${employee.fullName} - ${employee.dept}</h2>
           <p>You have <strong>${employee.remainingHolidays}</strong> holidays remaining.</p>
         </section>
     
@@ -25,7 +25,6 @@
             <table class="table text-bg-dark">
               <thead>
                 <tr>
-                  <th>ID</th>
                   <th>Title</th>
                   <th>Period</th>
                   <th>Status</th>
@@ -34,7 +33,6 @@
               <tbody>
                 <c:forEach var="hr" items="${holidayRequests}">
                   <tr>
-                    <td>${hr.id}</td>
                     <td>${hr.title}</td>
                     <td>
                       <span class="datetime">${hr.dateStart}</span> - <span class="datetime">${hr.dateEnd}</span> (${hr.duration} days)

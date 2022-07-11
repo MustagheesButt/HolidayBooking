@@ -3,22 +3,16 @@
 
 <t:layout>
   <jsp:attribute name="head">
-    <title>Dashboard - HolidaysManager</title>
+    <title>Dashboard | HolidaysManager</title>
   </jsp:attribute>
 
   <jsp:body>
   <script>
     const params = new URLSearchParams(window.location.search)
     if (["Head", "Deputy"].includes(params.get("error"))) {
-      Swal.fire({
-        title: 'This Department Already Has a ' + params.get('error'),
-        icon: 'error'
-      })
+      alert('Department already has a ' + params.get('error'))
     } else if (params.get("error") === "Email") {
-      Swal.fire({
-        title: 'Email Already Exists. Please use another Email.',
-        icon: 'error'
-      })
+      alert('Email already in use')
     }
   </script>
 
@@ -38,7 +32,6 @@
           <table class="table text-bg-dark">
             <thead>
               <tr>
-                <th>ID</th>
                 <th>Name</th>
                 <th>Email</th>
                 <th>Department</th>
@@ -49,10 +42,9 @@
             <tbody>
               <c:forEach var="employee" items="${employees}">
                 <tr>
-                  <td>${employee.id}</td>
                   <td>${employee.fullName}</td>
                   <td>${employee.email}</td>
-                  <td>${employee.department}</td>
+                  <td>${employee.dept}</td>
                   <td>${employee.role}</td>
                   <td>
                     <div class="d-flex">
@@ -84,20 +76,20 @@
             <table class="table text-bg-dark">
               <thead>
                 <tr>
+                  <th>Employee</th>
                   <th>Reason</th>
-                  <th>Name</th>
-                  <th>Email</th>
                   <th>Department</th>
+                  <th>Role</th>
                   <th>Period</th>
                 </tr>
               </thead>
               <tbody>
                 <c:forEach var="hb" items="${holidayBookings}">
                   <tr>
+                    <td><span class="filter1-target">${hb.emp.fullName}</span> (<span class="filter1-target">${hb.emp.email}</span>)</td>
                     <td>${hb.title}</td>
-                    <td class="filter1-target">${hb.employee.fullName}</td>
-                    <td class="filter1-target">${hb.employee.email}</td>
-                    <td>${hb.employee.department}</td>
+                    <td>${hb.emp.dept}</td>
+                    <td>${hb.emp.role}</td>
                     <td>
                       <span class="datetime">${hb.dateStart}</span> - <span class="datetime">${hb.dateEnd}</span> (${hb.duration} days)
                     </td>
@@ -106,24 +98,7 @@
               </tbody>
             </table>
 
-            <script>
-              const filter1 = document.querySelector('#filter1')
-  
-              filter1.addEventListener('input', function () {
-                document.querySelectorAll('.found').forEach((ele) => ele.classList.remove('found'))
-  
-                document.querySelectorAll('.filter1-target').forEach((ele, key, parent) => {
-                  if (ele.parentElement.classList.contains("found")) return
-  
-                  if (ele.innerHTML.toLowerCase().includes(filter1.value.toLowerCase())) {
-                    ele.parentElement.classList.add("found")
-                    ele.parentElement.classList.remove('d-none')
-                  } else {
-                    ele.parentElement.classList.add('d-none')
-                  }
-                })
-              })
-            </script>
+            <script src="/assets/filterByName_Email.js"></script>
           </c:if>
         </section>
 
@@ -149,7 +124,7 @@
                     <tr class="filter2-target onduty" data-holiday-bookings='${employee.holidayBookingsSerialized}'>
                       <td>${employee.fullName}</td>
                       <td>${employee.email}</td>
-                      <td>${employee.department}</td>
+                      <td>${employee.dept}</td>
                       <td>${employee.role}</td>
                     </tr>
                   </c:forEach>
@@ -163,7 +138,7 @@
               <table class="table text-bg-dark">
                 <thead>
                   <tr>
-                    <th>Employee Name</th>
+                    <th>Name</th>
                     <th>Email</th>
                     <th>Department</th>
                     <th>Role</th>
@@ -175,7 +150,7 @@
                       data-holiday-bookings='${employee.holidayBookingsSerialized}'>
                       <td class="p-2">${employee.fullName}</td>
                       <td class="p-2">${employee.email}</td>
-                      <td class="p-2">${employee.department}</td>
+                      <td class="p-2">${employee.dept}</td>
                       <td class="p-2">${employee.role}</td>
                     </tr>
                   </c:forEach>
@@ -184,50 +159,7 @@
             </div>
           </div>
 
-          <script>
-            const filter2 = document.querySelector('#filter2')
-
-            magic()
-            filter2.addEventListener('input', magic)
-
-            function magic() {
-              const selectedDate = new Date(filter2.value)
-
-              document.querySelectorAll('.filter2-target').forEach((ele) => {
-                ele.classList.remove('d-none')
-              })
-
-              document.querySelectorAll('.filter2-target.onleave').forEach((ele) => {
-                const bookings = JSON.parse(ele.getAttribute("data-holiday-bookings"))
-                if (bookings.length === 0) ele.classList.add('d-none')
-
-                let toHide = true
-                bookings.forEach((booking) => {
-                  const startDate = (new Date(new Date(booking.start).toDateString()))
-                  const endDate = (new Date(new Date(booking.end).toDateString()))
-
-                  if ((selectedDate >= startDate && selectedDate <= endDate)) {
-                    toHide = false
-                  }
-                })
-
-                if (toHide) ele.classList.add('d-none')
-              })
-
-              document.querySelectorAll('.filter2-target.onduty').forEach((ele) => {
-                const bookings = JSON.parse(ele.getAttribute("data-holiday-bookings"))
-
-                bookings.forEach((booking) => {
-                  const startDate = (new Date(new Date(booking.start).toDateString()))
-                  const endDate = (new Date(new Date(booking.end).toDateString()))
-
-                  if ((selectedDate >= startDate && selectedDate <= endDate)) {
-                    ele.classList.add('d-none')
-                  }
-                })
-              })
-            }
-          </script>
+          <script src="/assets/tableFilter_empOnLeave.js"></script>
         </section>
       </div>
     </div>

@@ -7,20 +7,22 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 
-import holidaysManager.entities.Role;
+import holidaysManager.entities.Dept;
 
 @ApplicationScoped
 @Transactional
-public class RoleService {
+public class DeptService {
   @PersistenceContext
   private EntityManager em;
 
-  public Role findRole(long id) {
-    return em.find(Role.class, id);
+  public Dept find(Long id) {
+    return em
+      .find(Dept.class, id);
   }
-  public List<Role> getAll() {
-	    return em
-        .createQuery("SELECT r FROM Role r", Role.class)
-        .getResultList();
-	  }
+
+  public List<Dept> getAll() {
+    return em
+      .createQuery("SELECT d FROM Dept d", Dept.class)
+      .getResultList();
+  }
 }

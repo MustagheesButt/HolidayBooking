@@ -20,7 +20,6 @@
             <table class="table text-bg-dark">
               <thead>
                 <tr>
-                  <th>ID</th>
                   <th>Employee Name</th>
                   <th>Title</th>
                   <th>Period</th>
@@ -31,8 +30,7 @@
               <tbody>
                 <c:forEach var="hr" items="${holidayRequests}">
                   <tr class='text-capitalize ${hr.violations.isEmpty() ? "" : "bg-danger"}'>
-                    <td>${hr.id}</td>
-                    <td>${hr.employee.fullName}</td>
+                    <td>${hr.emp.fullName}</td>
                     <td>${hr.title}</td>
                     <td>
                       <span class="datetime">${hr.dateStart}</span> - <span class="datetime">${hr.dateEnd}</span> (${hr.duration} days)

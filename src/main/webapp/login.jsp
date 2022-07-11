@@ -29,10 +29,8 @@
     </div>
 
     <script>
-      const params = new URLSearchParams(window.location.search)
-      if (params.get("error")) {
+      if ((new URLSearchParams(window.location.search)).get("error"))
         alert("Wrong email or password!")
-      }
     </script>
   </jsp:body>
 </t:layout>
