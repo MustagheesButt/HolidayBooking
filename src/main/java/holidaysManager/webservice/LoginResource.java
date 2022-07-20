@@ -12,7 +12,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
 import holidaysManager.helpers.LoginHelper;
-import holidaysManager.helpers.LoginResponse;
+import holidaysManager.helpers.LogResp;
 import holidaysManager.services.AdminService;
 import holidaysManager.services.EmpService;
 
@@ -33,10 +33,10 @@ public class LoginResource {
   @Path("/login")
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
-  public LoginResponse login(LoginJson lJson, @Context HttpServletRequest request) {
+  public LogResp login(LoginJson lJson, @Context HttpServletRequest request) {
     System.out.println(lJson.getEmail() + " " + lJson.getPassword());
     HttpSession session = request.getSession();
-    LoginResponse loginStatus = LoginHelper.login(lJson.getEmail(), lJson.getPassword(), employeeService, adminService,
+    LogResp loginStatus = LoginHelper.login(lJson.getEmail(), lJson.getPassword(), employeeService, adminService,
         session);
     return loginStatus;
   }

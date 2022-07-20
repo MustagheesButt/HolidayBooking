@@ -16,7 +16,7 @@ import javax.transaction.Transactional;
 
 import holidaysManager.entities.Admin;
 import holidaysManager.entities.HRequest;
-import holidaysManager.helpers.AdminBean;
+import holidaysManager.helpers.AdminHelper;
 import holidaysManager.services.DeptService;
 import holidaysManager.services.EmpService;
 import holidaysManager.services.HReqService;
@@ -52,9 +52,9 @@ public class AdminServlet extends HttpServlet {
 		Admin admin = (Admin) session.getAttribute("admin");
 		req.setAttribute("admin", admin);
 		if (uri.contains("manage-departments")) {
-			view = AdminBean.getManageDepartments(req, departmentService);
+			view = AdminHelper.getManageDepartments(req, departmentService);
 		} else if (uri.contains("manage-roles")) {
-			view = AdminBean.getManageRoles(req, roleService);
+			view = AdminHelper.getManageRoles(req, roleService);
 		} else if (uri.contains("create-employee")) {
 			req.setAttribute("roles", roleService.getAll());
 			req.setAttribute("departments", departmentService.getAll());
@@ -98,15 +98,15 @@ public class AdminServlet extends HttpServlet {
 
 		String redirectTo = "/admin";
 		if (uri.contains("delete-employee")) {
-			AdminBean.deleteEmployee(req, employeeService);
+			AdminHelper.deleteEmployee(req, employeeService);
 
 		} else if (uri.contains("update-employee")) {
-			String msg = AdminBean.updateEmployee(req, employeeService, roleService, departmentService);
+			String msg = AdminHelper.updateEmployee(req, employeeService, roleService, departmentService);
 			if (msg != null) {
 				redirectTo = "/admin?error=" + msg;
 			}
 		} else if (uri.contains("add-employee")) {
-			String msg = AdminBean.addEmployee(req, employeeService, roleService, departmentService);
+			String msg = AdminHelper.addEmployee(req, employeeService, roleService, departmentService);
 			if (msg != null) {
 				redirectTo = "/admin?error=" + msg;
 			}

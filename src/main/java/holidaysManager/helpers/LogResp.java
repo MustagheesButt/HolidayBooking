@@ -7,14 +7,19 @@ import com.google.gson.GsonBuilder;
 import holidaysManager.entities.Admin;
 import holidaysManager.entities.Emp;
 
-public class LoginResponse {
+public class LogResp {
   private Emp employee;
   private Admin admin;
 
-  public LoginResponse() {
+  public static LogResp pLogResp(String jsonString) {
+    Gson gson = Converters.registerLocalDateTime(new GsonBuilder()).create();
+    return gson.fromJson(jsonString, LogResp.class);
   }
 
-  public LoginResponse(Emp employee, Admin admin) {
+  public LogResp() {
+  }
+
+  public LogResp(Emp employee, Admin admin) {
     this.employee = employee;
     this.admin = admin;
   }
@@ -33,10 +38,5 @@ public class LoginResponse {
 
   public void setAdmin(Admin a) {
     this.admin = a;
-  }
-
-  public static LoginResponse parseLoginResponse(String jsonString) {
-    Gson gson = Converters.registerLocalDateTime(new GsonBuilder()).create();
-    return gson.fromJson(jsonString, LoginResponse.class);
   }
 }

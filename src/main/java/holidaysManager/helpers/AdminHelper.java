@@ -13,7 +13,7 @@ import holidaysManager.services.DeptService;
 import holidaysManager.services.EmpService;
 import holidaysManager.services.RoleService;
 
-public class AdminBean {
+public class AdminHelper {
   public static void deleteEmployee(HttpServletRequest req, EmpService employeeService) {
     Long id = Long.parseLong(req.getParameter("id"));
     Emp e = employeeService.find(id);
@@ -32,40 +32,30 @@ public class AdminBean {
     Dept d = departmentService.find(department);
     LocalDateTime now = LocalDateTime.now();
 
-    // validate new data for employee
     boolean update = true;
     String str = null;
     List<Emp> e_list = d.getEmployees();
     for (int i = 0; i < e_list.size(); i++) {
       if (e_list.get(i).getId() != e.getId()) {
         if (e_list.get(i).getDept().getId() == d.getId()) {
-          // a head of dept already exists
           if (e_list.get(i).isHeadOfDept() && r.getId() == 1) {
             update = false;
             str = "Head";
           }
-
-          // a deputy head already exists
           if (e_list.get(i).isDeputyHeadOfDept() && r.getId() == 2) {
             update = false;
             str = "Deputy";
           }
         }
-
-        // cant update if another employee with same email exists
         if (e_list.get(i).getEmail().equalsIgnoreCase(e.getEmail())) {
           update = false;
           str = "Email";
         }
       }
-
-      // dont need to validate further
       if (!update) {
         break;
       }
     }
-
-    // can update employee
     if (update) {
       e.setFirstName(req.getParameter("fname"));
       e.setLastName(req.getParameter("lname"));
@@ -90,30 +80,27 @@ public class AdminBean {
 
     Dept d = departmentService.find(department);
     LocalDateTime now = LocalDateTime.now();
-    
-    // test requirements to create a new employee
-    boolean create = true;
+    boolean flag = true;
     String str = null;
     List<Emp> e_list = d.getEmployees();
     for (int i = 0; i < e_list.size(); i++) {
       if (e_list.get(i).getDept().getId() == d.getId()) {
         if (e_list.get(i).getRole().getId() == 1 && r.getId() == 1) {
-          create = false;
+          flag = false;
           str = "Head";
         }
         if (e_list.get(i).getRole().getId() == 2 && r.getId() == 2) {
-          create = false;
+          flag = false;
           str = "Deputy";
         }
       }
 
-      if (!create) {
+      if (!flag) {
         break;
       }
     }
 
-    // can create new employee
-    if (create) {
+    if (flag) {
       boolean ex = true;
       e.setFirstName(req.getParameter("fname"));
       e.setLastName(req.getParameter("lname"));

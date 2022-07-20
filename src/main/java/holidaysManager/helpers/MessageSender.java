@@ -8,8 +8,6 @@ import javax.jms.Session;
 import javax.jms.TextMessage;
 
 public class MessageSender {
-
-  // To register messages in JMS queue
   public static void sendMessage(String message, ConnectionFactory connectionFactory, Queue queue) {
     MessageProducer mProducer;
     TextMessage textMessage;

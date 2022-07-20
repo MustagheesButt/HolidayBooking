@@ -8,23 +8,23 @@ import holidaysManager.services.AdminService;
 import holidaysManager.services.EmpService;
 
 public class LoginHelper {
-  public static LoginResponse login(String email, String password, EmpService employeeService, AdminService adminService, HttpSession session) {
+  public static LogResp login(String email, String password, EmpService employeeService, AdminService adminService, HttpSession session) {
     Emp employee = employeeService.findByEmail(email);
     if (employee != null) {
       if (!employee.getPassword().equals(password)) {
-        return new LoginResponse(null, null);
+        return new LogResp(null, null);
       }
 
       session.setAttribute("employee", employee);
-      return new LoginResponse(employee, null);
+      return new LogResp(employee, null);
     }
 
     Admin admin = adminService.findByEmail(email);
     if (admin != null && !admin.getPassword().equals(password)) {
-      return new LoginResponse(null, null);
+      return new LogResp(null, null);
     }
 
     session.setAttribute("admin", admin);
-    return new LoginResponse(null, admin);
+    return new LogResp(null, admin);
   }
 }

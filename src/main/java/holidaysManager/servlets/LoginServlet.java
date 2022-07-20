@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import holidaysManager.helpers.LoginHelper;
-import holidaysManager.helpers.LoginResponse;
+import holidaysManager.helpers.LogResp;
 import holidaysManager.services.AdminService;
 import holidaysManager.services.EmpService;
 
@@ -29,11 +29,9 @@ public class LoginServlet extends HttpServlet {
     String uri = req.getRequestURI();
     HttpSession session = req.getSession();
 
-    // if logout url is requested
     if (uri.contains("logout")) {
       session.invalidate();
     }
-    // redirect, if either admin or employee is already logged in
     else if (session.getAttribute("admin") != null) {
       resp.sendRedirect("/admin");
       return;
@@ -51,17 +49,14 @@ public class LoginServlet extends HttpServlet {
     String password = req.getParameter("password");
     HttpSession session = req.getSession();
 
-    LoginResponse loginStatus = LoginHelper.login(email, password, employeeService, adminService, session);
+    LogResp loginStatus = LoginHelper.login(email, password, employeeService, adminService, session);
 
-    // if niether employee nor admin user found with matching email, show error
     if (loginStatus.getEmployee() == null && loginStatus.getAdmin() == null) {
       resp.sendRedirect("/login?error=email");
     }
-    // if it's employee
     else if (loginStatus.getEmployee() != null) {
       resp.sendRedirect("/dashboard");
     }
-    // if it's an admin
     else {
       resp.sendRedirect("/admin");
     }

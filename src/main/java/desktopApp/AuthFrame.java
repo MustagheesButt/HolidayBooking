@@ -10,7 +10,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 import holidaysManager.entities.Emp;
-import holidaysManager.helpers.LoginResponse;
+import holidaysManager.helpers.LogResp;
 
 public class AuthFrame extends CustomFrame {
   public AuthFrame() {
@@ -32,7 +32,7 @@ public class AuthFrame extends CustomFrame {
     lBtn.setBounds(width / 2 - 105, 250, width / 3, 40);
     lBtn.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
-        LoginResponse lr = Helpers.sendLoginReq(emailField.getText(), passwdField.getText());
+        LogResp lr = Helpers.sendLoginReq(emailField.getText(), passwdField.getText());
         if (lr == null) {
           JOptionPane.showMessageDialog(null, "Could not establish a connection");
           return;

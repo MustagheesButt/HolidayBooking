@@ -16,7 +16,7 @@ import javax.swing.JTextField;
 import holidaysManager.entities.Emp;
 import holidaysManager.entities.HRequest;
 import holidaysManager.helpers.HReqHelper;
-import holidaysManager.helpers.LoginResponse;
+import holidaysManager.helpers.LogResp;
 
 public class Helpers {
   private static String apiBaseUrl = "http://localhost:8080";
@@ -42,16 +42,16 @@ public class Helpers {
     });
   }
 
-  public static LoginResponse sendLoginReq(String email, String password) {
+  public static LogResp sendLoginReq(String email, String password) {
     try {
       HttpClient client = HttpClient.newHttpClient();
       HttpRequest request = HttpRequest.newBuilder(new URI(apiBaseUrl + "/api/auth/login"))
           .header("Content-Type", "application/json")
           .POST(BodyPublishers.ofString(String.format("{\"email\": \"%s\", \"password\": \"%s\"}", email, password)))
           .build();
-      LoginResponse lr = client.sendAsync(request, BodyHandlers.ofString())
+      LogResp lr = client.sendAsync(request, BodyHandlers.ofString())
           .thenApply(HttpResponse::body)
-          .thenApply(LoginResponse::parseLoginResponse)
+          .thenApply(LogResp::pLogResp)
           .join();
       return lr;
     } catch (Exception e) {

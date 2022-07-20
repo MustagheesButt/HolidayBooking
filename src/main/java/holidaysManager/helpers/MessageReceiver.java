@@ -30,16 +30,12 @@ public class MessageReceiver implements MessageListener {
   @Inject
   AdminService adminService;
 
-  // this gets automatically called when there is a message in the JMS queue
   @Override
   public void onMessage(Message message) {
     try {
       String msg = ((TextMessage)message).getText();
-
       Notification n = new Notification();
       n.setMessage(msg);
-
-      // send notification to all admins
       adminService.sendNotification(n);
     } catch (Exception e) {
       e.printStackTrace();

@@ -20,6 +20,18 @@ public class AdminService {
     return entityManager.find(Admin.class, id);
   }
 
+  public List<Admin> getAll() {
+    return entityManager.createQuery("SELECT a FROM Admin a", Admin.class).getResultList();
+  }
+
+  public void sendNotification(Notification notification) {
+    this.getAll().forEach(admin -> {
+      notification.setSendTo(admin.getEmail());
+      notification.setMsgStatus("unread");
+      entityManager.persist(notification);
+    });
+  }
+
   public Admin findByEmail(String email) {
     try {
       return entityManager.createQuery("SELECT a FROM Admin a WHERE email = ?1", Admin.class)
@@ -28,18 +40,5 @@ public class AdminService {
     } catch (Exception e) {
       return null;
     }
-  }
-
-  public List<Admin> getAll() {
-    return entityManager.createQuery("SELECT a FROM Admin a", Admin.class).getResultList();
-  }
-
-  // save notification for each admin
-  public void sendNotification(Notification notification) {
-    this.getAll().forEach(admin -> {
-      notification.setSendTo(admin.getEmail());
-      notification.setMsgStatus("unread");
-      entityManager.persist(notification);
-    });
   }
 }
